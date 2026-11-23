@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Productores')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h1 class="h3 titulo-pagina mb-0">Productores agrícolas</h1>
+        <a th:href="@{/encargado/productores/nuevo}" class="btn btn-primary" data-testid="btn-nuevo-productor">
+            <i class="bi bi-person-plus"></i> Registrar productor</a>
+    </div>
+    <form th:action="@{/encargado/productores}" method="get" class="card card-body mb-3">
+        <div class="row g-2">
+            <div class="col-md-10">
+                <input type="search" name="q" class="form-control" th:value="${q}" maxlength="80"
+                       placeholder="Buscar por nombre, apellido, DNI o usuario" data-testid="buscar-productor">
+            </div>
+            <div class="col-md-2 d-grid"><button class="btn btn-outline-primary" type="submit">Buscar</button></div>
+        </div>
+    </form>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-productores">
+                <thead><tr><th>DNI</th><th>Nombre</th><th>Usuario</th><th>Sector</th><th>Teléfono</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${productores}" data-testid="fila-productor">
+                    <td th:text="${p.dni()}">DNI</td>
+                    <td th:text="${p.nombreCompleto()}">Nombre</td>
+                    <td th:text="${p.username()}">usuario</td>
+                    <td th:text="${p.sector()}">Sector</td>
+                    <td th:text="${p.telefono()} ?: '—'">tel</td>
+                    <td><span class="badge" th:classappend="${p.activo()} ? 'text-bg-success' : 'text-bg-secondary'"
+                              th:text="${p.activo()} ? 'Activo' : 'Inactivo'">Activo</span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary"
+                                            th:href="@{/encargado/productores/{id}/editar(id=${p.id()})}">
+                        <i class="bi bi-pencil"></i> Editar</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(productores)}"><td colspan="7" class="text-center text-muted py-4">Sin resultados.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

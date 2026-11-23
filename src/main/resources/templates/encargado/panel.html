@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Panel administrativo')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina" data-testid="titulo-panel">Panel administrativo del almacén</h1>
+    <p class="subtitulo">Resumen de existencias, solicitudes y préstamos.</p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-2">
+            <div class="card kpi h-100"><div class="card-body">
+                <div class="etiqueta-dato">Disponibles</div>
+                <div class="valor" data-testid="kpi-disponibles" th:text="${reporte.inventario().cantidadDisponible()}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card kpi kpi-info h-100"><div class="card-body">
+                <div class="etiqueta-dato">Prestadas</div>
+                <div class="valor" data-testid="kpi-prestadas" th:text="${reporte.inventario().cantidadPrestada()}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card kpi kpi-peligro h-100"><div class="card-body">
+                <div class="etiqueta-dato">Dañadas</div>
+                <div class="valor" th:text="${reporte.inventario().cantidadDanada()}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card kpi kpi-tierra h-100"><div class="card-body">
+                <div class="etiqueta-dato">Mantenimiento</div>
+                <div class="valor" th:text="${reporte.inventario().cantidadMantenimiento()}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card kpi kpi-alerta h-100"><div class="card-body">
+                <div class="etiqueta-dato">Sol. pendientes</div>
+                <div class="valor" data-testid="kpi-pendientes" th:text="${#lists.size(solicitudesPendientes)}">0</div>
+            </div></div>
+        </div>
+        <div class="col-6 col-lg-2">
+            <div class="card kpi kpi-info h-100"><div class="card-body">
+                <div class="etiqueta-dato">Préstamos activos</div>
+                <div class="valor" data-testid="kpi-prestamos" th:text="${#lists.size(reporte.pendientesDevolucion())}">0</div>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header d-flex justify-content-between">
+                    <span><i class="bi bi-hourglass-split"></i> Solicitudes pendientes</span>
+                    <a th:href="@{/encargado/solicitudes}" class="small">Ver todas</a>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-agro table-hover mb-0" th:if="${!#lists.isEmpty(solicitudesPendientes)}">
+                        <thead><tr><th>N.°</th><th>Productor</th><th>Material</th><th class="text-end">Cant.</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="s : ${solicitudesPendientes}">
+                            <td th:text="${s.id()}">1</td>
+                            <td th:text="${s.productorNombre()}">Productor</td>
+                            <td th:text="${s.materialNombre()}">Material</td>
+                            <td class="text-end" th:text="${s.cantidad()}">1</td>
+                            <td><a class="btn btn-sm btn-outline-primary" th:href="@{/encargado/solicitudes/{id}(id=${s.id()})}">Revisar</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted p-3 mb-0" th:if="${#lists.isEmpty(solicitudesPendientes)}">No hay solicitudes pendientes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header"><i class="bi bi-box-arrow-up"></i> Aprobadas por entregar</div>
+                <div class="card-body p-0">
+                    <table class="table table-agro table-hover mb-0" th:if="${!#lists.isEmpty(solicitudesAprobadas)}">
+                        <thead><tr><th>N.°</th><th>Productor</th><th>Material</th><th class="text-end">Cant.</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="s : ${solicitudesAprobadas}">
+                            <td th:text="${s.id()}">1</td>
+                            <td th:text="${s.productorNombre()}">Productor</td>
+                            <td th:text="${s.materialNombre()}">Material</td>
+                            <td class="text-end" th:text="${s.cantidad()}">1</td>
+                            <td><a class="btn btn-sm btn-outline-primary" th:href="@{/encargado/solicitudes/{id}(id=${s.id()})}">Entregar</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted p-3 mb-0" th:if="${#lists.isEmpty(solicitudesAprobadas)}">No hay entregas pendientes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" th:if="${!#lists.isEmpty(prestamosVencidos)}">
+            <div class="card border-danger">
+                <div class="card-header text-danger"><i class="bi bi-exclamation-octagon"></i> Préstamos vencidos</div>
+                <div class="card-body p-0">
+                    <table class="table table-agro mb-0">
+                        <thead><tr><th>N.°</th><th>Productor</th><th>Material</th><th class="text-end">Pendientes</th><th>Fecha límite</th><th></th></tr></thead>
+                        <tbody>
+                        <tr th:each="p : ${prestamosVencidos}">
+                            <td th:text="${p.id()}">1</td>
+                            <td th:text="${p.productorNombre()}">Productor</td>
+                            <td th:text="${p.materialNombre()}">Material</td>
+                            <td class="text-end" th:text="${p.cantidadPendiente()}">0</td>
+                            <td th:text="${#temporals.format(p.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">fecha</td>
+                            <td><a class="btn btn-sm btn-outline-danger" th:href="@{/encargado/prestamos/{id}(id=${p.id()})}">Registrar devolución</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

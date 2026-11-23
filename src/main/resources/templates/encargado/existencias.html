@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Existencias')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Existencias del almacén</h1>
+    <p class="subtitulo">Total = Disponible + Prestado + Dañado + Mantenimiento</p>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-existencias">
+                <thead><tr><th>Código</th><th>Material</th><th class="text-end">Total</th><th class="text-end">Disponible</th>
+                    <th class="text-end">Prestado</th><th class="text-end">Dañado</th><th class="text-end">Mantenimiento</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="m : ${materiales}" data-testid="fila-existencia" th:attr="data-codigo=${m.codigo()}">
+                    <td class="fw-semibold" th:text="${m.codigo()}">COD</td>
+                    <td th:text="${m.nombre()}">Material</td>
+                    <td class="text-end fw-bold" th:text="${m.cantidadTotal()}">0</td>
+                    <td class="text-end text-success fw-semibold" th:text="${m.cantidadDisponible()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadPrestada()}">0</td>
+                    <td class="text-end text-danger" th:text="${m.cantidadDanada()}">0</td>
+                    <td class="text-end text-tierra" th:text="${m.cantidadMantenimiento()}">0</td>
+                    <td><span class="badge" th:classappend="${m.activo()} ? 'text-bg-success' : 'text-bg-secondary'" th:text="${m.estado()}">A</span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/encargado/existencias/{id}(id=${m.id()})}"
+                                            th:attr="data-testid='ajustar-' + ${m.codigo()}">Administrar</a></td>
+                </tr>
+                </tbody>
+                <tfoot class="table-light fw-bold">
+                <tr>
+                    <td colspan="2">Totales (<span th:text="${resumen.materialesRegistrados()}">0</span> materiales)</td>
+                    <td class="text-end" th:text="${resumen.cantidadTotal()}">0</td>
+                    <td class="text-end" th:text="${resumen.cantidadDisponible()}">0</td>
+                    <td class="text-end" th:text="${resumen.cantidadPrestada()}">0</td>
+                    <td class="text-end" th:text="${resumen.cantidadDanada()}">0</td>
+                    <td class="text-end" th:text="${resumen.cantidadMantenimiento()}">0</td>
+                    <td colspan="2"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

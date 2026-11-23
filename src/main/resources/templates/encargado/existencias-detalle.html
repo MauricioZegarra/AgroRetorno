@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Existencias del material')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/encargado/existencias}">Existencias</a></li>
+        <li class="breadcrumb-item active" th:text="${material.codigo()}">COD</li>
+    </ol></nav>
+    <h1 class="h3 titulo-pagina"><span th:text="${material.codigo()}">COD</span> · <span th:text="${material.nombre()}">Material</span></h1>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Total</div>
+            <div class="valor" data-testid="exist-total" th:text="${material.cantidadTotal()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Disponible</div>
+            <div class="valor text-success" data-testid="exist-disponible" th:text="${material.cantidadDisponible()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-info h-100"><div class="card-body"><div class="etiqueta-dato">Prestado</div>
+            <div class="valor" data-testid="exist-prestado" th:text="${material.cantidadPrestada()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-peligro h-100"><div class="card-body"><div class="etiqueta-dato">Dañado</div>
+            <div class="valor" data-testid="exist-danado" th:text="${material.cantidadDanada()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-tierra h-100"><div class="card-body"><div class="etiqueta-dato">Mantenimiento</div>
+            <div class="valor" data-testid="exist-mantenimiento" th:text="${material.cantidadMantenimiento()}">0</div></div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-sliders"></i> Ajustar existencias</div>
+                <div class="card-body">
+                    <form th:action="@{/encargado/existencias/{id}/ajustes(id=${material.id()})}" th:object="${ajuste}"
+                          method="post" class="needs-validation" novalidate data-testid="form-ajuste"
+                          data-confirm="¿Confirma el ajuste de existencias?">
+                        <div class="mb-3">
+                            <label for="tipo" class="form-label">Tipo de ajuste</label>
+                            <select th:field="*{tipo}" class="form-select" required data-testid="ajuste-tipo">
+                                <option th:each="t : ${tiposAjuste}" th:value="${t}" th:text="${t.etiqueta}">t</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label">Cantidad</label>
+                            <input type="number" th:field="*{cantidad}" class="form-control" required min="1" max="100000" step="1"
+                                   th:classappend="${#fields.hasErrors('cantidad')} ? 'is-invalid'" data-testid="ajuste-cantidad">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('cantidad')} ? ${#fields.errors('cantidad')[0]} : 'Ingrese un entero positivo'">x</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="observacion" class="form-label">Motivo</label>
+                            <input type="text" th:field="*{observacion}" class="form-control" required maxlength="300"
+                                   th:classappend="${#fields.hasErrors('observacion')} ? 'is-invalid'" data-testid="ajuste-motivo">
+                            <div class="invalid-feedback">Indique el motivo del ajuste.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" data-testid="ajuste-guardar">Registrar ajuste</button>
+                    </form>
+                    <ul class="small text-muted mt-3 mb-0 ps-3">
+                        <li><strong>Ingreso:</strong> nuevas unidades (total y disponible).</li>
+                        <li><strong>Retiro:</strong> quita unidades disponibles del total.</li>
+                        <li><strong>Envío / Retorno de mantenimiento:</strong> mueve entre disponible y mantenimiento.</li>
+                        <li><strong>Baja de dañadas:</strong> descarta unidades dañadas del total.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-arrow-left-right"></i> Movimientos de existencias</div>
+                <div class="table-responsive">
+                    <table class="table table-agro table-sm mb-0" data-testid="tabla-movimientos">
+                        <thead><tr><th>Fecha</th><th>Tipo</th><th class="text-end">Cant.</th><th>Usuario</th><th>Referencia</th><th>Observación</th></tr></thead>
+                        <tbody>
+                        <tr th:each="mv : ${movimientos}">
+                            <td th:text="${#temporals.format(mv.fecha(), 'dd/MM/yyyy HH:mm')}">f</td>
+                            <td th:text="${mv.tipoEtiqueta()}">tipo</td>
+                            <td class="text-end" th:text="${mv.cantidad()}">0</td>
+                            <td th:text="${mv.usuario()}">u</td>
+                            <td class="small" th:text="${mv.referencia()}">ref</td>
+                            <td class="small" th:text="${mv.observacion()}">obs</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(movimientos)}"><td colspan="6" class="text-muted text-center py-3">Sin movimientos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('No encontrado')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5 text-center" data-testid="pagina-404">
+    <i class="bi bi-search display-1 text-tierra"></i>
+    <h1 class="h3 mt-3">Recurso no encontrado</h1>
+    <p class="text-muted" th:text="${mensaje} ?: 'La página o el registro solicitado no existe.'">No existe.</p>
+    <a th:href="@{/panel}" class="btn btn-primary">Volver a mi panel</a>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

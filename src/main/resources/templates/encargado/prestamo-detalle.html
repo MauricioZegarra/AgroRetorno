@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Préstamo y devoluciones')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/encargado/prestamos}">Préstamos</a></li>
+        <li class="breadcrumb-item active">N.° <span th:text="${prestamo.id()}">1</span></li>
+    </ol></nav>
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <h1 class="h3 titulo-pagina mb-0">Préstamo N.° <span th:text="${prestamo.id()}">1</span></h1>
+        <span data-testid="prestamo-estado" th:attr="data-estado=${prestamo.estado()}">
+            <span th:replace="~{fragments/layout :: estadoPrestamo(${prestamo})}"></span>
+        </span>
+    </div>
+    <p class="subtitulo"><span th:text="${prestamo.productorNombre()}">P</span> ·
+        <span th:text="${prestamo.materialNombre()}">M</span> ·
+        solicitud <a th:href="@{/encargado/solicitudes/{id}(id=${prestamo.solicitudId()})}" th:text="'N.° ' + ${prestamo.solicitudId()}">1</a></p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Entregadas</div>
+            <div class="valor" data-testid="prestamo-entregadas" th:text="${prestamo.cantidadEntregada()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-info h-100"><div class="card-body"><div class="etiqueta-dato">Devueltas</div>
+            <div class="valor" data-testid="prestamo-devueltas" th:text="${prestamo.cantidadDevuelta()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-alerta h-100"><div class="card-body"><div class="etiqueta-dato">Pendientes</div>
+            <div class="valor" data-testid="prestamo-pendiente" th:text="${prestamo.cantidadPendiente()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-peligro h-100"><div class="card-body"><div class="etiqueta-dato">Dañadas</div>
+            <div class="valor" data-testid="prestamo-danadas" th:text="${prestamo.cantidadDanada()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-tierra h-100"><div class="card-body"><div class="etiqueta-dato">Mantenimiento</div>
+            <div class="valor" data-testid="prestamo-mantenimiento" th:text="${prestamo.cantidadMantenimiento()}">0</div></div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5" th:if="${prestamo.estado().name() == 'ACTIVO'}">
+            <div class="card">
+                <div class="card-header"><i class="bi bi-box-arrow-in-down"></i> Registrar devolución</div>
+                <div class="card-body">
+                    <form id="form-devolucion" th:action="@{/encargado/prestamos/{id}/devoluciones(id=${prestamo.id()})}"
+                          th:object="${devolucion}" method="post" class="needs-validation" novalidate
+                          th:attr="data-pendiente=${prestamo.cantidadPendiente()}"
+                          data-confirm="¿Registrar la devolución con las cantidades indicadas?" data-testid="form-devolucion">
+                        <p class="small text-muted">Clasifique las unidades recibidas. Máximo
+                            <strong th:text="${prestamo.cantidadPendiente()}">0</strong> unidades pendientes.</p>
+                        <div class="mb-3">
+                            <label for="cantidadBuenEstado" class="form-label">En buen estado</label>
+                            <input type="number" th:field="*{cantidadBuenEstado}" class="form-control" min="0" step="1" required
+                                   th:classappend="${#fields.hasErrors('cantidadBuenEstado')} ? 'is-invalid'" data-testid="dev-buen">
+                            <div class="invalid-feedback">La suma de unidades debe estar entre 1 y las unidades pendientes.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidadDanada" class="form-label">Dañadas</label>
+                            <input type="number" th:field="*{cantidadDanada}" class="form-control" min="0" step="1" required
+                                   data-testid="dev-danado">
+                            <div class="invalid-feedback">Ingrese 0 o un entero positivo.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cantidadMantenimiento" class="form-label">Requieren mantenimiento</label>
+                            <input type="number" th:field="*{cantidadMantenimiento}" class="form-control" min="0" step="1" required
+                                   data-testid="dev-mantenimiento">
+                            <div class="invalid-feedback">Ingrese 0 o un entero positivo.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea th:field="*{observaciones}" class="form-control" rows="2" maxlength="500"
+                                      data-testid="dev-observaciones"></textarea>
+                            <div class="form-text">Obligatorias si hay unidades dañadas o en mantenimiento.</div>
+                            <div class="invalid-feedback">Describa el estado de las unidades dañadas o en mantenimiento.</div>
+                        </div>
+                        <p class="mb-3">Total a registrar: <strong id="total-devolucion" data-testid="dev-total">0</strong></p>
+                        <button type="submit" class="btn btn-primary w-100" data-testid="btn-devolver">
+                            <i class="bi bi-check2-circle"></i> Registrar devolución</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div th:class="${prestamo.estado().name() == 'ACTIVO'} ? 'col-lg-7' : 'col-12'">
+            <div class="card mb-3">
+                <div class="card-body small">
+                    <span class="me-3"><strong>Entregado:</strong> <span th:text="${#temporals.format(prestamo.fechaEntrega(), 'dd/MM/yyyy HH:mm')}">f</span>
+                        por <span th:text="${prestamo.entregadoPor()}">E</span></span>
+                    <span class="me-3"><strong>Devolver hasta:</strong> <span th:text="${#temporals.format(prestamo.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">f</span></span>
+                    <span th:if="${prestamo.fechaCierre() != null}"><strong>Cerrado:</strong>
+                        <span data-testid="prestamo-fecha-cierre" th:text="${#temporals.format(prestamo.fechaCierre(), 'dd/MM/yyyy HH:mm')}">f</span></span>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="bi bi-clock-history"></i> Devoluciones registradas</div>
+                <div class="table-responsive">
+                    <table class="table table-agro table-sm mb-0" data-testid="tabla-devoluciones">
+                        <thead><tr><th>Fecha</th><th class="text-end">Buen estado</th><th class="text-end">Dañadas</th>
+                            <th class="text-end">Mant.</th><th>Recibido por</th><th>Observaciones</th></tr></thead>
+                        <tbody>
+                        <tr th:each="d : ${devoluciones}" data-testid="fila-devolucion">
+                            <td th:text="${#temporals.format(d.fecha(), 'dd/MM/yyyy HH:mm')}">f</td>
+                            <td class="text-end" th:text="${d.cantidadBuenEstado()}">0</td>
+                            <td class="text-end" th:text="${d.cantidadDanada()}">0</td>
+                            <td class="text-end" th:text="${d.cantidadMantenimiento()}">0</td>
+                            <td th:text="${d.recibidoPor()}">E</td>
+                            <td class="small" th:text="${d.observaciones()}">obs</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(devoluciones)}"><td colspan="6" class="text-center text-muted py-3">Aún no hay devoluciones.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

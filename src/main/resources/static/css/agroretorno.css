@@ -1,0 +1,92 @@
+/* AgroRetorno - estilos propios (paleta agrícola con contraste AA) */
+:root {
+    --agro-verde: #2e6b30;
+    --agro-verde-oscuro: #1f4d21;
+    --agro-verde-claro: #e7f1e4;
+    --agro-tierra: #7a5a3a;
+    --agro-trigo: #f7f4ec;
+    --agro-borde: #ddd6c6;
+    --bs-primary: #2e6b30;
+    --bs-primary-rgb: 46, 107, 48;
+    --bs-link-color: #2e6b30;
+    --bs-link-color-rgb: 46, 107, 48;
+    --bs-link-hover-color: #1f4d21;
+    --bs-link-hover-color-rgb: 31, 77, 33;
+}
+
+body {
+    background-color: var(--agro-trigo);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main { flex: 1 0 auto; }
+
+.navbar-agro { background: linear-gradient(90deg, var(--agro-verde-oscuro), var(--agro-verde)); }
+
+.footer-agro { background-color: #efeadf; border-top: 1px solid var(--agro-borde); }
+
+.btn-primary {
+    --bs-btn-bg: var(--agro-verde);
+    --bs-btn-border-color: var(--agro-verde);
+    --bs-btn-hover-bg: var(--agro-verde-oscuro);
+    --bs-btn-hover-border-color: var(--agro-verde-oscuro);
+    --bs-btn-active-bg: var(--agro-verde-oscuro);
+    --bs-btn-active-border-color: var(--agro-verde-oscuro);
+    --bs-btn-disabled-bg: #7aa27b;
+    --bs-btn-disabled-border-color: #7aa27b;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--agro-verde);
+    --bs-btn-border-color: var(--agro-verde);
+    --bs-btn-hover-bg: var(--agro-verde);
+    --bs-btn-hover-border-color: var(--agro-verde);
+    --bs-btn-active-bg: var(--agro-verde-oscuro);
+}
+
+.text-agro { color: var(--agro-verde) !important; }
+.text-tierra { color: var(--agro-tierra) !important; }
+
+.card { border-color: var(--agro-borde); }
+.card-header { background-color: #fbfaf6; border-bottom-color: var(--agro-borde); font-weight: 600; }
+
+.titulo-pagina { color: var(--agro-verde-oscuro); font-weight: 700; }
+.subtitulo { color: #5c5c5c; }
+
+/* Tarjetas de indicadores */
+.kpi { border-left: 5px solid var(--agro-verde); }
+.kpi .valor { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+.kpi.kpi-tierra { border-left-color: var(--agro-tierra); }
+.kpi.kpi-alerta { border-left-color: #b8860b; }
+.kpi.kpi-peligro { border-left-color: #b02a37; }
+.kpi.kpi-info { border-left-color: #0b6e99; }
+
+/* Tablas */
+.table-agro thead th {
+    background-color: var(--agro-verde-claro);
+    color: var(--agro-verde-oscuro);
+    font-weight: 600;
+    white-space: nowrap;
+}
+.table-agro td { vertical-align: middle; }
+
+/* Indicador de existencias */
+.barra-stock { height: 8px; background-color: #e9e4d8; border-radius: 4px; overflow: hidden; min-width: 80px; }
+.barra-stock > div { height: 100%; background-color: var(--agro-verde); }
+.barra-stock.baja > div { background-color: #c77700; }
+.barra-stock.agotada > div { background-color: #b02a37; }
+
+/* Inicio de sesión */
+.login-fondo {
+    background: radial-gradient(circle at 20% 20%, #e7f1e4 0, var(--agro-trigo) 45%, #efe6d2 100%);
+}
+.login-card { max-width: 420px; }
+
+.etiqueta-dato { font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: #6b6b6b; }
+
+@media print {
+    .navbar-agro, .footer-agro, .no-imprimir { display: none !important; }
+    body { background: #fff; }
+}

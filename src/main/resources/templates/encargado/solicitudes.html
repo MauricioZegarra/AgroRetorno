@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Solicitudes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Solicitudes de préstamo</h1>
+    <ul class="nav nav-pills mb-3 gap-1" data-testid="filtro-estados">
+        <li class="nav-item" th:each="e : ${estados}">
+            <a class="nav-link" th:classappend="${estadoSeleccionado == e.name()} ? 'active'"
+               th:href="@{/encargado/solicitudes(estado=${e})}" th:text="${e}"
+               th:attr="data-testid='filtro-' + ${e}">E</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${estadoSeleccionado == 'TODAS'} ? 'active'"
+                                th:href="@{/encargado/solicitudes(estado='TODAS')}" data-testid="filtro-TODAS">TODAS</a></li>
+    </ul>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-solicitudes">
+                <thead><tr><th>N.°</th><th>Fecha</th><th>Productor</th><th>Material</th><th class="text-end">Cantidad</th>
+                    <th>Devolución prevista</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="s : ${solicitudes}" data-testid="fila-solicitud" th:attr="data-id=${s.id()}">
+                    <td class="fw-semibold" th:text="${s.id()}">1</td>
+                    <td th:text="${#temporals.format(s.fechaSolicitud(), 'dd/MM/yyyy HH:mm')}">f</td>
+                    <td th:text="${s.productorNombre()}">P</td>
+                    <td th:text="${s.materialNombre()}">M</td>
+                    <td class="text-end" th:text="${s.cantidad()} + ' ' + ${s.unidad()}">1</td>
+                    <td th:text="${#temporals.format(s.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">f</td>
+                    <td><span th:replace="~{fragments/layout :: estadoSolicitud(${s.estado()})}"></span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary"
+                                            th:href="@{/encargado/solicitudes/{id}(id=${s.id()})}"
+                                            th:attr="data-testid='ver-solicitud-' + ${s.id()}">Ver detalle</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(solicitudes)}"><td colspan="8" class="text-center text-muted py-4">No hay solicitudes en este estado.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

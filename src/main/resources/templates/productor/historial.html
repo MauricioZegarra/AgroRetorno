@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mi historial')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Mi historial</h1>
+    <p class="subtitulo">Solicitudes, préstamos y devoluciones registradas a su nombre.</p>
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-sol" type="button" role="tab"
+                    data-testid="tab-solicitudes">Solicitudes (<span th:text="${#lists.size(solicitudes)}">0</span>)</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pre" type="button" role="tab"
+                    data-testid="tab-prestamos">Préstamos (<span th:text="${#lists.size(prestamos)}">0</span>)</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dev" type="button" role="tab"
+                    data-testid="tab-devoluciones">Devoluciones (<span th:text="${#lists.size(devoluciones)}">0</span>)</button>
+        </li>
+    </ul>
+    <div class="tab-content card border-top-0 rounded-top-0">
+        <div class="tab-pane fade show active table-responsive" id="tab-sol" role="tabpanel">
+            <table class="table table-agro mb-0">
+                <thead><tr><th>N.°</th><th>Fecha</th><th>Material</th><th class="text-end">Cant.</th><th>Estado</th></tr></thead>
+                <tbody>
+                <tr th:each="s : ${solicitudes}">
+                    <td th:text="${s.id()}">1</td>
+                    <td th:text="${#temporals.format(s.fechaSolicitud(), 'dd/MM/yyyy HH:mm')}">fecha</td>
+                    <td th:text="${s.materialNombre()}">Material</td>
+                    <td class="text-end" th:text="${s.cantidad()}">1</td>
+                    <td><span th:replace="~{fragments/layout :: estadoSolicitud(${s.estado()})}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade table-responsive" id="tab-pre" role="tabpanel">
+            <table class="table table-agro mb-0">
+                <thead><tr><th>N.°</th><th>Material</th><th>Entrega</th><th class="text-end">Entregadas</th>
+                    <th class="text-end">Buen estado</th><th class="text-end">Dañadas</th><th class="text-end">Mantenimiento</th><th>Estado</th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${prestamos}">
+                    <td th:text="${p.id()}">1</td>
+                    <td th:text="${p.materialNombre()}">Material</td>
+                    <td th:text="${#temporals.format(p.fechaEntrega(), 'dd/MM/yyyy')}">fecha</td>
+                    <td class="text-end" th:text="${p.cantidadEntregada()}">0</td>
+                    <td class="text-end" th:text="${p.cantidadBuenEstado()}">0</td>
+                    <td class="text-end" th:text="${p.cantidadDanada()}">0</td>
+                    <td class="text-end" th:text="${p.cantidadMantenimiento()}">0</td>
+                    <td><span th:replace="~{fragments/layout :: estadoPrestamo(${p})}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade table-responsive" id="tab-dev" role="tabpanel">
+            <table class="table table-agro mb-0">
+                <thead><tr><th>Fecha</th><th>Préstamo</th><th>Material</th><th class="text-end">Buen estado</th>
+                    <th class="text-end">Dañadas</th><th class="text-end">Mantenimiento</th><th>Observaciones</th></tr></thead>
+                <tbody>
+                <tr th:each="d : ${devoluciones}">
+                    <td th:text="${#temporals.format(d.fecha(), 'dd/MM/yyyy HH:mm')}">fecha</td>
+                    <td th:text="${d.prestamoId()}">1</td>
+                    <td th:text="${d.materialNombre()}">Material</td>
+                    <td class="text-end" th:text="${d.cantidadBuenEstado()}">0</td>
+                    <td class="text-end" th:text="${d.cantidadDanada()}">0</td>
+                    <td class="text-end" th:text="${d.cantidadMantenimiento()}">0</td>
+                    <td class="small" th:text="${d.observaciones()}">obs</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

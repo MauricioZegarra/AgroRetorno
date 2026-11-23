@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${edicion} ? 'Editar material' : 'Registrar material')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/encargado/materiales}">Materiales</a></li>
+        <li class="breadcrumb-item active" th:text="${edicion} ? 'Editar' : 'Registrar'">Registrar</li>
+    </ol></nav>
+    <div class="row justify-content-center"><div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header" th:text="${edicion} ? 'Modificar material' : 'Registrar material'">Material</div>
+            <div class="card-body">
+                <form th:action="${edicion} ? @{/encargado/materiales/{id}(id=${materialId})} : @{/encargado/materiales}"
+                      th:object="${material}" method="post" class="needs-validation" novalidate data-testid="form-material">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="codigo" class="form-label">Código</label>
+                            <input type="text" th:field="*{codigo}" class="form-control" required pattern="[A-Za-z0-9-]{3,20}"
+                                   maxlength="20" th:readonly="${edicion}"
+                                   th:classappend="${#fields.hasErrors('codigo')} ? 'is-invalid'" data-testid="mat-codigo">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('codigo')} ? ${#fields.errors('codigo')[0]} : '3 a 20 letras, números o guiones'">x</div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" th:field="*{nombre}" class="form-control" required maxlength="100"
+                                   th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" data-testid="mat-nombre">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('nombre')} ? ${#fields.errors('nombre')[0]} : 'Ingrese el nombre'">x</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <select th:field="*{categoria}" class="form-select" required
+                                    th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid'" data-testid="mat-categoria">
+                                <option value="">Seleccione…</option>
+                                <option th:each="c : ${categorias}" th:value="${c}" th:text="${c.etiqueta}">c</option>
+                            </select>
+                            <div class="invalid-feedback">Seleccione la categoría.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="unidad" class="form-label">Unidad de medida</label>
+                            <input type="text" th:field="*{unidad}" class="form-control" required maxlength="30"
+                                   placeholder="jaba, unidad, equipo…" data-testid="mat-unidad">
+                            <div class="invalid-feedback">Ingrese la unidad.</div>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <textarea th:field="*{descripcion}" class="form-control" rows="2" maxlength="500" data-testid="mat-descripcion"></textarea>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cantidadInicial" class="form-label"
+                                   th:text="${edicion} ? 'Cantidad total actual' : 'Cantidad inicial'">Cantidad</label>
+                            <input type="number" th:field="*{cantidadInicial}" class="form-control" min="0" max="100000"
+                                   step="1" th:readonly="${edicion}" required data-testid="mat-cantidad">
+                            <div class="form-text" th:if="${edicion}">Las existencias se modifican desde <em>Existencias → Ajustes</em>.</div>
+                            <div class="invalid-feedback">Ingrese un número entero mayor o igual a 0.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="estado" class="form-label">Estado</label>
+                            <select th:field="*{estado}" class="form-select" data-testid="mat-estado">
+                                <option th:each="e : ${estados}" th:value="${e}" th:text="${e}">e</option>
+                            </select>
+                            <div class="form-text">Un material INACTIVO no puede solicitarse.</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/encargado/materiales}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary" data-testid="mat-guardar"><i class="bi bi-save"></i> Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div></div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

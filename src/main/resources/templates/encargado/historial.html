@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Historial de operaciones')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Historial de operaciones</h1>
+    <p class="subtitulo">Registro de auditoría: quién hizo qué, cuándo y sobre qué registro (máximo 500 resultados).</p>
+    <form th:action="@{/encargado/historial}" th:object="${filtro}" method="get" class="card card-body mb-3">
+        <div class="row g-2 align-items-end">
+            <div class="col-6 col-md-2"><label class="form-label" for="desde">Desde</label>
+                <input type="date" th:field="*{desde}" class="form-control"></div>
+            <div class="col-6 col-md-2"><label class="form-label" for="hasta">Hasta</label>
+                <input type="date" th:field="*{hasta}" class="form-control"></div>
+            <div class="col-md-2"><label class="form-label" for="actor">Usuario</label>
+                <input type="text" th:field="*{actor}" class="form-control" maxlength="50" data-testid="hist-actor"></div>
+            <div class="col-md-2"><label class="form-label" for="entidad">Entidad</label>
+                <select th:field="*{entidad}" class="form-select" data-testid="hist-entidad">
+                    <option value="">Todas</option>
+                    <option value="Solicitud">Solicitud</option>
+                    <option value="Prestamo">Préstamo</option>
+                    <option value="Material">Material</option>
+                    <option value="Productor">Productor</option>
+                </select></div>
+            <div class="col-md-2"><label class="form-label" for="accion">Acción</label>
+                <select th:field="*{accion}" class="form-select" data-testid="hist-accion">
+                    <option value="">Todas</option>
+                    <option value="REGISTRAR_SOLICITUD">Registrar solicitud</option>
+                    <option value="APROBAR_SOLICITUD">Aprobar solicitud</option>
+                    <option value="RECHAZAR_SOLICITUD">Rechazar solicitud</option>
+                    <option value="REGISTRAR_ENTREGA">Registrar entrega</option>
+                    <option value="REGISTRAR_DEVOLUCION">Registrar devolución</option>
+                    <option value="REGISTRAR_MATERIAL">Registrar material</option>
+                    <option value="ACTUALIZAR_MATERIAL">Actualizar material</option>
+                    <option value="AJUSTE_EXISTENCIAS">Ajuste de existencias</option>
+                    <option value="REGISTRAR_PRODUCTOR">Registrar productor</option>
+                    <option value="ACTUALIZAR_PRODUCTOR">Actualizar productor</option>
+                </select></div>
+            <div class="col-md-2 d-grid"><button type="submit" class="btn btn-primary" data-testid="hist-filtrar">Filtrar</button></div>
+        </div>
+    </form>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-sm table-hover mb-0" data-testid="tabla-historial">
+                <thead><tr><th>Fecha y hora</th><th>Usuario</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr></thead>
+                <tbody>
+                <tr th:each="h : ${operaciones}" data-testid="fila-historial">
+                    <td class="text-nowrap" th:text="${#temporals.format(h.fechaHora(), 'dd/MM/yyyy HH:mm:ss')}">f</td>
+                    <td th:text="${h.actor()}">u</td>
+                    <td><span class="badge text-bg-light border" th:text="${h.accion()}">A</span></td>
+                    <td th:text="${h.entidad()}">E</td>
+                    <td th:text="${h.entidadId()}">1</td>
+                    <td class="small" th:text="${h.detalle()}">d</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(operaciones)}"><td colspan="6" class="text-center text-muted py-4">Sin operaciones para los filtros indicados.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

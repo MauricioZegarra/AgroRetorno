@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis préstamos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Mis préstamos</h1>
+    <p class="subtitulo">Materiales entregados, unidades pendientes y fechas de devolución.</p>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro mb-0" data-testid="tabla-prestamos">
+                <thead>
+                <tr><th>N.°</th><th>Material</th><th>Entregado</th><th class="text-end">Entregadas</th>
+                    <th class="text-end">Devueltas</th><th class="text-end">Pendientes</th><th>Devolver hasta</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${prestamos}" data-testid="fila-prestamo" th:attr="data-id=${p.id()}">
+                    <td class="fw-semibold" th:text="${p.id()}">1</td>
+                    <td th:text="${p.materialNombre()}">Material</td>
+                    <td th:text="${#temporals.format(p.fechaEntrega(), 'dd/MM/yyyy')}">fecha</td>
+                    <td class="text-end" th:text="${p.cantidadEntregada()}">0</td>
+                    <td class="text-end" th:text="${p.cantidadDevuelta()}">0</td>
+                    <td class="text-end fw-bold" th:text="${p.cantidadPendiente()}">0</td>
+                    <td th:text="${#temporals.format(p.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">fecha</td>
+                    <td><span th:replace="~{fragments/layout :: estadoPrestamo(${p})}"></span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(prestamos)}">
+                    <td colspan="8" class="text-center text-muted py-4">No tiene préstamos registrados.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

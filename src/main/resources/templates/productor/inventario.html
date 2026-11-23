@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inventario disponible')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Inventario disponible</h1>
+    <p class="subtitulo">Consulte las existencias del almacén central y solicite los materiales que necesita.</p>
+
+    <form th:action="@{/productor/inventario}" method="get" class="card card-body mb-3" data-testid="form-busqueda">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-6">
+                <label for="q" class="form-label">Buscar por nombre o código</label>
+                <input type="search" id="q" name="q" class="form-control" th:value="${q}" maxlength="100"
+                       placeholder="Ej.: jaba, carretilla, FUM-001" data-testid="buscar-texto">
+            </div>
+            <div class="col-md-4">
+                <label for="categoria" class="form-label">Categoría</label>
+                <select id="categoria" name="categoria" class="form-select" data-testid="buscar-categoria">
+                    <option value="">Todas</option>
+                    <option th:each="c : ${categorias}" th:value="${c}" th:text="${c.etiqueta}"
+                            th:selected="${c == categoriaSeleccionada}">Categoría</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary" data-testid="buscar-enviar"><i class="bi bi-search"></i> Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-inventario">
+                <thead>
+                <tr><th>Código</th><th>Material</th><th>Categoría</th><th class="text-end">Disponible</th>
+                    <th class="text-end">Total</th><th>Existencias</th><th></th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${materiales}" data-testid="fila-material" th:attr="data-codigo=${m.codigo()}">
+                    <td class="fw-semibold" th:text="${m.codigo()}">COD</td>
+                    <td>
+                        <div th:text="${m.nombre()}">Material</div>
+                        <div class="small text-muted" th:text="${m.descripcion()}">Descripción</div>
+                    </td>
+                    <td th:text="${m.categoriaEtiqueta()}">Categoría</td>
+                    <td class="text-end fw-bold" th:attr="data-testid='disponible-' + ${m.codigo()}"
+                        th:text="${m.cantidadDisponible()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadTotal()}">0</td>
+                    <td>
+                        <div class="barra-stock" th:classappend="${m.cantidadDisponible() == 0} ? 'agotada' : (${m.porcentajeDisponible() < 25} ? 'baja' : '')"
+                             th:title="${m.porcentajeDisponible()} + '% disponible'">
+                            <div th:style="'width:' + ${m.porcentajeDisponible()} + '%'"></div>
+                        </div>
+                        <span class="small text-muted" th:text="${m.unidad()}">unidad</span>
+                    </td>
+                    <td class="text-end">
+                        <a th:if="${m.cantidadDisponible() > 0}" class="btn btn-sm btn-outline-primary"
+                           th:href="@{/productor/solicitudes/nueva(materialId=${m.id()})}"
+                           th:attr="data-testid='solicitar-' + ${m.codigo()}">
+                            <i class="bi bi-cart-plus"></i> Solicitar
+                        </a>
+                        <span th:if="${m.cantidadDisponible() == 0}" class="badge text-bg-secondary">Sin stock</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(materiales)}">
+                    <td colspan="7" class="text-center text-muted py-4" data-testid="sin-resultados">
+                        No se encontraron materiales con los criterios indicados.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

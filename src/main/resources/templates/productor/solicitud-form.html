@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Nueva solicitud')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/productor/inventario}">Inventario</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Nueva solicitud</li>
+        </ol>
+    </nav>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header"><i class="bi bi-clipboard-plus"></i> Solicitud de préstamo</div>
+                <div class="card-body">
+                    <form th:action="@{/productor/solicitudes}" th:object="${solicitud}" method="post"
+                          class="needs-validation" novalidate data-testid="form-solicitud">
+                        <div class="mb-3">
+                            <label for="materialId" class="form-label">Material</label>
+                            <select th:field="*{materialId}" class="form-select" required
+                                    th:classappend="${#fields.hasErrors('materialId')} ? 'is-invalid'"
+                                    data-testid="sol-material">
+                                <option value="">Seleccione un material…</option>
+                                <option th:each="m : ${materiales}" th:value="${m.id()}"
+                                        th:attr="data-disponible=${m.cantidadDisponible()}"
+                                        th:text="${m.codigo()} + ' - ' + ${m.nombre()} + ' (' + ${m.cantidadDisponible()} + ' disp.)'">
+                                    Material
+                                </option>
+                            </select>
+                            <div class="form-text" id="info-disponible" data-testid="sol-disponible"></div>
+                            <div class="invalid-feedback" data-testid="error-materialId"
+                                 th:text="${#fields.hasErrors('materialId')} ? ${#fields.errors('materialId')[0]} : 'Seleccione un material'">
+                                Seleccione un material</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label for="cantidad" class="form-label">Cantidad solicitada</label>
+                                <input type="number" th:field="*{cantidad}" class="form-control" required min="1"
+                                       max="10000" step="1"
+                                       th:classappend="${#fields.hasErrors('cantidad')} ? 'is-invalid'"
+                                       data-testid="sol-cantidad">
+                                <div class="invalid-feedback" data-testid="error-cantidad"
+                                     th:text="${#fields.hasErrors('cantidad')} ? ${#fields.errors('cantidad')[0]} : 'Ingrese un número entero positivo'">
+                                    Ingrese un número entero positivo</div>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <label for="fechaDevolucionPrevista" class="form-label">Fecha prevista de devolución</label>
+                                <input type="date" th:field="*{fechaDevolucionPrevista}" class="form-control" required
+                                       th:min="${fechaMinima}" th:max="${fechaMaxima}"
+                                       th:classappend="${#fields.hasErrors('fechaDevolucionPrevista')} ? 'is-invalid'"
+                                       data-testid="sol-fecha">
+                                <div class="form-text">
+                                    Entre <span th:text="${#temporals.format(fechaMinima, 'dd/MM/yyyy')}"></span>
+                                    y <span th:text="${#temporals.format(fechaMaxima, 'dd/MM/yyyy')}"></span>.
+                                </div>
+                                <div class="invalid-feedback" data-testid="error-fecha"
+                                     th:text="${#fields.hasErrors('fechaDevolucionPrevista')} ? ${#fields.errors('fechaDevolucionPrevista')[0]} : 'Seleccione una fecha dentro del plazo permitido'">
+                                    Seleccione una fecha válida</div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="motivo" class="form-label">Motivo del préstamo</label>
+                            <textarea th:field="*{motivo}" class="form-control" rows="3" required
+                                      th:attr="minlength=${longitudMinimaMotivo}" maxlength="300"
+                                      th:classappend="${#fields.hasErrors('motivo')} ? 'is-invalid'"
+                                      placeholder="Ej.: cosecha de cebolla en la parcela 3" data-testid="sol-motivo"></textarea>
+                            <div class="invalid-feedback" data-testid="error-motivo"
+                                 th:text="${#fields.hasErrors('motivo')} ? ${#fields.errors('motivo')[0]} : 'Describa el motivo (mínimo ' + ${longitudMinimaMotivo} + ' caracteres)'">
+                                Describa el motivo</div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/productor/inventario}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary" data-testid="sol-enviar">
+                                <i class="bi bi-send"></i> Enviar solicitud
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

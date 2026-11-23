@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalle de solicitud')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/encargado/solicitudes}">Solicitudes</a></li>
+        <li class="breadcrumb-item active">N.° <span th:text="${solicitud.id()}">1</span></li>
+    </ol></nav>
+    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+        <h1 class="h3 titulo-pagina mb-0">Solicitud N.° <span data-testid="detalle-id" th:text="${solicitud.id()}">1</span></h1>
+        <span data-testid="detalle-estado" th:attr="data-estado=${solicitud.estado()}">
+            <span th:replace="~{fragments/layout :: estadoSolicitud(${solicitud.estado()})}"></span>
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card mb-4">
+                <div class="card-header"><i class="bi bi-info-circle"></i> Datos de la solicitud</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Material</dt>
+                        <dd class="col-sm-8" data-testid="detalle-material"><span th:text="${solicitud.materialCodigo()}">C</span> - <span th:text="${solicitud.materialNombre()}">M</span></dd>
+                        <dt class="col-sm-4">Cantidad</dt>
+                        <dd class="col-sm-8" data-testid="detalle-cantidad" th:text="${solicitud.cantidad()} + ' ' + ${solicitud.unidad()}">1</dd>
+                        <dt class="col-sm-4">Fecha de solicitud</dt>
+                        <dd class="col-sm-8" th:text="${#temporals.format(solicitud.fechaSolicitud(), 'dd/MM/yyyy HH:mm')}">f</dd>
+                        <dt class="col-sm-4">Devolución prevista</dt>
+                        <dd class="col-sm-8" th:text="${#temporals.format(solicitud.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">f</dd>
+                        <dt class="col-sm-4">Motivo</dt>
+                        <dd class="col-sm-8" data-testid="detalle-motivo" th:text="${solicitud.motivo()}">motivo</dd>
+                        <th:block th:if="${solicitud.respondidoPor() != null}">
+                            <dt class="col-sm-4">Respondida por</dt>
+                            <dd class="col-sm-8"><span th:text="${solicitud.respondidoPor()}">E</span>
+                                (<span th:text="${#temporals.format(solicitud.fechaRespuesta(), 'dd/MM/yyyy HH:mm')}">f</span>)</dd>
+                        </th:block>
+                        <th:block th:if="${solicitud.motivoRechazo() != null}">
+                            <dt class="col-sm-4 text-danger">Motivo de rechazo</dt>
+                            <dd class="col-sm-8 text-danger" data-testid="detalle-motivo-rechazo" th:text="${solicitud.motivoRechazo()}">m</dd>
+                        </th:block>
+                    </dl>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><i class="bi bi-person"></i> Productor</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Nombre</dt><dd class="col-sm-8" data-testid="detalle-productor" th:text="${productor.nombreCompleto()}">N</dd>
+                        <dt class="col-sm-4">DNI</dt><dd class="col-sm-8" th:text="${productor.dni()}">D</dd>
+                        <dt class="col-sm-4">Sector</dt><dd class="col-sm-8" th:text="${productor.sector()}">S</dd>
+                        <dt class="col-sm-4">Teléfono</dt><dd class="col-sm-8" th:text="${productor.telefono()} ?: '—'">T</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card mb-4" th:classappend="${disponibilidad.disponible()} ? 'border-success' : 'border-danger'">
+                <div class="card-header"><i class="bi bi-boxes"></i> Disponibilidad actual</div>
+                <div class="card-body">
+                    <p class="mb-1"><span class="display-6 fw-bold" data-testid="detalle-disponible"
+                                          th:text="${disponibilidad.cantidadDisponible()}">0</span> unidades disponibles</p>
+                    <p class="mb-0" th:classappend="${disponibilidad.disponible()} ? 'text-success' : 'text-danger'"
+                       data-testid="detalle-disponibilidad-mensaje" th:text="${disponibilidad.mensaje()}">mensaje</p>
+                </div>
+            </div>
+
+            <!-- Acciones según el estado -->
+            <div class="card" th:if="${solicitud.estado().name() == 'PENDIENTE' or solicitud.estado().name() == 'APROBADA'}">
+                <div class="card-header"><i class="bi bi-check2-square"></i> Acciones</div>
+                <div class="card-body">
+                    <form th:if="${solicitud.estado().name() == 'PENDIENTE'}" method="post"
+                          th:action="@{/encargado/solicitudes/{id}/aprobar(id=${solicitud.id()})}" class="mb-3"
+                          data-confirm="¿Aprobar esta solicitud? El inventario se descontará al registrar la entrega.">
+                        <button type="submit" class="btn btn-primary w-100" data-testid="btn-aprobar">
+                            <i class="bi bi-check-circle"></i> Aprobar solicitud</button>
+                    </form>
+                    <form th:if="${solicitud.estado().name() == 'APROBADA'}" method="post"
+                          th:action="@{/encargado/solicitudes/{id}/entregar(id=${solicitud.id()})}" class="mb-3"
+                          data-confirm="¿Registrar la entrega física? Se descontarán las unidades del inventario disponible.">
+                        <button type="submit" class="btn btn-success w-100" data-testid="btn-entregar">
+                            <i class="bi bi-box-arrow-up"></i> Registrar entrega física</button>
+                    </form>
+                    <hr>
+                    <form method="post" th:action="@{/encargado/solicitudes/{id}/rechazar(id=${solicitud.id()})}"
+                          th:object="${rechazo}" class="needs-validation" novalidate
+                          data-confirm="¿Rechazar esta solicitud? Esta acción no se puede deshacer.">
+                        <label for="motivo" class="form-label">Motivo del rechazo</label>
+                        <textarea th:field="*{motivo}" class="form-control mb-2" rows="2" required minlength="5" maxlength="300"
+                                  th:classappend="${#fields.hasErrors('motivo')} ? 'is-invalid'" data-testid="rechazo-motivo"></textarea>
+                        <div class="invalid-feedback mb-2" th:text="${#fields.hasErrors('motivo')} ? ${#fields.errors('motivo')[0]} : 'Indique el motivo (mínimo 5 caracteres)'">x</div>
+                        <button type="submit" class="btn btn-outline-danger w-100" data-testid="btn-rechazar">
+                            <i class="bi bi-x-circle"></i> Rechazar solicitud</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card border-success" th:if="${prestamo != null}">
+                <div class="card-header text-success"><i class="bi bi-truck"></i> Préstamo generado</div>
+                <div class="card-body">
+                    <p class="mb-1">Préstamo N.° <strong data-testid="detalle-prestamo-id" th:text="${prestamo.id()}">1</strong></p>
+                    <p class="mb-1">Entregado el <span th:text="${#temporals.format(prestamo.fechaEntrega(), 'dd/MM/yyyy HH:mm')}">f</span>
+                        por <span th:text="${prestamo.entregadoPor()}">E</span></p>
+                    <a class="btn btn-outline-primary btn-sm mt-2" th:href="@{/encargado/prestamos/{id}(id=${prestamo.id()})}"
+                       data-testid="ir-prestamo">Ver préstamo y devoluciones</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

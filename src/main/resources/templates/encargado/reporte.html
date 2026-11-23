@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reporte consolidado')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h1 class="h3 titulo-pagina mb-0">Reporte consolidado</h1>
+        <button type="button" class="btn btn-outline-secondary no-imprimir" onclick="window.print()" data-testid="btn-imprimir">
+            <i class="bi bi-printer"></i> Imprimir</button>
+    </div>
+
+    <form th:action="@{/encargado/reportes}" th:object="${filtro}" method="get" class="card card-body mb-4 no-imprimir"
+          data-testid="form-filtro-reporte">
+        <div class="row g-2 align-items-end">
+            <div class="col-6 col-md-2"><label class="form-label" for="desde">Desde</label>
+                <input type="date" th:field="*{desde}" class="form-control" data-testid="filtro-desde"></div>
+            <div class="col-6 col-md-2"><label class="form-label" for="hasta">Hasta</label>
+                <input type="date" th:field="*{hasta}" class="form-control" data-testid="filtro-hasta"></div>
+            <div class="col-md-3"><label class="form-label" for="productorId">Productor</label>
+                <select th:field="*{productorId}" class="form-select" data-testid="filtro-productor">
+                    <option value="">Todos</option>
+                    <option th:each="p : ${productores}" th:value="${p.id()}" th:text="${p.nombreCompleto()}">p</option>
+                </select></div>
+            <div class="col-md-3"><label class="form-label" for="materialId">Material</label>
+                <select th:field="*{materialId}" class="form-select" data-testid="filtro-material">
+                    <option value="">Todos</option>
+                    <option th:each="m : ${materiales}" th:value="${m.id()}" th:text="${m.codigo()} + ' - ' + ${m.nombre()}">m</option>
+                </select></div>
+            <div class="col-md-2"><label class="form-label" for="estado">Estado solicitud</label>
+                <select th:field="*{estado}" class="form-select" data-testid="filtro-estado">
+                    <option value="">Todos</option>
+                    <option th:each="e : ${estados}" th:value="${e}" th:text="${e}">e</option>
+                </select></div>
+            <div class="col-12 d-flex gap-2 justify-content-end">
+                <a th:href="@{/encargado/reportes}" class="btn btn-outline-secondary">Limpiar</a>
+                <button type="submit" class="btn btn-primary" data-testid="filtro-aplicar"><i class="bi bi-funnel"></i> Aplicar filtros</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Resumen de inventario -->
+    <h2 class="h5 text-agro">Inventario</h2>
+    <div class="row g-3 mb-4" th:with="inv=${reporte.inventario()}">
+        <div class="col-6 col-md-2"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Materiales</div>
+            <div class="valor" data-testid="rep-materiales" th:text="${inv.materialesRegistrados()}">0</div></div></div></div>
+        <div class="col-6 col-md-2"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Total unidades</div>
+            <div class="valor" data-testid="rep-total" th:text="${inv.cantidadTotal()}">0</div></div></div></div>
+        <div class="col-6 col-md-2"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Disponibles</div>
+            <div class="valor" data-testid="rep-disponibles" th:text="${inv.cantidadDisponible()}">0</div></div></div></div>
+        <div class="col-6 col-md-2"><div class="card kpi kpi-info h-100"><div class="card-body"><div class="etiqueta-dato">Prestadas</div>
+            <div class="valor" data-testid="rep-prestadas" th:text="${inv.cantidadPrestada()}">0</div></div></div></div>
+        <div class="col-6 col-md-2"><div class="card kpi kpi-peligro h-100"><div class="card-body"><div class="etiqueta-dato">Dañadas</div>
+            <div class="valor" data-testid="rep-danadas" th:text="${inv.cantidadDanada()}">0</div></div></div></div>
+        <div class="col-6 col-md-2"><div class="card kpi kpi-tierra h-100"><div class="card-body"><div class="etiqueta-dato">Mantenimiento</div>
+            <div class="valor" data-testid="rep-mantenimiento" th:text="${inv.cantidadMantenimiento()}">0</div></div></div></div>
+    </div>
+
+    <h2 class="h5 text-agro">Solicitudes, préstamos y devoluciones del periodo</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md" th:each="e : ${estados}">
+            <div class="card kpi kpi-alerta h-100"><div class="card-body"><div class="etiqueta-dato" th:text="'Sol. ' + ${e}">E</div>
+                <div class="valor" th:attr="data-testid='rep-sol-' + ${e}" th:text="${reporte.solicitudesPorEstado().get(e)}">0</div></div></div>
+        </div>
+        <div class="col-6 col-md"><div class="card kpi kpi-info h-100"><div class="card-body"><div class="etiqueta-dato">Préstamos activos</div>
+            <div class="valor" data-testid="rep-prestamos-activos" th:text="${reporte.prestamosActivos()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi h-100"><div class="card-body"><div class="etiqueta-dato">Devoluciones</div>
+            <div class="valor" data-testid="rep-devoluciones" th:text="${reporte.devolucionesRegistradas()}">0</div></div></div></div>
+        <div class="col-6 col-md"><div class="card kpi kpi-peligro h-100"><div class="card-body"><div class="etiqueta-dato">Unid. por devolver</div>
+            <div class="valor" data-testid="rep-pendientes" th:text="${reporte.unidadesPendientesDevolucion()}">0</div></div></div></div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><i class="bi bi-exclamation-circle"></i> Materiales pendientes de devolución</div>
+        <div class="table-responsive">
+            <table class="table table-agro table-sm mb-0" data-testid="tabla-pendientes">
+                <thead><tr><th>Préstamo</th><th>Productor</th><th>Material</th><th class="text-end">Entregadas</th>
+                    <th class="text-end">Pendientes</th><th>Devolver hasta</th><th>Estado</th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${reporte.pendientesDevolucion()}">
+                    <td><a th:href="@{/encargado/prestamos/{id}(id=${p.id()})}" th:text="${p.id()}">1</a></td>
+                    <td th:text="${p.productorNombre()}">P</td>
+                    <td th:text="${p.materialNombre()}">M</td>
+                    <td class="text-end" th:text="${p.cantidadEntregada()}">0</td>
+                    <td class="text-end fw-bold" th:text="${p.cantidadPendiente()}">0</td>
+                    <td th:text="${#temporals.format(p.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">f</td>
+                    <td><span th:replace="~{fragments/layout :: estadoPrestamo(${p})}"></span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(reporte.pendientesDevolucion())}"><td colspan="7" class="text-muted text-center py-3">Sin pendientes.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header"><i class="bi bi-boxes"></i> Existencias por material</div>
+        <div class="table-responsive">
+            <table class="table table-agro table-sm mb-0">
+                <thead><tr><th>Código</th><th>Material</th><th class="text-end">Total</th><th class="text-end">Disp.</th>
+                    <th class="text-end">Prest.</th><th class="text-end">Dañ.</th><th class="text-end">Mant.</th></tr></thead>
+                <tbody>
+                <tr th:each="m : ${reporte.materiales()}">
+                    <td th:text="${m.codigo()}">C</td><td th:text="${m.nombre()}">M</td>
+                    <td class="text-end" th:text="${m.cantidadTotal()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadDisponible()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadPrestada()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadDanada()}">0</td>
+                    <td class="text-end" th:text="${m.cantidadMantenimiento()}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Préstamos del periodo (<span th:text="${#lists.size(reporte.prestamos())}">0</span>)</div>
+                <div class="table-responsive">
+                    <table class="table table-agro table-sm mb-0" data-testid="tabla-prestamos-periodo">
+                        <thead><tr><th>N.°</th><th>Entrega</th><th>Productor</th><th>Material</th><th class="text-end">Cant.</th><th>Estado</th></tr></thead>
+                        <tbody>
+                        <tr th:each="p : ${reporte.prestamos()}">
+                            <td th:text="${p.id()}">1</td>
+                            <td th:text="${#temporals.format(p.fechaEntrega(), 'dd/MM/yyyy')}">f</td>
+                            <td th:text="${p.productorNombre()}">P</td>
+                            <td th:text="${p.materialNombre()}">M</td>
+                            <td class="text-end" th:text="${p.cantidadEntregada()}">0</td>
+                            <td th:text="${p.estado()}">E</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-header">Devoluciones del periodo (<span th:text="${#lists.size(reporte.devoluciones())}">0</span>)</div>
+                <div class="table-responsive">
+                    <table class="table table-agro table-sm mb-0" data-testid="tabla-devoluciones-periodo">
+                        <thead><tr><th>Fecha</th><th>Préstamo</th><th>Material</th><th class="text-end">Buen</th><th class="text-end">Dañ.</th><th class="text-end">Mant.</th></tr></thead>
+                        <tbody>
+                        <tr th:each="d : ${reporte.devoluciones()}">
+                            <td th:text="${#temporals.format(d.fecha(), 'dd/MM/yyyy')}">f</td>
+                            <td th:text="${d.prestamoId()}">1</td>
+                            <td th:text="${d.materialNombre()}">M</td>
+                            <td class="text-end" th:text="${d.cantidadBuenEstado()}">0</td>
+                            <td class="text-end" th:text="${d.cantidadDanada()}">0</td>
+                            <td class="text-end" th:text="${d.cantidadMantenimiento()}">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">Solicitudes del periodo (<span th:text="${#lists.size(reporte.solicitudes())}">0</span>)</div>
+                <div class="table-responsive">
+                    <table class="table table-agro table-sm mb-0" data-testid="tabla-solicitudes-periodo">
+                        <thead><tr><th>N.°</th><th>Fecha</th><th>Productor</th><th>Material</th><th class="text-end">Cant.</th><th>Estado</th></tr></thead>
+                        <tbody>
+                        <tr th:each="s : ${reporte.solicitudes()}">
+                            <td th:text="${s.id()}">1</td>
+                            <td th:text="${#temporals.format(s.fechaSolicitud(), 'dd/MM/yyyy')}">f</td>
+                            <td th:text="${s.productorNombre()}">P</td>
+                            <td th:text="${s.materialNombre()}">M</td>
+                            <td class="text-end" th:text="${s.cantidad()}">0</td>
+                            <td><span th:replace="~{fragments/layout :: estadoSolicitud(${s.estado()})}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

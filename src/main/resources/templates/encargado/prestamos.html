@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Préstamos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <h1 class="h3 titulo-pagina">Préstamos</h1>
+    <ul class="nav nav-pills mb-3 gap-1">
+        <li class="nav-item"><a class="nav-link" th:classappend="${estadoSeleccionado.name() == 'ACTIVO'} ? 'active'"
+                                th:href="@{/encargado/prestamos(estado='ACTIVO')}" data-testid="filtro-ACTIVO">Activos</a></li>
+        <li class="nav-item"><a class="nav-link" th:classappend="${estadoSeleccionado.name() == 'CERRADO'} ? 'active'"
+                                th:href="@{/encargado/prestamos(estado='CERRADO')}" data-testid="filtro-CERRADO">Cerrados</a></li>
+    </ul>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-prestamos">
+                <thead><tr><th>N.°</th><th>Productor</th><th>Material</th><th class="text-end">Entregadas</th>
+                    <th class="text-end">Devueltas</th><th class="text-end">Pendientes</th><th>Devolver hasta</th><th>Estado</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="p : ${prestamos}" data-testid="fila-prestamo" th:attr="data-id=${p.id()}">
+                    <td class="fw-semibold" th:text="${p.id()}">1</td>
+                    <td th:text="${p.productorNombre()}">P</td>
+                    <td th:text="${p.materialNombre()}">M</td>
+                    <td class="text-end" th:text="${p.cantidadEntregada()}">0</td>
+                    <td class="text-end" th:text="${p.cantidadDevuelta()}">0</td>
+                    <td class="text-end fw-bold" th:text="${p.cantidadPendiente()}">0</td>
+                    <td th:text="${#temporals.format(p.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">f</td>
+                    <td><span th:replace="~{fragments/layout :: estadoPrestamo(${p})}"></span></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" th:href="@{/encargado/prestamos/{id}(id=${p.id()})}"
+                                            th:attr="data-testid='ver-prestamo-' + ${p.id()}"
+                                            th:text="${p.estado().name() == 'ACTIVO'} ? 'Registrar devolución' : 'Ver detalle'">Ver</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(prestamos)}"><td colspan="9" class="text-center text-muted py-4">No hay préstamos en este estado.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

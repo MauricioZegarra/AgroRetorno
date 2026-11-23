@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mis solicitudes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+        <h1 class="h3 titulo-pagina mb-0">Mis solicitudes</h1>
+        <a th:href="@{/productor/inventario}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nueva solicitud</a>
+    </div>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-agro table-hover mb-0" data-testid="tabla-solicitudes">
+                <thead>
+                <tr><th>N.°</th><th>Fecha</th><th>Material</th><th class="text-end">Cantidad</th>
+                    <th>Devolución prevista</th><th>Motivo</th><th>Estado</th><th>Respuesta</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="s : ${solicitudes}" data-testid="fila-solicitud" th:attr="data-id=${s.id()}">
+                    <td class="fw-semibold" th:text="${s.id()}">1</td>
+                    <td th:text="${#temporals.format(s.fechaSolicitud(), 'dd/MM/yyyy HH:mm')}">fecha</td>
+                    <td th:text="${s.materialNombre()}">Material</td>
+                    <td class="text-end" th:text="${s.cantidad()} + ' ' + ${s.unidad()}">1</td>
+                    <td th:text="${#temporals.format(s.fechaDevolucionPrevista(), 'dd/MM/yyyy')}">fecha</td>
+                    <td class="small" th:text="${s.motivo()}" data-testid="motivo-solicitud">motivo</td>
+                    <td><span th:replace="~{fragments/layout :: estadoSolicitud(${s.estado()})}"></span></td>
+                    <td class="small">
+                        <span th:if="${s.motivoRechazo() != null}" class="text-danger" th:text="${s.motivoRechazo()}"
+                              data-testid="motivo-rechazo">motivo</span>
+                        <span th:if="${s.motivoRechazo() == null and s.respondidoPor() != null}"
+                              th:text="'Por ' + ${s.respondidoPor()}">encargado</span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(solicitudes)}">
+                    <td colspan="8" class="text-center text-muted py-4">Aún no registró solicitudes.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${edicion} ? 'Editar productor' : 'Registrar productor')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-4">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+        <li class="breadcrumb-item"><a th:href="@{/encargado/productores}">Productores</a></li>
+        <li class="breadcrumb-item active" th:text="${edicion} ? 'Editar' : 'Registrar'">Registrar</li>
+    </ol></nav>
+    <div class="row justify-content-center"><div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header" th:text="${edicion} ? 'Actualizar productor' : 'Registrar productor'">Productor</div>
+            <div class="card-body">
+                <form th:action="${edicion} ? @{/encargado/productores/{id}(id=${productorId})} : @{/encargado/productores}"
+                      th:object="${productor}" method="post" class="needs-validation" novalidate data-testid="form-productor">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Usuario de acceso</label>
+                            <input type="text" th:field="*{username}" class="form-control" th:readonly="${edicion}"
+                                   th:disabled="${edicion}" th:required="${!edicion}" pattern="[a-z0-9._]{4,30}"
+                                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'" data-testid="prod-usuario">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('username')} ? ${#fields.errors('username')[0]} : '4 a 30 caracteres: minúsculas, números, punto o guion bajo'">x</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label"
+                                   th:text="${edicion} ? 'Nueva contraseña (opcional)' : 'Contraseña inicial'">Contraseña</label>
+                            <input type="password" th:field="*{password}" class="form-control" minlength="8" maxlength="72"
+                                   th:required="${!edicion}" autocomplete="new-password" data-testid="prod-clave">
+                            <div class="invalid-feedback">Mínimo 8 caracteres.</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="text" th:field="*{dni}" class="form-control" required pattern="[0-9]{8}" maxlength="8"
+                                   th:readonly="${edicion}" inputmode="numeric"
+                                   th:classappend="${#fields.hasErrors('dni')} ? 'is-invalid'" data-testid="prod-dni">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('dni')} ? ${#fields.errors('dni')[0]} : 'El DNI debe tener 8 dígitos'">x</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="nombres" class="form-label">Nombres</label>
+                            <input type="text" th:field="*{nombres}" class="form-control" required maxlength="80"
+                                   th:classappend="${#fields.hasErrors('nombres')} ? 'is-invalid'" data-testid="prod-nombres">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('nombres')} ? ${#fields.errors('nombres')[0]} : 'Ingrese los nombres'">x</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="apellidos" class="form-label">Apellidos</label>
+                            <input type="text" th:field="*{apellidos}" class="form-control" required maxlength="80"
+                                   th:classappend="${#fields.hasErrors('apellidos')} ? 'is-invalid'" data-testid="prod-apellidos">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('apellidos')} ? ${#fields.errors('apellidos')[0]} : 'Ingrese los apellidos'">x</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="telefono" class="form-label">Teléfono (opcional)</label>
+                            <input type="tel" th:field="*{telefono}" class="form-control" pattern="9[0-9]{8}" maxlength="9"
+                                   th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'" data-testid="prod-telefono">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('telefono')} ? ${#fields.errors('telefono')[0]} : '9 dígitos, empieza con 9'">x</div>
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label for="sector" class="form-label">Sector, anexo o comunidad</label>
+                            <input type="text" th:field="*{sector}" class="form-control" required maxlength="100"
+                                   th:classappend="${#fields.hasErrors('sector')} ? 'is-invalid'" data-testid="prod-sector">
+                            <div class="invalid-feedback" th:text="${#fields.hasErrors('sector')} ? ${#fields.errors('sector')[0]} : 'Ingrese el sector'">x</div>
+                        </div>
+                        <div class="col-12 mb-3 form-check ms-2">
+                            <input type="checkbox" th:field="*{activo}" class="form-check-input" data-testid="prod-activo">
+                            <label class="form-check-label" for="activo1">Cuenta activa (puede iniciar sesión)</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <a th:href="@{/encargado/productores}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary" data-testid="prod-guardar"><i class="bi bi-save"></i> Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div></div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container py-5 text-center" data-testid="pagina-error">
+    <i class="bi bi-exclamation-octagon display-1 text-danger"></i>
+    <h1 class="h3 mt-3">Ocurrió un error <span th:if="${status}" th:text="'(' + ${status} + ')'"></span></h1>
+    <p class="text-muted">No se pudo completar la operación. Intente nuevamente o contacte al encargado del almacén.</p>
+    <a th:href="@{/panel}" class="btn btn-primary">Volver a mi panel</a>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>

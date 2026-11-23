@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- ======================= HEAD ======================= -->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" th:if="${_csrf != null}" th:content="${_csrf.token}">
+    <title th:text="${titulo} + ' | AgroRetorno'">AgroRetorno</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.13.2/font/bootstrap-icons.min.css}">
+    <link rel="stylesheet" th:href="@{/css/agroretorno.css}">
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/logo.svg}">
+</head>
+
+<body>
+
+<!-- ======================= NAVBAR ======================= -->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark navbar-agro shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/panel}" data-testid="nav-inicio">
+            <img th:src="@{/images/logo.svg}" alt="" width="30" height="30">
+            <span class="fw-semibold">AgroRetorno</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                aria-controls="menuPrincipal" aria-expanded="false" aria-label="Mostrar menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <!-- Menú del productor -->
+            <ul class="navbar-nav me-auto" sec:authorize="hasRole('PRODUCTOR')">
+                <li class="nav-item"><a class="nav-link" th:href="@{/productor/panel}" data-testid="nav-panel">
+                    <i class="bi bi-speedometer2"></i> Panel</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productor/inventario}" data-testid="nav-inventario">
+                    <i class="bi bi-box-seam"></i> Inventario</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productor/solicitudes}" data-testid="nav-solicitudes">
+                    <i class="bi bi-clipboard-check"></i> Mis solicitudes</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productor/prestamos}" data-testid="nav-prestamos">
+                    <i class="bi bi-truck"></i> Mis préstamos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productor/historial}" data-testid="nav-historial">
+                    <i class="bi bi-clock-history"></i> Historial</a></li>
+            </ul>
+            <!-- Menú del encargado -->
+            <ul class="navbar-nav me-auto" sec:authorize="hasRole('ENCARGADO')">
+                <li class="nav-item"><a class="nav-link" th:href="@{/encargado/panel}" data-testid="nav-panel">
+                    <i class="bi bi-speedometer2"></i> Panel</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/encargado/solicitudes}" data-testid="nav-solicitudes">
+                    <i class="bi bi-clipboard-check"></i> Solicitudes</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/encargado/prestamos}" data-testid="nav-prestamos">
+                    <i class="bi bi-truck"></i> Préstamos</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false" data-testid="nav-almacen"><i class="bi bi-boxes"></i> Almacén</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/encargado/materiales}" data-testid="nav-materiales">Materiales</a></li>
+                        <li><a class="dropdown-item" th:href="@{/encargado/existencias}" data-testid="nav-existencias">Existencias</a></li>
+                        <li><a class="dropdown-item" th:href="@{/encargado/productores}" data-testid="nav-productores">Productores</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/encargado/reportes}" data-testid="nav-reportes">
+                    <i class="bi bi-bar-chart"></i> Reporte</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/encargado/historial}" data-testid="nav-historial">
+                    <i class="bi bi-clock-history"></i> Historial</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3 text-white" sec:authorize="isAuthenticated()">
+                <span class="small">
+                    <i class="bi bi-person-circle"></i>
+                    <span data-testid="usuario-actual" sec:authentication="name">usuario</span>
+                    <span class="badge bg-light text-success ms-1" sec:authorize="hasRole('ENCARGADO')"
+                          data-testid="rol-actual">Encargado</span>
+                    <span class="badge bg-light text-success ms-1" sec:authorize="hasRole('PRODUCTOR')"
+                          data-testid="rol-actual">Productor</span>
+                </span>
+                <form th:action="@{/logout}" method="post" class="m-0">
+                    <button type="submit" class="btn btn-sm btn-outline-light" data-testid="btn-cerrar-sesion">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ======================= ALERTAS ======================= -->
+<div th:fragment="alertas">
+    <div th:if="${exito}" class="alert alert-success alert-dismissible fade show d-flex gap-2" role="alert"
+         data-testid="alerta-exito">
+        <i class="bi bi-check-circle-fill"></i>
+        <div><span th:text="${exito}">Operación correcta</span>
+            <span th:if="${idCreado}" class="d-none" data-testid="id-creado" th:text="${idCreado}"></span></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger d-flex gap-2" role="alert" data-testid="alerta-error">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span th:text="${error}">Error</span>
+    </div>
+</div>
+
+<!-- ======================= INDICADORES DE ESTADO ======================= -->
+<span th:fragment="estadoSolicitud(estado)" class="badge rounded-pill"
+      th:classappend="${estado.name() == 'PENDIENTE'} ? 'text-bg-warning' :
+                      (${estado.name() == 'APROBADA'} ? 'text-bg-primary' :
+                      (${estado.name() == 'ENTREGADA'} ? 'text-bg-success' : 'text-bg-danger'))"
+      data-testid="estado-solicitud" th:text="${estado}">PENDIENTE</span>
+
+<span th:fragment="estadoPrestamo(prestamo)">
+    <span class="badge rounded-pill" data-testid="estado-prestamo"
+          th:classappend="${prestamo.estado().name() == 'ACTIVO'} ? 'text-bg-info' : 'text-bg-secondary'"
+          th:text="${prestamo.estado()}">ACTIVO</span>
+    <span th:if="${prestamo.vencido()}" class="badge rounded-pill text-bg-danger" data-testid="prestamo-vencido">VENCIDO</span>
+</span>
+
+<!-- ======================= PIE ======================= -->
+<footer th:fragment="footer" class="footer-agro py-3 mt-5">
+    <div class="container small text-muted d-flex flex-wrap justify-content-between gap-2">
+        <span>AgroRetorno v1.0.0 · Gestión de materiales agrícolas reutilizables · Región Arequipa</span>
+        <span>Datos ficticios de demostración</span>
+    </div>
+</footer>
+
+<!-- ======================= SCRIPTS ======================= -->
+<th:block th:fragment="scripts">
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/agroretorno.js}"></script>
+</th:block>
+
+</body>
+</html>

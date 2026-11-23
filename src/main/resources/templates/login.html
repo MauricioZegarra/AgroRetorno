@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Iniciar sesión')}"></head>
+<body class="login-fondo">
+<main class="container d-flex align-items-center justify-content-center py-5" style="min-height: 90vh;">
+    <div class="card shadow login-card w-100">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <img th:src="@{/images/logo.svg}" alt="" width="72" height="72">
+                <h1 class="h3 titulo-pagina mt-2 mb-0">AgroRetorno</h1>
+                <p class="subtitulo small mb-0">Préstamo y devolución de materiales agrícolas</p>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-danger py-2" role="alert" data-testid="login-error">
+                <i class="bi bi-exclamation-triangle-fill"></i> Usuario o contraseña incorrectos, o cuenta inactiva.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success py-2" role="alert" data-testid="login-salida">
+                <i class="bi bi-check-circle-fill"></i> Sesión cerrada correctamente.
+            </div>
+
+            <form th:action="@{/login}" method="post" class="needs-validation" novalidate data-testid="form-login">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Usuario</label>
+                    <input type="text" id="username" name="username" class="form-control" required maxlength="50"
+                           autocomplete="username" autofocus data-testid="login-usuario">
+                    <div class="invalid-feedback">Ingrese su usuario.</div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" id="password" name="password" class="form-control" required maxlength="72"
+                           autocomplete="current-password" data-testid="login-clave">
+                    <div class="invalid-feedback">Ingrese su contraseña.</div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" data-testid="login-enviar">
+                    <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
+                </button>
+            </form>
+        </div>
+        <div class="card-footer small text-muted text-center">
+            Cooperativa agrícola · Almacén central · Región Arequipa
+        </div>
+    </div>
+</main>
+<th:block th:replace="~{fragments/layout :: scripts}"></th:block>
+</body>
+</html>
