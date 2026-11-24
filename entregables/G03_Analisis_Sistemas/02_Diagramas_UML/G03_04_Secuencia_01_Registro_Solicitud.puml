@@ -1,0 +1,69 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FCFDFB
+skinparam shadowing false
+skinparam dpi 160
+skinparam roundcorner 13
+skinparam SequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #286B55
+  LifeLineBorderColor #81A999
+  LifeLineBackgroundColor #F3F9F5
+  ParticipantBorderColor #397B66
+  ParticipantBackgroundColor #E5F3EA
+  ActorBorderColor #397B66
+  ActorBackgroundColor #E5F3EA
+  GroupBorderColor #8ABDA1
+  GroupBackgroundColor #F3F9F5
+  GroupHeaderFontColor #205A45
+}
+skinparam note {
+  BorderColor #BE9A55
+  BackgroundColor #FFF9E9
+}
+title G03 · Secuencia 01 — Registrar solicitud (RF06)
+actor "Productor" as P
+boundary "ProductorController" as PC
+control "SolicitudService" as SS
+entity "ProductorRepository" as PRepo
+entity "MaterialRepository" as MRepo
+control "InventarioService" as IS
+entity "SolicitudRepository" as SRepo
+control "HistorialService" as HS
+
+P -> PC: POST /productor/solicitudes (SolicitudRequest)
+activate PC
+note over PC: Spring Security restringe /productor/** al rol PRODUCTOR.
+@Valid y BindingResult validan el formulario.
+alt Error de validación web
+    PC --> P: Mostrar formulario con errores
+else Formulario válido
+    PC -> SS: registrar(username, solicitud)
+    activate SS
+    SS -> PRepo: findByUsername(username)
+    PRepo --> SS: Productor
+    SS -> SS: validarDatos(req)
+(cantidad, fecha, motivo)
+    SS -> MRepo: findByIdConInventario(materialId)
+    MRepo --> SS: Material con inventario
+    SS -> IS: validarDisponibilidad(material, cantidad)
+    IS --> SS: Validación o excepción
+    alt Datos y disponibilidad correctos
+        SS -> SRepo: save(Solicitud con estado PENDIENTE)
+        SRepo --> SS: Solicitud guardada con id
+        SS -> HS: registrar(REGISTRAR_SOLICITUD)
+        HS --> SS: Operación registrada
+        SS --> PC: SolicitudResponse(PENDIENTE)
+        PC --> P: redirect:/productor/solicitudes + mensaje
+    else Excepción de negocio
+        SS --> PC: AgroRetornoException
+        PC --> P: Formulario + mensaje de error
+    end
+    deactivate SS
+end
+deactivate PC
+note bottom
+La solicitud NO reserva ni descuenta existencias.
+El código consulta el stock disponible al registrarla.
+end note
+@enduml

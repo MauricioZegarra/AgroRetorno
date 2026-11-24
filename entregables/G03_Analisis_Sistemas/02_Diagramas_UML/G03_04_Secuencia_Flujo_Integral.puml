@@ -1,0 +1,67 @@
+@startuml
+!theme plain
+skinparam backgroundColor #FCFDFB
+skinparam shadowing false
+skinparam dpi 160
+skinparam roundcorner 13
+skinparam SequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #286B55
+  LifeLineBorderColor #81A999
+  LifeLineBackgroundColor #F3F9F5
+  ParticipantBorderColor #397B66
+  ParticipantBackgroundColor #E5F3EA
+  ActorBorderColor #397B66
+  ActorBackgroundColor #E5F3EA
+  GroupBorderColor #8ABDA1
+  GroupBackgroundColor #F3F9F5
+  GroupHeaderFontColor #205A45
+}
+skinparam note {
+  BorderColor #BE9A55
+  BackgroundColor #FFF9E9
+}
+title G03 · Secuencia general — Solicitud, aprobación y entrega
+actor "Productor" as P
+actor "Encargado" as E
+boundary "ProductorController" as PC
+boundary "EncargadoSolicitudController" as EC
+control "SolicitudService" as SS
+control "PrestamoService" as PS
+control "InventarioService" as IS
+entity "Repositorios JPA" as REPO
+
+== RF06 · Solicitud ==
+P -> PC: Registrar solicitud
+PC -> SS: registrar(username, req)
+SS -> REPO: Consultar productor/material
+SS -> IS: validarDisponibilidad(...)
+SS -> REPO: save(Solicitud PENDIENTE)
+SS --> PC: SolicitudResponse
+PC --> P: Confirmación de registro
+note over SS, IS: No se descuenta stock.
+
+== RF07 · Aprobación ==
+E -> EC: Aprobar solicitud
+EC -> SS: aprobar(id, encargado)
+SS -> REPO: Bloquear solicitud + comprobar estado
+SS -> IS: validarDisponibilidad(...)
+SS -> SS: Estado = APROBADA
+SS --> EC: SolicitudResponse
+EC --> E: Confirmación de aprobación
+note over SS, IS: Tampoco se descuenta stock.
+
+== RF08 · Entrega física ==
+E -> EC: Registrar entrega
+EC -> PS: registrarEntrega(id, encargado)
+PS -> REPO: Bloquear solicitud + verificar no duplicidad
+PS -> IS: descontarPorEntrega(...)
+IS -> REPO: Bloquear inventario + guardar stock y movimiento
+IS --> PS: Inventario actualizado
+PS -> REPO: save(Prestamo ACTIVO)
+PS -> PS: Solicitud = ENTREGADA
+PS --> EC: PrestamoResponse
+EC --> E: Confirmación de entrega
+note over PS, IS: Aquí se descuenta disponible
+y se incrementa prestado.
+@enduml

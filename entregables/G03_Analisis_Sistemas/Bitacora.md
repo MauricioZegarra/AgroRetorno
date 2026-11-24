@@ -62,3 +62,35 @@ Resultados:
 Estado:
 Modelo preparado, pendiente de revision final.
 
+
+## 2026-11-23 - G03 Paso 1.4
+
+Actividad:
+Modelado UML de los procesos de solicitud,
+aprobacion y entrega de materiales.
+
+Procedimiento:
+Se revisaron los metodos de ProductorController,
+EncargadoSolicitudController, SolicitudService,
+PrestamoService e InventarioService.
+
+Se prepararon diagramas de secuencia para:
+- RF06: registro de solicitudes.
+- RF07: aprobacion de solicitudes.
+- RF08: entrega fisica de materiales.
+
+Resultados:
+- Fuentes editables PlantUML.
+- Vistas PNG y SVG.
+- Analisis tecnico de interacciones.
+- Matriz de correspondencia con codigo Java.
+- Checklist de revision.
+
+Hallazgo principal:
+La aprobacion no modifica inventario.
+El descuento ocurre en la entrega fisica.
+
+Estado:
+Modelos preparados. Pendiente revision visual
+y verificacion final de las fuentes PlantUML.
+
