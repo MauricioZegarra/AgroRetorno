@@ -157,3 +157,32 @@ Analisis preparado.
 Pendiente validacion de la ERS,
 revision local y horas reales del equipo.
 
+
+## G04 - Paso 1.7: Registro de horas reales
+
+Actividad:
+Preparacion del registro y comparacion de
+horas reales frente a COCOMO.
+
+Procedimiento:
+Se estructuro un registro por integrante,
+fecha, actividad, fase y evidencia.
+
+Se incorporaron formulas para:
+- Horas declaradas.
+- Horas validadas.
+- Persona-meses observados.
+- Comparacion con el esfuerzo COCOMO.
+
+Resultados:
+- Excel acumulativo de 37 hojas.
+- Memoria metodologica.
+- Checklist de revision.
+- Panel de seguimiento.
+
+Estado:
+Instrumento preparado.
+Pendiente completar y verificar horas reales
+de los integrantes.
+Corte PARCIAL.
+
