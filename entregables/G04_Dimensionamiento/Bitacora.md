@@ -76,3 +76,32 @@ Pendiente:
 Verificar movimientos, grupos de datos,
 salidas de control y requisitos de G01.
 
+
+## G04 - Paso 1.4: Estimacion COCOMO
+
+Actividad:
+Estimacion de esfuerzo y duracion de AgroRetorno.
+
+Procedimiento:
+Se aplico COCOMO 81 basico, modo organico.
+Se realizo un conteo aproximado del codigo Java.
+Se construyeron escenarios de 1 y 3 personas.
+Se documento sensibilidad del tamaño +/-20 %.
+
+Resultados:
+- Tamano tecnico: 3.491 KLOC aproximadas.
+- Esfuerzo nominal: 8.92 persona-meses.
+- Duracion nominal: 5.74 meses.
+- Comparacion de costos y plazos.
+- Excel con formulas y graficos.
+- Script reproducible para contar lineas Java.
+
+Limitaciones:
+Se excluyen otros lenguajes y recursos.
+COCOMO no esta calibrado para este proyecto.
+Las tarifas, dedicacion y coordinacion son supuestos.
+
+Estado:
+Estimacion ilustrativa elaborada.
+Pendiente validacion y horas reales del equipo.
+
