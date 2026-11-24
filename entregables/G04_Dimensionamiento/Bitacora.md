@@ -49,3 +49,30 @@ Conteo preliminar, NO APROBADO.
 Pendiente contrastar con ERS de G01
 y verificar las clasificaciones funcionales.
 
+
+## G04 - Paso 1.3: Medicion COSMIC
+
+Actividad:
+Aplicacion preliminar del metodo COSMIC.
+
+Procedimiento:
+Se analizaron los 23 procesos candidatos.
+Se mantuvieron 21 procesos incluidos
+y dos pendientes de validacion.
+
+Se identificaron movimientos de datos:
+Entry, Exit, Read y Write.
+
+Resultados:
+- Libro Excel editable y recalculable.
+- Registro individual de 111 movimientos candidatos.
+- Memoria de calculo y checklist.
+- Resumen y comparacion con NESMA.
+
+Resultado preliminar:
+111 CFP. NO APROBADO.
+
+Pendiente:
+Verificar movimientos, grupos de datos,
+salidas de control y requisitos de G01.
+
