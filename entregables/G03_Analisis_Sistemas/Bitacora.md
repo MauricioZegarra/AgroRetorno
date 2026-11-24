@@ -170,3 +170,18 @@ Entregables:
 Estado:
 Versiones DOCX y PDF preparadas para revision.
 
+
+## 2026-11-23 - Correcciones de G03
+
+Actividad:
+Normalizacion de los entregables de G03.
+
+Correcciones realizadas:
+- Separacion de la estructura G04 de esta rama.
+- Actualizacion del SDD editable sin encabezados ni pies.
+- Correccion del nombre antiguo de la rama.
+
+Estado:
+Correcciones documentales realizadas.
+Pendiente revision de los diagramas y evidencias.
+
