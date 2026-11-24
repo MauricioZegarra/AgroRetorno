@@ -152,3 +152,21 @@ Estado:
 Borrador consolidado.
 Pendiente revision formal y confirmacion de ERS.
 
+
+## 2026-11-23 - Exportacion del SDD a PDF
+
+Actividad:
+Normalizacion y exportacion del SDD de G03.
+
+Procedimiento:
+Se eliminaron los encabezados y pies de pagina.
+Se conservaron las figuras, tablas y estructura del documento.
+Se genero una version PDF de 15 paginas.
+
+Entregables:
+- G03_06_SDD_IEEE1016_AgroRetorno_Cielo.docx
+- G03_06_SDD_IEEE1016_AgroRetorno_Cielo.pdf
+
+Estado:
+Versiones DOCX y PDF preparadas para revision.
+
