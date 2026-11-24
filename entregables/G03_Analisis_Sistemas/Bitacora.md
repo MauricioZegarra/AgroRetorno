@@ -185,3 +185,27 @@ Estado:
 Correcciones documentales realizadas.
 Pendiente revision de los diagramas y evidencias.
 
+
+## 2026-11-23 - G03 Paso 1.8
+
+Actividad:
+Correccion de exportaciones de diagramas UML.
+
+Procedimiento:
+Se actualizaron las vistas de secuencia
+para alinearlas con los identificadores
+de la linea base ampliada de requisitos.
+
+Resultados preparados:
+- Solicitud: RF07.
+- Aprobacion: RF09.
+- Entrega: RF11.
+- Flujo integral actualizado.
+- Archivos PNG y SVG.
+- Registro de verificacion.
+
+Estado:
+Exportaciones preparadas.
+Pendiente confirmar representacion en PlantUML
+y ratificar RF con la ERS definitiva de G01.
+
