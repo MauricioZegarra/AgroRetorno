@@ -37,3 +37,28 @@ Archivos:
 - 03_Casos_de_Uso/G03_02_Analisis_Casos_de_Uso.md
 
 Estado: Modelo preparado para revision.
+
+## 2026-11-23 - G03 Paso 1.3
+
+Actividad:
+Elaboracion del diagrama de clases UML.
+
+Procedimiento:
+Se analizaron las entidades Java de AgroRetorno,
+sus atributos, metodos y relaciones JPA.
+
+Se identificaron diez entidades persistentes.
+Se prepararon diagramas del nucleo del sistema
+y de los componentes de soporte.
+
+Resultados:
+- Modelo de clases del dominio.
+- Identificacion de multiplicidades.
+- Documentacion de relaciones y restricciones.
+- Fuentes editables PlantUML y Graphviz.
+- Diagramas PNG y SVG.
+- Analisis tecnico y lista de revision.
+
+Estado:
+Modelo preparado, pendiente de revision final.
+
