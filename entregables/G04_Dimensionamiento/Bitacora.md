@@ -105,3 +105,28 @@ Estado:
 Estimacion ilustrativa elaborada.
 Pendiente validacion y horas reales del equipo.
 
+
+## G04 - Paso 1.5: Costos y cronogramas
+
+Actividad:
+Elaboracion de escenarios de costos y planificacion.
+
+Procedimiento:
+Se utilizaron las estimaciones de COCOMO 81.
+Se prepararon escenarios de 1 y 3 personas.
+Se modelaron tarifas, dedicacion, coordinacion,
+horas productivas y capacidad disponible.
+Se distribuyo el cronograma en seis fases.
+
+Resultados:
+- Excel acumulativo de 30 hojas.
+- Dos escenarios de personal.
+- Dos modalidades de costo.
+- Cronogramas relativos con formulas.
+- Graficos y memoria tecnica.
+- Checklist de revision.
+
+Estado:
+Material preparado. Pendiente revision personal,
+validacion de supuestos y costos reales.
+
