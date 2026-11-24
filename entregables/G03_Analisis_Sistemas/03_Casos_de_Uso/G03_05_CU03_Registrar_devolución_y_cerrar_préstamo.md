@@ -1,9 +1,9 @@
-# CU-03 — Registrar devolución y cerrar préstamo
+# ED-03 — Registrar devolución y cerrar préstamo
 
 **Proyecto:** AgroRetorno  |  **Guía:** G03  |  **Responsable:** Cielo Cristal Meza Vizcarra
 **Estado:** Especificación derivada de código; pendiente de revisión académica.
 
-**Requisitos vinculados:** RF09
+**Requisitos vinculados:** RF13
 **Actores:** Encargado (principal); sistema AgroRetorno (interno)
 **Objetivo:** Registrar una devolución total o parcial, clasificar materiales por condición y actualizar existencias y saldos del préstamo.
 **Disparador:** El encargado abre el detalle de un préstamo ACTIVO y selecciona «Registrar devolución».

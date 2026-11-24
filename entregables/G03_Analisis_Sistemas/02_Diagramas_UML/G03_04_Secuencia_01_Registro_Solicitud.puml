@@ -21,7 +21,7 @@ skinparam note {
   BorderColor #BE9A55
   BackgroundColor #FFF9E9
 }
-title G03 · Secuencia 01 — Registrar solicitud (RF06)
+title G03 · Secuencia 01 — Registrar solicitud (RF07)
 actor "Productor" as P
 boundary "ProductorController" as PC
 control "SolicitudService" as SS

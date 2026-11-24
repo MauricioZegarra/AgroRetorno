@@ -1,9 +1,9 @@
-# CU-01 — Registrar solicitud de préstamo
+# ED-01 — Registrar solicitud de préstamo
 
 **Proyecto:** AgroRetorno  |  **Guía:** G03  |  **Responsable:** Cielo Cristal Meza Vizcarra
 **Estado:** Especificación derivada de código; pendiente de revisión académica.
 
-**Requisitos vinculados:** RF06
+**Requisitos vinculados:** RF07
 **Actores:** Productor (principal); sistema AgroRetorno (interno)
 **Objetivo:** Permitir que un productor autenticado solicite una cantidad de un material agrícola reutilizable, indicando una fecha prevista de devolución y un motivo.
 **Disparador:** El productor selecciona «Solicitar» desde el inventario disponible o abre «Nueva solicitud».

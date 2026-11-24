@@ -21,7 +21,7 @@ skinparam note {
   BorderColor #BE9A55
   BackgroundColor #FFF9E9
 }
-title G03 · Secuencia 03 — Registrar entrega (RF08)
+title G03 · Secuencia 03 — Registrar entrega (RF11)
 actor "Encargado" as E
 boundary "EncargadoSolicitudController" as EC
 control "PrestamoService" as PS

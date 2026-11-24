@@ -8,7 +8,7 @@
 
 ## 1. Propósito
 
-Describir cómo colaboran actores, controladores Spring MVC, servicios de negocio y repositorios JPA durante los procesos **registrar solicitud (RF06)**, **aprobar solicitud (RF07)** y **registrar entrega (RF08)**. Los diagramas explican las interacciones *en el tiempo*, complementando los diagramas de casos de uso y clases de G03.
+Describir cómo colaboran actores, controladores Spring MVC, servicios de negocio y repositorios JPA durante los procesos **registrar solicitud (RF07)**, **aprobar solicitud (RF09)** y **registrar entrega (RF11)**. Los diagramas explican las interacciones *en el tiempo*, complementando los diagramas de casos de uso y clases de G03.
 
 ## 2. Frontera y notación
 
@@ -20,7 +20,7 @@ Describir cómo colaboran actores, controladores Spring MVC, servicios de negoci
 - **alt:** rutas alternativas de éxito o error. **note:** reglas de negocio o simplificaciones.
 - Las láminas PNG/SVG son **resúmenes del camino principal** para la exposición; los archivos `.puml` contienen los diagramas UML con alternativas y validaciones. La vista general condensa los tres momentos.
 
-## 3. Secuencia 01 — Registro de solicitud (RF06)
+## 3. Secuencia 01 — Registro de solicitud (RF07)
 
 1. El productor envía `POST /productor/solicitudes` a `ProductorController.registrarSolicitud()`.
 2. El controlador aplica `@Valid`, controla `BindingResult` y llama a `SolicitudService.registrar(username, req)`.
@@ -33,7 +33,7 @@ Describir cómo colaboran actores, controladores Spring MVC, servicios de negoci
 
 **Regla clave:** registrar la solicitud **no descuenta** stock del inventario. El registro prueba disponibilidad en ese momento.
 
-## 4. Secuencia 02 — Aprobación (RF07)
+## 4. Secuencia 02 — Aprobación (RF09)
 
 1. El encargado envía `POST /encargado/solicitudes/{id}/aprobar`.
 2. El controlador llama a `SolicitudService.aprobar(id, usernameEncargado)`.
@@ -45,7 +45,7 @@ Describir cómo colaboran actores, controladores Spring MVC, servicios de negoci
 
 **Regla clave:** aprobar **no descuenta** inventario ni crea préstamo. La aprobación es una decisión administrativa diferente de la entrega física.
 
-## 5. Secuencia 03 — Entrega física (RF08)
+## 5. Secuencia 03 — Entrega física (RF11)
 
 1. El encargado envía `POST /encargado/solicitudes/{id}/entregar`.
 2. `EncargadoSolicitudController.entregar` invoca `PrestamoService.registrarEntrega(id, usernameEncargado)`.
@@ -64,9 +64,9 @@ Describir cómo colaboran actores, controladores Spring MVC, servicios de negoci
 
 | Proceso | Controlador / método | Servicio / método | Repositorios y colaboradores | RF |
 |---|---|---|---|---|
-| Registrar solicitud | `ProductorController.registrarSolicitud` | `SolicitudService.registrar` | `ProductorRepository`, `MaterialRepository`, `InventarioService`, `SolicitudRepository`, `HistorialService` | RF06 |
-| Aprobar solicitud | `EncargadoSolicitudController.aprobar` | `SolicitudService.aprobar` | `UsuarioService`, `SolicitudRepository`, `InventarioService`, `HistorialService` | RF07 |
-| Registrar entrega | `EncargadoSolicitudController.entregar` | `PrestamoService.registrarEntrega` | `UsuarioService`, `SolicitudRepository`, `PrestamoRepository`, `InventarioService`, `InventarioRepository`, `MovimientoInventarioRepository`, `HistorialService` | RF08 |
+| Registrar solicitud | `ProductorController.registrarSolicitud` | `SolicitudService.registrar` | `ProductorRepository`, `MaterialRepository`, `InventarioService`, `SolicitudRepository`, `HistorialService` | RF07 |
+| Aprobar solicitud | `EncargadoSolicitudController.aprobar` | `SolicitudService.aprobar` | `UsuarioService`, `SolicitudRepository`, `InventarioService`, `HistorialService` | RF09 |
+| Registrar entrega | `EncargadoSolicitudController.entregar` | `PrestamoService.registrarEntrega` | `UsuarioService`, `SolicitudRepository`, `PrestamoRepository`, `InventarioService`, `InventarioRepository`, `MovimientoInventarioRepository`, `HistorialService` | RF11 |
 
 ## 7. Riesgos y decisiones de diseño observadas
 

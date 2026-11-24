@@ -31,7 +31,7 @@ control "PrestamoService" as PS
 control "InventarioService" as IS
 entity "Repositorios JPA" as REPO
 
-== RF06 · Solicitud ==
+== RF07 · Solicitud ==
 P -> PC: Registrar solicitud
 PC -> SS: registrar(username, req)
 SS -> REPO: Consultar productor/material
@@ -41,7 +41,7 @@ SS --> PC: SolicitudResponse
 PC --> P: Confirmación de registro
 note over SS, IS: No se descuenta stock.
 
-== RF07 · Aprobación ==
+== RF09 · Aprobación ==
 E -> EC: Aprobar solicitud
 EC -> SS: aprobar(id, encargado)
 SS -> REPO: Bloquear solicitud + comprobar estado
@@ -51,7 +51,7 @@ SS --> EC: SolicitudResponse
 EC --> E: Confirmación de aprobación
 note over SS, IS: Tampoco se descuenta stock.
 
-== RF08 · Entrega física ==
+== RF11 · Entrega física ==
 E -> EC: Registrar entrega
 EC -> PS: registrarEntrega(id, encargado)
 PS -> REPO: Bloquear solicitud + verificar no duplicidad

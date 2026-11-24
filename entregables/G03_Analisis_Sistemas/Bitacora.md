@@ -127,3 +127,28 @@ Estado:
 Material preparado, pendiente de revision
 personal y consolidacion con el SDD.
 
+
+## 2026-11-23 - G03 Paso 1.6
+
+Actividad:
+Consolidacion del documento de diseno de software.
+
+Procedimiento:
+Se integraron las vistas arquitectonicas,
+diagramas UML, modelo de datos, especificaciones
+de casos de uso, mockups y decisiones de diseno.
+
+Se reviso la trazabilidad con la linea base
+ampliada de requisitos de AgroRetorno.
+
+Resultados:
+- SDD consolidado en Word.
+- Matriz de trazabilidad corregida.
+- Identificadores RF y ED normalizados.
+- Mockups y fuentes UML actualizados.
+- Checklist para revision del SDD.
+
+Estado:
+Borrador consolidado.
+Pendiente revision formal y confirmacion de ERS.
+

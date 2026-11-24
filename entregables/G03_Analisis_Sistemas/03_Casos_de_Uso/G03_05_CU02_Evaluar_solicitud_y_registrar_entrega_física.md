@@ -1,9 +1,9 @@
-# CU-02 — Evaluar solicitud y registrar entrega física
+# ED-02 — Evaluar solicitud y registrar entrega física
 
 **Proyecto:** AgroRetorno  |  **Guía:** G03  |  **Responsable:** Cielo Cristal Meza Vizcarra
 **Estado:** Especificación derivada de código; pendiente de revisión académica.
 
-**Requisitos vinculados:** RF07, RF08
+**Requisitos vinculados:** RF09, RF11
 **Actores:** Encargado (principal); sistema AgroRetorno (interno)
 **Objetivo:** Permitir que el encargado revise una solicitud pendiente, la apruebe o rechace y, si ha sido aprobada, registre la entrega física sin generar préstamos duplicados.
 **Disparador:** El encargado abre la lista de solicitudes y entra en el detalle de una solicitud PENDIENTE.

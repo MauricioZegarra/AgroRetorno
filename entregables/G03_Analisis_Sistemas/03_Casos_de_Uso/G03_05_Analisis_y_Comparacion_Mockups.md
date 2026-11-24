@@ -10,16 +10,16 @@ Documentar cuatro vistas editables que cubren tres casos de uso y refuerzan la c
 
 | Mockup | CU / RF | Pantalla original de referencia | Correspondencia funcional |
 |---|---|---|---|
-| M01 Solicitud | CU-01 / RF06 | `productor/solicitud-form.html` | material, cantidad, fecha prevista, motivo, enviar solicitud |
-| M02 Revisión | CU-02 / RF07 | `encargado/solicitud-detalle.html` | detalles, disponibilidad, aprobar y rechazar con motivo |
-| M03 Entrega | CU-02 / RF08 | `encargado/solicitud-detalle.html` | solo en estado APROBADA, registrar entrega física |
-| M04 Devolución | CU-03 / RF09 | `encargado/prestamo-detalle.html` | cantidades por condición, observaciones, saldo y estado |
+| M01 Solicitud | ED-01 / RF07 | `productor/solicitud-form.html` | material, cantidad, fecha prevista, motivo, enviar solicitud |
+| M02 Revisión | ED-02 / RF09 | `encargado/solicitud-detalle.html` | detalles, disponibilidad, aprobar y rechazar con motivo |
+| M03 Entrega | ED-02 / RF11 | `encargado/solicitud-detalle.html` | solo en estado APROBADA, registrar entrega física |
+| M04 Devolución | ED-03 / RF13 | `encargado/prestamo-detalle.html` | cantidades por condición, observaciones, saldo y estado |
 
 ## Criterios de diseño aplicados
 
 1. **Claridad del estado:** PENDIENTE, APROBADA, ENTREGADA, ACTIVO y CERRADO aparecen con etiquetas consistentes con las entidades reales.
 2. **Separación de acciones:** aprobar y entregar están representados en pantallas distintas por fines didácticos; el sistema real usa el mismo detalle con acciones condicionadas por estado.
-3. **Validación visible:** se explican cantidad, fecha y motivo en CU-01; existencia de stock en CU-02; y límites/observaciones en CU-03.
+3. **Validación visible:** se explican cantidad, fecha y motivo en ED-01; existencia de stock en ED-02; y límites/observaciones en ED-03.
 4. **Trazabilidad:** cada mockup se vincula con una ruta, un controlador, uno o más servicios y un RF.
 5. **Accesibilidad visual básica:** tipografía legible, contraste verde/blanco, estructura por secciones y etiquetas de campo. Debe verificarse adicionalmente si se desea implementar el diseño.
 6. **Datos:** todos los números, nombres, referencias y fechas mostrados son **ficticios**; no provienen de la base de datos desplegada.
