@@ -94,3 +94,36 @@ Estado:
 Modelos preparados. Pendiente revision visual
 y verificacion final de las fuentes PlantUML.
 
+
+## 2026-11-23 - G03 Paso 1.5
+
+Actividad:
+Especificacion de casos de uso y elaboracion
+de mockups de AgroRetorno.
+
+Procedimiento:
+Se revisaron controladores, servicios, DTO
+y plantillas Thymeleaf.
+
+Se documentaron tres casos de uso:
+- CU-01: Registrar solicitud de prestamo.
+- CU-02: Evaluar solicitud y registrar entrega.
+- CU-03: Registrar devolucion y cerrar prestamo.
+
+Se prepararon cuatro prototipos visuales:
+- M01: Nueva solicitud.
+- M02: Revision y aprobacion.
+- M03: Entrega fisica.
+- M04: Devolucion.
+
+Entregables:
+- Casos de uso en Word y Markdown.
+- Matriz de trazabilidad CSV.
+- Mockups HTML, CSS y PNG.
+- Analisis de correspondencia con el codigo.
+- Checklist de revision.
+
+Estado:
+Material preparado, pendiente de revision
+personal y consolidacion con el SDD.
+

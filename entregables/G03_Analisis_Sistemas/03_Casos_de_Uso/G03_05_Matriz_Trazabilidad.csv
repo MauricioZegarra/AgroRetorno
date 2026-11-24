@@ -1,0 +1,5 @@
+﻿Caso de uso;RF;Actor;Pantalla real Thymeleaf;Método/servicio;Mockup;Estado
+CU-01;RF06;PRODUCTOR;productor/solicitud-form.html;SolicitudService.registrar;G03_05_M01_Solicitud.html;"Documentado; no probado"
+CU-02;RF07;ENCARGADO;encargado/solicitud-detalle.html;SolicitudService.aprobar / rechazar;G03_05_M02_Revision.html;"Documentado; no probado"
+CU-02;RF08;ENCARGADO;encargado/solicitud-detalle.html;PrestamoService.registrarEntrega;G03_05_M03_Entrega.html;"Documentado; no probado"
+CU-03;RF09;ENCARGADO;encargado/prestamo-detalle.html;DevolucionService.registrar;G03_05_M04_Devolucion.html;"Documentado; no probado"
