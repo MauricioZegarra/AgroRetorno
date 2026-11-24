@@ -1,0 +1,5 @@
+
+# Archivos temporales de Office y LibreOffice
+.~lock.*#
+~$*
+*.tmp
