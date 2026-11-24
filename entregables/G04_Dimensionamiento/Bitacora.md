@@ -25,3 +25,27 @@ Analisis preliminar elaborado.
 Pendiente validar contra ERS de G01
 y realizar conteos funcionales definitivos.
 
+
+## G04 - Paso 1.2: Conteo NESMA
+
+Actividad:
+Aplicacion del metodo NESMA a AgroRetorno.
+
+Procedimiento:
+Clasificacion preliminar de archivos logicos
+y transacciones elementales.
+Registro de DET, RET y FTR.
+Aplicacion de matrices de complejidad
+y formulas de puntos de funcion.
+
+Resultados:
+- Libro Excel editable.
+- Memoria de calculo NESMA.
+- Checklist de validacion.
+- Estimacion preliminar: 131 UFP.
+
+Estado:
+Conteo preliminar, NO APROBADO.
+Pendiente contrastar con ERS de G01
+y verificar las clasificaciones funcionales.
+
