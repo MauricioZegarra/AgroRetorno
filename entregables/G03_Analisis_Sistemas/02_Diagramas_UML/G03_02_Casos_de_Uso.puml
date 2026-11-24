@@ -1,0 +1,68 @@
+@startuml
+' G03 — Paso 1.2 — Casos de uso de AgroRetorno
+' Modelo de funcionalidades verificadas en controladores Java (23/11/2026).
+' Responsable: Cielo Cristal Meza Vizcarra
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam defaultFontName Arial
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor #EDF6F1
+  BorderColor #318468
+  FontColor #174E40
+}
+skinparam package {
+  BorderColor #BBD8CA
+  BackgroundColor #F8FBF9
+  FontColor #174E40
+}
+skinparam ArrowColor #657C73
+actor "Productor" as P
+actor "Encargado" as E
+rectangle "AgroRetorno — Sistema web" as SYS {
+  usecase "CU-01\nIniciar sesión" as UC01
+  package "Funciones del PRODUCTOR" {
+    usecase "CU-02\nConsultar inventario" as UC02
+    usecase "CU-03\nRegistrar solicitud" as UC03
+    usecase "CU-04\nConsultar solicitudes" as UC04
+    usecase "CU-05\nConsultar préstamos" as UC05
+    usecase "CU-06\nConsultar historial" as UC06
+  }
+  package "Funciones del ENCARGADO" {
+    usecase "CU-07\nGestionar productores" as UC07
+    usecase "CU-08\nGestionar materiales" as UC08
+    usecase "CU-09\nAjustar existencias" as UC09
+    usecase "CU-10\nRevisar solicitudes" as UC10
+    usecase "CU-11\nAprobar solicitud" as UC11
+    usecase "CU-12\nRechazar solicitud" as UC12
+    usecase "CU-13\nRegistrar entrega" as UC13
+    usecase "CU-14\nConsultar préstamos" as UC14
+    usecase "CU-15\nRegistrar devolución" as UC15
+    usecase "CU-16\nConsultar reportes e historial" as UC16
+  }
+}
+P -- UC01
+E -- UC01
+P -- UC02
+P -- UC03
+P -- UC04
+P -- UC05
+P -- UC06
+E -- UC07
+E -- UC08
+E -- UC09
+E -- UC10
+E -- UC11
+E -- UC12
+E -- UC13
+E -- UC14
+E -- UC15
+E -- UC16
+note bottom of UC13
+  La entrega física actualiza el inventario;
+  la aprobación por sí sola no lo descuenta.
+end note
+@enduml
