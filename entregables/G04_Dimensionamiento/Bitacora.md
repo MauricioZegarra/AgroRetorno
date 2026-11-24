@@ -130,3 +130,30 @@ Estado:
 Material preparado. Pendiente revision personal,
 validacion de supuestos y costos reales.
 
+
+## G04 - Paso 1.6: Sensibilidad y comparacion
+
+Actividad:
+Analisis de sensibilidad de las estimaciones
+y comparacion de NESMA, COSMIC y COCOMO.
+
+Procedimiento:
+Se analizaron escenarios de variacion +/-20 %
+para KLOC, tarifa, dedicacion y coordinacion.
+
+Se compararon las unidades y alcances de
+los tres metodos sin convertirlas entre si.
+
+Resultados:
+- Excel acumulativo de 34 hojas.
+- Doce escenarios de sensibilidad.
+- Tablero comparativo.
+- Graficos en PNG.
+- Memoria tecnica.
+- Checklist de revision.
+
+Estado:
+Analisis preparado.
+Pendiente validacion de la ERS,
+revision local y horas reales del equipo.
+
