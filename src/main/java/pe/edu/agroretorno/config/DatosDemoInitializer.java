@@ -27,12 +27,11 @@ import pe.edu.agroretorno.service.ProductorService;
 import pe.edu.agroretorno.service.SolicitudService;
 
 /**
- * Carga datos FICTICIOS de demostración solo cuando la base está vacía (no duplica registros
- * en cada inicio). Usa los mismos servicios de negocio, por lo que el inventario queda cuadrado
- * y el historial registra cada operación.
+ * Carga datos ficticios cuando se habilita el modo de demostración y la base está vacía.
+ * Usa los servicios de negocio para mantener el inventario y registrar el historial.
  */
 @Component
-@ConditionalOnProperty(name = "agroretorno.datos-demo.habilitado", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(name = "agroretorno.datos-demo.habilitado", havingValue = "true")
 public class DatosDemoInitializer implements ApplicationRunner {
 
     public static final String ENCARGADO = "encargado";
