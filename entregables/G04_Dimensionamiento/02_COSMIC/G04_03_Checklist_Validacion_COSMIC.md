@@ -30,3 +30,11 @@
 - [ ] Registrar fecha, revisor, observaciones, versión medida y estado final.
 
 **ESTADO:** preparado para revisión; NO APROBADO.
+
+<!-- G04-PASO19-AUDITORIA-REAL -->
+## Paso 1.9 - Resultado de auditoria real
+- COSMIC: 21 procesos incluidos; 111 movimientos E/X/R/W (E=21, X=21, R=41, W=28).
+- Total: 111 CFP PRELIMINARES, consistente aritmeticamente con el resumen.
+- Las 111 filas siguen con estado "Por validar". No se aprueban ni marcan como revisadas individualmente.
+- Pendiente revisar E/X/R/W, datos D08, duplicados y trazabilidad contra G01.
+- Evidencia: G04_09_Salida_Real.txt y G04_09_Informe_Validacion_Automatica.md.

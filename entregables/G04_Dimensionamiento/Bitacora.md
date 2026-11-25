@@ -1,4 +1,4 @@
-﻿# Bitacora G04
+# Bitacora G04
 
 Responsable: Cielo Cristal Meza Vizcarra
 
@@ -186,3 +186,14 @@ Pendiente completar y verificar horas reales
 de los integrantes.
 Corte PARCIAL.
 
+<!-- G04-PASO19-AUDITORIA-REAL -->
+## 2026-11-24 - G04 Paso 1.9 (registro de resultado real)
+- Script auditado: G04_09_Validar_Libro.py.
+- Libro con SHA256 2916f17fb7bd2285c0037dd8f6b41b98ca2f76390f96e002a618c42ee0073472.
+- Resultado: 11 controles (10 OK, 1 OBSERVACION, 0 REVISAR).
+- NESMA: 131 UFP preliminares; COSMIC: 111 CFP preliminares.
+- COCOMO: 3491 LOC Java, 8.91884 PM, 5.74192 meses.
+- REALES_Registro sin horas; corte PARCIAL.
+- Commit base al documentar: cb7e69dcdb85070d9acaac9fa1f0455499964212.
+- Verificacion externa y ERS G01: pendientes. Sin merge.
+- Informes en 04_Comparaciones/G04_09_*.

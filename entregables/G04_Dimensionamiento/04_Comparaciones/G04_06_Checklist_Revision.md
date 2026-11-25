@@ -24,3 +24,10 @@
 - **No marcar como aprobados** 131 UFP, 111 CFP o los costos hasta validar los supuestos con G01 y fuentes propias.
 - Las horas reales se registran solo a partir de evidencias auténticas.
 - No convertir directamente UFP a CFP ni tratar COCOMO como resultado observado.
+
+<!-- G04-PASO19-AUDITORIA-REAL -->
+## Paso 1.9 - Alcance de la auditoria real
+- La auditoria de 11 controles NO prueba escenarios de sensibilidad +/-20 por ciento ni sus recalculos.
+- NESMA=131 UFP y COSMIC=111 CFP son resultados preliminares en unidades distintas.
+- Mantener V02/V03 pendientes de G01; V04 pendiente de reconteo HEAD; V05-V09 pendientes de inspeccion de formulas.
+- No marcar V10 (horas reales) ni V11 (captura genuina) como completados.

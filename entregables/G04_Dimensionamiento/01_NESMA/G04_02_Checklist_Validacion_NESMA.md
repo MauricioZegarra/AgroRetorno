@@ -23,3 +23,13 @@
 | Pendiente | P01/P02 | Validar si cuentan como procesos elementales | Sin resolver | SecurityConfig | Pendiente |
 
 **No marque este checklist como aprobado sin revisar los criterios con la ERS y las reglas de medición.**
+
+<!-- G04-PASO19-AUDITORIA-REAL -->
+## Paso 1.9 - Resultado de auditoria real
+- Auditoria automatica: consistente para el modelo actual de 37 hojas.
+- NESMA: 8 ILF incluidos (56 UFP) y 21 transacciones incluidas (10 EI, 1 EO, 10 EQ; 75 UFP).
+- Total calculado de forma independiente: 131 UFP PRELIMINARES.
+- No se han validado los DET, RET, FTR, los grupos D01/D07/D08 ni la decision EIF.
+- P01/P02 y la frontera requieren contraste con la ERS definitiva de G01.
+- Las casillas de validacion funcional anteriores permanecen pendientes.
+- Evidencia: G04_09_Salida_Real.txt y G04_09_Informe_Validacion_Automatica.md.
