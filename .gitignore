@@ -21,3 +21,6 @@ Thumbs.db
 
 # Herramientas portátiles descargadas por run.bat / run.sh (Java 21, PostgreSQL)
 .runtime/
+
+# Conservar logs reales de evidencias dentro de entregables/
+!entregables/**/*.log
