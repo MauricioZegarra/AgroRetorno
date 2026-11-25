@@ -1,0 +1,16 @@
+﻿RF (propuesto G01);Descripción;CU catálogo / especificación;Código fuente referencial;Interfaz
+RF01;Inicio y cierre de sesión;CU-01;InicioController / SecurityConfig;Inicio de sesión web
+RF02;Autorización por rol y propiedad;CU-01, CU-03, CU-11, CU-13, CU-15;SecurityConfig / @PreAuthorize;Rutas protegidas
+RF03;Gestionar productores;CU-07;EncargadoProductorController / ProductorService;Productores
+RF04;Gestionar materiales;CU-08;EncargadoMaterialController / MaterialService;Materiales
+RF05;Gestionar existencias;CU-09;EncargadoMaterialController / InventarioService;Existencias
+RF06;Consultar y filtrar disponibilidad;CU-02;ProductorController.inventario / InventarioService;Inventario disponible
+RF07;Registrar solicitudes;"CU-03; ED-01";ProductorController / SolicitudService.registrar;M01 Solicitud
+RF08;Consultar solicitudes propias;CU-04;ProductorController.misSolicitudes;Mis solicitudes
+RF09;Aprobar solicitudes;"CU-11; ED-02";EncargadoSolicitudController / SolicitudService.aprobar;M02 Revisión
+RF10;Rechazar solicitudes;"CU-12; ED-02";EncargadoSolicitudController / SolicitudService.rechazar;M02 Revisión
+RF11;Registrar entregas;"CU-13; ED-02";EncargadoSolicitudController / PrestamoService.registrarEntrega;M03 Entrega
+RF12;Consultar préstamos y pendientes;CU-05, CU-14;ProductorController / EncargadoPrestamoController;Préstamos
+RF13;Registrar devoluciones;"CU-15; ED-03";EncargadoPrestamoController / DevolucionService.registrar;M04 Devolución
+RF14;Consultar historial;CU-06, CU-16;HistorialService / EncargadoReporteController;Historial
+RF15;Consultar reporte consolidado;CU-16;EncargadoReporteController / ReporteService;Reporte

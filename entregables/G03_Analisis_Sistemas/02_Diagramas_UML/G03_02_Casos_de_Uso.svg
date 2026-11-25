@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1450" viewBox="0 0 1900 1450">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f6faf8"/><stop offset="1" stop-color="#e9f4ef"/></linearGradient>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="9" flood-opacity="0.07"/></filter>
+</defs>
+<rect width="1900" height="1450" fill="url(#bg)"/>
+<rect x="0" y="0" width="1900" height="22" fill="#176d50"/>
+<text x="950" y="76" text-anchor="middle" fill="#163d33" font-family="DejaVu Sans, Arial" font-size="38" font-weight="700">G03 · DIAGRAMA DE CASOS DE USO</text>
+<text x="950" y="117" text-anchor="middle" fill="#6a8279" font-family="DejaVu Sans, Arial" font-size="22">AgroRetorno | Modelo basado en controladores web verificados</text>
+<rect x="255" y="154" width="1390" height="1195" rx="28" fill="#ffffff" stroke="#b6d5c7" stroke-width="3" filter="url(#shadow)"/>
+<text x="950" y="197" text-anchor="middle" fill="#255444" font-family="DejaVu Sans, Arial" font-size="23" font-weight="700">Límite del sistema: AgroRetorno</text>
+<rect x="295" y="332" width="610" height="961" rx="24" fill="#f7fcf9" stroke="#d9ebe2" stroke-width="2"/>
+<rect x="945" y="332" width="660" height="961" rx="24" fill="#f9fbf7" stroke="#e2eadc" stroke-width="2"/>
+<text x="600" y="376" text-anchor="middle" fill="#17664e" font-family="DejaVu Sans, Arial" font-size="21" font-weight="700">FUNCIONES DEL PRODUCTOR</text>
+<text x="1275" y="376" text-anchor="middle" fill="#517347" font-family="DejaVu Sans, Arial" font-size="21" font-weight="700">FUNCIONES DEL ENCARGADO</text>
+<g stroke="#a5b8ad" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.85">
+<line x1="147" y1="700" x2="805" y2="262"/>
+<line x1="1753" y1="700" x2="1095" y2="262"/>
+<line x1="148" y1="740" x2="455" y2="458"/>
+<line x1="148" y1="740" x2="455" y2="625"/>
+<line x1="148" y1="740" x2="455" y2="792"/>
+<line x1="148" y1="740" x2="455" y2="959"/>
+<line x1="148" y1="740" x2="455" y2="1126"/>
+<line x1="1752" y1="740" x2="1450" y2="430"/>
+<line x1="1752" y1="740" x2="1450" y2="515"/>
+<line x1="1752" y1="740" x2="1450" y2="600"/>
+<line x1="1752" y1="740" x2="1450" y2="685"/>
+<line x1="1752" y1="740" x2="1450" y2="770"/>
+<line x1="1752" y1="740" x2="1450" y2="855"/>
+<line x1="1752" y1="740" x2="1450" y2="940"/>
+<line x1="1752" y1="740" x2="1450" y2="1025"/>
+<line x1="1752" y1="740" x2="1450" y2="1110"/>
+<line x1="1752" y1="740" x2="1450" y2="1195"/>
+</g>
+<g stroke="#236e53" stroke-width="6" stroke-linecap="round" fill="none">
+<circle cx="120" cy="608" r="27" fill="#ffffff"/>
+<line x1="120" y1="635" x2="120" y2="720"/>
+<line x1="78" y1="682" x2="162" y2="682"/>
+<line x1="120" y1="720" x2="86" y2="783"/>
+<line x1="120" y1="720" x2="154" y2="783"/>
+</g>
+<text x="120" y="842" text-anchor="middle" fill="#236e53" font-family="DejaVu Sans, Arial" font-size="25" font-weight="700">Productor</text>
+<g stroke="#53734b" stroke-width="6" stroke-linecap="round" fill="none">
+<circle cx="1780" cy="608" r="27" fill="#ffffff"/>
+<line x1="1780" y1="635" x2="1780" y2="720"/>
+<line x1="1738" y1="682" x2="1822" y2="682"/>
+<line x1="1780" y1="720" x2="1746" y2="783"/>
+<line x1="1780" y1="720" x2="1814" y2="783"/>
+</g>
+<text x="1780" y="842" text-anchor="middle" fill="#53734b" font-family="DejaVu Sans, Arial" font-size="25" font-weight="700">Encargado</text>
+<ellipse cx="950" cy="268" rx="180" ry="52" fill="#eef6fa" stroke="#478198" stroke-width="2.6"/>
+<text x="950" y="259" text-anchor="middle" fill="#478198" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-01</text>
+<text x="950" y="288" text-anchor="middle" fill="#244957" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Iniciar sesión</text>
+<ellipse cx="600" cy="458" rx="235" ry="51" fill="#eaf7f0" stroke="#31866a" stroke-width="2.6"/>
+<text x="600" y="449" text-anchor="middle" fill="#31866a" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-02</text>
+<text x="600" y="478" text-anchor="middle" fill="#20563f" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Consultar inventario</text>
+<ellipse cx="600" cy="625" rx="235" ry="51" fill="#eaf7f0" stroke="#31866a" stroke-width="2.6"/>
+<text x="600" y="616" text-anchor="middle" fill="#31866a" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-03</text>
+<text x="600" y="645" text-anchor="middle" fill="#20563f" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Registrar solicitud</text>
+<ellipse cx="600" cy="792" rx="235" ry="51" fill="#eaf7f0" stroke="#31866a" stroke-width="2.6"/>
+<text x="600" y="783" text-anchor="middle" fill="#31866a" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-04</text>
+<text x="600" y="812" text-anchor="middle" fill="#20563f" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Consultar solicitudes</text>
+<ellipse cx="600" cy="959" rx="235" ry="51" fill="#eaf7f0" stroke="#31866a" stroke-width="2.6"/>
+<text x="600" y="950" text-anchor="middle" fill="#31866a" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-05</text>
+<text x="600" y="979" text-anchor="middle" fill="#20563f" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Consultar préstamos</text>
+<ellipse cx="600" cy="1126" rx="235" ry="51" fill="#eaf7f0" stroke="#31866a" stroke-width="2.6"/>
+<text x="600" y="1117" text-anchor="middle" fill="#31866a" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-06</text>
+<text x="600" y="1146" text-anchor="middle" fill="#20563f" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Consultar historial</text>
+<ellipse cx="1275" cy="430" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="421" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-07</text>
+<text x="1275" y="450" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Gestionar productores</text>
+<ellipse cx="1275" cy="515" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="506" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-08</text>
+<text x="1275" y="535" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Gestionar materiales</text>
+<ellipse cx="1275" cy="600" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="591" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-09</text>
+<text x="1275" y="620" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Ajustar existencias</text>
+<ellipse cx="1275" cy="685" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="676" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-10</text>
+<text x="1275" y="705" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Revisar solicitudes</text>
+<ellipse cx="1275" cy="770" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="761" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-11</text>
+<text x="1275" y="790" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Aprobar solicitud</text>
+<ellipse cx="1275" cy="855" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="846" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-12</text>
+<text x="1275" y="875" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Rechazar solicitud</text>
+<ellipse cx="1275" cy="940" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="931" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-13</text>
+<text x="1275" y="960" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Registrar entrega</text>
+<ellipse cx="1275" cy="1025" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="1016" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-14</text>
+<text x="1275" y="1045" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Consultar préstamos</text>
+<ellipse cx="1275" cy="1110" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="1101" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-15</text>
+<text x="1275" y="1130" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="18" font-weight="600">Registrar devolución</text>
+<ellipse cx="1275" cy="1195" rx="255" ry="34" fill="#f2f6e9" stroke="#7a9a6c" stroke-width="2.6"/>
+<text x="1275" y="1186" text-anchor="middle" fill="#7a9a6c" font-family="DejaVu Sans, Arial" font-size="17" font-weight="700">CU-16</text>
+<text x="1275" y="1215" text-anchor="middle" fill="#405b36" font-family="DejaVu Sans, Arial" font-size="16" font-weight="600">Consultar reportes e historial</text>
+<rect x="265" y="1374" width="1370" height="53" rx="12" fill="#dcebe4"/>
+<text x="950" y="1408" text-anchor="middle" fill="#35584b" font-family="DejaVu Sans, Arial" font-size="19">Nota técnica: la aprobación de la solicitud y el registro de entrega son operaciones diferentes.</text>
+</svg>

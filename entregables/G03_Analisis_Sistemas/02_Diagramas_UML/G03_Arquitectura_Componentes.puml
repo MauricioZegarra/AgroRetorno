@@ -1,0 +1,63 @@
+@startuml
+' G03 AgroRetorno - vista logica de componentes, derivada de codigo fuente
+' Responsable: Cielo Cristal Meza Vizcarra | 2026-11-23
+left to right direction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam RoundCorner 17
+skinparam defaultFontName Arial
+skinparam ArrowColor #44715A
+skinparam packageStyle rectangle
+skinparam rectangle {
+  BorderColor #59816A
+  FontColor #183E2D
+  BackgroundColor #F1F8F2
+}
+skinparam actor {
+  BorderColor #32674B
+  FontColor #183E2D
+}
+skinparam database {
+  BorderColor #46785A
+  BackgroundColor #F0F5FC
+}
+
+actor "Productor" as productor
+actor "Encargado\nde almacen" as encargado
+actor "Cliente HTTP\n(JMeter / pruebas)" as cliente
+
+package "AgroRetorno - monolito Spring Boot" #F9FCF9 {
+  rectangle "Interfaz web\nThymeleaf + Bootstrap" as vistas #E7F5E8
+  rectangle "Spring Security\nRoles PRODUCTOR / ENCARGADO\nFormulario web + CSRF / API HTTP Basic" as seguridad #EAF0FF
+  package "Capa de control" #EDF7EF {
+    rectangle "Controladores MVC\nProductorController\nEncargado*Controller" as mvc
+    rectangle "Controladores REST\n/api/productor/**\n/api/encargado/**" as api
+  }
+  package "Capa de negocio" #F0F8F0 {
+    rectangle "Servicios transaccionales\nSolicitudService · PrestamoService\nDevolucionService · InventarioService\nMaterialService · ProductorService\nReporteService · HistorialService\nUsuarioService" as services
+  }
+  package "Capa de persistencia" #F4F7FA {
+    rectangle "Repositorios Spring Data JPA\n...Repository" as repos
+    rectangle "Flyway\nV1__esquema_inicial.sql" as flyway #FDF6E7
+  }
+}
+database "PostgreSQL\n10 tablas" as bd
+
+productor --> vistas : Navega
+encargado --> vistas : Navega
+vistas --> seguridad : Solicitudes web
+cliente --> seguridad : Solicitudes HTTP
+seguridad --> mvc : Rutas web
+seguridad --> api : Rutas REST
+mvc --> services : Usa servicios
+api --> services : Usa los mismos servicios
+services --> repos : Acceso a datos
+repos --> bd : JPA / Hibernate
+flyway --> bd : Migraciones SQL
+
+note bottom of services
+  Aprobar una solicitud NO descuenta stock.
+  La entrega física valida y actualiza inventario.
+  La devolución puede ser parcial.
+end note
+@enduml

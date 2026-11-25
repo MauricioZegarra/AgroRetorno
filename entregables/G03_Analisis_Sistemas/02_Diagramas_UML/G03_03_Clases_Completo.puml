@@ -1,0 +1,126 @@
+@startuml G03_03_Clases_Completo
+' AgroRetorno — clases persistentes. Basado en entidades JPA reales.
+' Fuente: MauricioZegarra/AgroRetorno, src/main/java/pe/edu/agroretorno/entity
+!theme plain
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 10
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor #F9FCFF
+  BorderColor #47788C
+  ArrowColor #557486
+  FontColor #1C354A
+  FontName Arial
+}
+left to right direction
+hide empty members
+package "Usuarios" #DCECF5 {
+ class Usuario <<entity>> {
+  - id: Long
+  - username: String
+  - passwordHash: String
+  - nombreCompleto: String
+  - rol: Rol
+  - activo: boolean
+  + getRol(): Rol
+  + isActivo(): boolean
+ }
+ class Productor <<entity>> {
+  - id: Long
+  - dni: String
+  - nombres: String
+  - apellidos: String
+  - sector: String
+  + getNombreCompleto(): String
+ }
+}
+package "Materiales e inventario" #DAF2E5 {
+ class Material <<entity>> {
+  - id: Long
+  - codigo: String
+  - nombre: String
+  - categoria: CategoriaMaterial
+  - unidad: String
+  - estado: EstadoMaterial
+  + isActivo(): boolean
+ }
+ class Inventario <<entity>> {
+  - id: Long
+  - cantidadTotal: int
+  - cantidadDisponible: int
+  - cantidadPrestada: int
+  - cantidadDanada: int
+  - cantidadMantenimiento: int
+  + estaCuadrado(): boolean
+ }
+ class MovimientoInventario <<entity>> {
+  - id: Long
+  - tipo: TipoMovimiento
+  - cantidad: int
+  - fecha: LocalDateTime
+  - referencia: String
+ }
+}
+package "Solicitudes y préstamos" #E7E3FB {
+ class Solicitud <<entity>> {
+  - id: Long
+  - cantidad: int
+  - estado: EstadoSolicitud
+  - fechaDevolucionPrevista: LocalDate
+  - motivo: String
+ }
+ class Prestamo <<entity>> {
+  - id: Long
+  - cantidadEntregada: int
+  - cantidadDevuelta: int
+  - estado: EstadoPrestamo
+  + getCantidadPendiente(): int
+ }
+}
+package "Devoluciones" #FFF0D8 {
+ class Devolucion <<entity>> {
+  - id: Long
+  - fecha: LocalDateTime
+  - observaciones: String
+  + agregarDetalle(condicion, cantidad): void
+  + getCantidadTotal(): int
+ }
+ class DetalleDevolucion <<entity>> {
+  - id: Long
+  - estadoMaterial: CondicionDevolucion
+  - cantidad: int
+ }
+}
+package "Auditoría" #EEF1F5 {
+ class HistorialOperacion <<entity>> {
+  - id: Long
+  - fechaHora: LocalDateTime
+  - actor: String
+  - accion: String
+  - entidad: String
+  - entidadId: Long
+ }
+}
+Usuario "1" -- "0..1" Productor : cuenta de productor
+Productor "1" -- "0..*" Solicitud : realiza
+Material "1" -- "0..*" Solicitud : solicitado
+Material "1" -- "0..1" Inventario : controla
+Solicitud "1" -- "0..1" Prestamo : origina
+Prestamo "1" -- "0..*" Devolucion : recibe
+Devolucion "1" *-- "0..*" DetalleDevolucion : contiene
+Usuario "0..1" -- "0..*" Solicitud : respondidoPor
+Usuario "1" -- "0..*" Prestamo : entregadoPor
+Usuario "1" -- "0..*" Devolucion : recibidoPor
+Material "1" -- "0..*" MovimientoInventario : registra
+Usuario "1" -- "0..*" MovimientoInventario : registra
+note bottom of Inventario
+Invariante: total = disponible + prestada
++ dañada + mantenimiento.
+La BD también valida la igualdad con CHECK.
+end note
+note bottom of HistorialOperacion
+Registro de auditoría basado en texto.
+No tiene FK JPA directa a las otras entidades.
+end note
+@enduml
