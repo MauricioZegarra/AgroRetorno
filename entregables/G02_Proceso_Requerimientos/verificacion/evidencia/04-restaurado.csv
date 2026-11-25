@@ -1,0 +1,11 @@
+tabla,filas,huella_md5
+usuarios,6,432cfd29e3dea69bd2c6698b20130724
+productores,5,b30d54ca0d49b18023cabb033fc66472
+materiales,11,af8f7e770a8d7fedb7402586ab529de2
+inventario,11,ca150b266cb3047a90b9aa8ee519537d
+solicitudes,8,dbff57d124685ddd356998d4f807ff67
+prestamos,4,930160b23b86ca7b950fa55adf50fd2f
+devoluciones,3,16a35e8742f4d02956a5625ccdff7d8b
+detalles_devolucion,4,ef1d4ceb11bc46d688dfe6195f341030
+movimientos_inventario,19,64cd91cbfe60a38e212e9890988d2392
+historial_operaciones,38,f718173755d7d73618527c90ed54411b
