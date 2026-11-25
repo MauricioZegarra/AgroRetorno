@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UsuarioDetailsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.security</a> &gt; <span class="el_source">UsuarioDetailsService.java</span></div><h1>UsuarioDetailsService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.security;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.repository.UsuarioRepository;
+
+/** Carga las credenciales (hash BCrypt) y el rol desde la tabla usuarios (RF01, RF02). */
+@Service
+public class UsuarioDetailsService implements UserDetailsService {
+
+    private final UsuarioRepository usuarioRepository;
+
+<span class="fc" id="L19">    public UsuarioDetailsService(UsuarioRepository usuarioRepository) {</span>
+<span class="fc" id="L20">        this.usuarioRepository = usuarioRepository;</span>
+<span class="fc" id="L21">    }</span>
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String username) {
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        Usuario u = usuarioRepository.findByUsername(username == null ? &quot;&quot; : username.trim().toLowerCase())</span>
+<span class="pc" id="L27">                .orElseThrow(() -&gt; new UsernameNotFoundException(&quot;Usuario no encontrado&quot;));</span>
+<span class="fc" id="L28">        return User.withUsername(u.getUsername())</span>
+<span class="fc" id="L29">                .password(u.getPasswordHash())</span>
+<span class="fc" id="L30">                .authorities(new SimpleGrantedAuthority(u.getRol().authority()))</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                .disabled(!u.isActivo())</span>
+<span class="fc" id="L32">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

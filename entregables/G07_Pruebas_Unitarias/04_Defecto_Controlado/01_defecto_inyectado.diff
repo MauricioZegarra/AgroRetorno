@@ -1,0 +1,13 @@
+diff --git a/src/main/java/pe/edu/agroretorno/service/DevolucionService.java b/src/main/java/pe/edu/agroretorno/service/DevolucionService.java
+index f82754e..f243396 100644
+--- a/src/main/java/pe/edu/agroretorno/service/DevolucionService.java
++++ b/src/main/java/pe/edu/agroretorno/service/DevolucionService.java
+@@ -72,7 +72,7 @@ public class DevolucionService {
+         if (prestamo.getEstado() == EstadoPrestamo.CERRADO) {
+             throw new ReglaNegocioException("El préstamo " + prestamoId + " ya está cerrado");
+         }
+-        if (total > prestamo.getCantidadPendiente()) {
++        if (total >= prestamo.getCantidadPendiente()) {
+             throw new ReglaNegocioException("La cantidad devuelta (" + total + ") supera las unidades pendientes ("
+                     + prestamo.getCantidadPendiente() + ")");
+         }

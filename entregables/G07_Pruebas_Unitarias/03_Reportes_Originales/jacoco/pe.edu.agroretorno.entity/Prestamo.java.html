@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Prestamo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">Prestamo.java</span></div><h1>Prestamo.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;prestamos&quot;)
+public class Prestamo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;solicitud_id&quot;, nullable = false, unique = true)
+    private Solicitud solicitud;
+
+    @Column(name = &quot;cantidad_entregada&quot;, nullable = false)
+    private int cantidadEntregada;
+
+    @Column(name = &quot;cantidad_devuelta&quot;, nullable = false)
+    private int cantidadDevuelta;
+
+    @Column(name = &quot;cantidad_buen_estado&quot;, nullable = false)
+    private int cantidadBuenEstado;
+
+    @Column(name = &quot;cantidad_danada&quot;, nullable = false)
+    private int cantidadDanada;
+
+    @Column(name = &quot;cantidad_mantenimiento&quot;, nullable = false)
+    private int cantidadMantenimiento;
+
+    @Column(name = &quot;fecha_entrega&quot;, nullable = false)
+    private LocalDateTime fechaEntrega;
+
+    @Column(name = &quot;fecha_devolucion_prevista&quot;, nullable = false)
+    private LocalDate fechaDevolucionPrevista;
+
+<span class="fc" id="L40">    @Enumerated(EnumType.STRING)</span>
+    @Column(nullable = false, length = 10)
+    private EstadoPrestamo estado = EstadoPrestamo.ACTIVO;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;entregado_por&quot;, nullable = false)
+    private Usuario entregadoPor;
+
+    @Column(name = &quot;fecha_cierre&quot;)
+    private LocalDateTime fechaCierre;
+
+<span class="fc" id="L51">    protected Prestamo() {</span>
+<span class="fc" id="L52">    }</span>
+
+<span class="fc" id="L54">    public Prestamo(Solicitud solicitud, int cantidadEntregada, LocalDateTime fechaEntrega, Usuario entregadoPor) {</span>
+<span class="fc" id="L55">        this.solicitud = solicitud;</span>
+<span class="fc" id="L56">        this.cantidadEntregada = cantidadEntregada;</span>
+<span class="fc" id="L57">        this.fechaEntrega = fechaEntrega;</span>
+<span class="fc" id="L58">        this.fechaDevolucionPrevista = solicitud.getFechaDevolucionPrevista();</span>
+<span class="fc" id="L59">        this.entregadoPor = entregadoPor;</span>
+<span class="fc" id="L60">        this.estado = EstadoPrestamo.ACTIVO;</span>
+<span class="fc" id="L61">    }</span>
+
+    /** Unidades entregadas que aún no han sido devueltas. */
+    public int getCantidadPendiente() {
+<span class="fc" id="L65">        return cantidadEntregada - cantidadDevuelta;</span>
+    }
+
+<span class="fc" id="L68">    public Long getId() { return id; }</span>
+<span class="fc" id="L69">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L70">    public Solicitud getSolicitud() { return solicitud; }</span>
+<span class="fc" id="L71">    public int getCantidadEntregada() { return cantidadEntregada; }</span>
+<span class="fc" id="L72">    public int getCantidadDevuelta() { return cantidadDevuelta; }</span>
+<span class="fc" id="L73">    public void setCantidadDevuelta(int cantidadDevuelta) { this.cantidadDevuelta = cantidadDevuelta; }</span>
+<span class="fc" id="L74">    public int getCantidadBuenEstado() { return cantidadBuenEstado; }</span>
+<span class="fc" id="L75">    public void setCantidadBuenEstado(int cantidadBuenEstado) { this.cantidadBuenEstado = cantidadBuenEstado; }</span>
+<span class="fc" id="L76">    public int getCantidadDanada() { return cantidadDanada; }</span>
+<span class="fc" id="L77">    public void setCantidadDanada(int cantidadDanada) { this.cantidadDanada = cantidadDanada; }</span>
+<span class="fc" id="L78">    public int getCantidadMantenimiento() { return cantidadMantenimiento; }</span>
+<span class="fc" id="L79">    public void setCantidadMantenimiento(int cantidadMantenimiento) { this.cantidadMantenimiento = cantidadMantenimiento; }</span>
+<span class="fc" id="L80">    public LocalDateTime getFechaEntrega() { return fechaEntrega; }</span>
+<span class="fc" id="L81">    public LocalDate getFechaDevolucionPrevista() { return fechaDevolucionPrevista; }</span>
+<span class="fc" id="L82">    public EstadoPrestamo getEstado() { return estado; }</span>
+<span class="fc" id="L83">    public void setEstado(EstadoPrestamo estado) { this.estado = estado; }</span>
+<span class="fc" id="L84">    public Usuario getEntregadoPor() { return entregadoPor; }</span>
+<span class="fc" id="L85">    public LocalDateTime getFechaCierre() { return fechaCierre; }</span>
+<span class="fc" id="L86">    public void setFechaCierre(LocalDateTime fechaCierre) { this.fechaCierre = fechaCierre; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

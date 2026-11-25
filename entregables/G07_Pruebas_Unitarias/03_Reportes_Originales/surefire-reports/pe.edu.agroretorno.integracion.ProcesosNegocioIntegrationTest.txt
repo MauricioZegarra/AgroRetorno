@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pe.edu.agroretorno.integracion.ProcesosNegocioIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.608 s -- in pe.edu.agroretorno.integracion.ProcesosNegocioIntegrationTest

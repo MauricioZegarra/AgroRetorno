@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReporteService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">ReporteService.java</span></div><h1>ReporteService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import jakarta.persistence.criteria.Predicate;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.DevolucionResponse;
+import pe.edu.agroretorno.dto.FiltroReporte;
+import pe.edu.agroretorno.dto.MaterialResponse;
+import pe.edu.agroretorno.dto.PrestamoResponse;
+import pe.edu.agroretorno.dto.ReporteConsolidado;
+import pe.edu.agroretorno.dto.SolicitudResponse;
+import pe.edu.agroretorno.entity.Devolucion;
+import pe.edu.agroretorno.entity.EstadoPrestamo;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.entity.Prestamo;
+import pe.edu.agroretorno.entity.Solicitud;
+import pe.edu.agroretorno.repository.DevolucionRepository;
+import pe.edu.agroretorno.repository.MaterialRepository;
+import pe.edu.agroretorno.repository.PrestamoRepository;
+import pe.edu.agroretorno.repository.SolicitudRepository;
+
+/**
+ * Reporte consolidado de préstamos, devoluciones y materiales pendientes (RF10).
+ * Filtros: periodo (desde/hasta), productor, material y estado de solicitud.
+ */
+@Service
+public class ReporteService {
+
+    private final MaterialRepository materialRepository;
+    private final SolicitudRepository solicitudRepository;
+    private final PrestamoRepository prestamoRepository;
+    private final DevolucionRepository devolucionRepository;
+    private final Clock clock;
+
+    public ReporteService(MaterialRepository materialRepository, SolicitudRepository solicitudRepository,
+                          PrestamoRepository prestamoRepository, DevolucionRepository devolucionRepository,
+<span class="fc" id="L45">                          Clock clock) {</span>
+<span class="fc" id="L46">        this.materialRepository = materialRepository;</span>
+<span class="fc" id="L47">        this.solicitudRepository = solicitudRepository;</span>
+<span class="fc" id="L48">        this.prestamoRepository = prestamoRepository;</span>
+<span class="fc" id="L49">        this.devolucionRepository = devolucionRepository;</span>
+<span class="fc" id="L50">        this.clock = clock;</span>
+<span class="fc" id="L51">    }</span>
+
+    @Transactional(readOnly = true)
+    public ReporteConsolidado generar(FiltroReporte filtro) {
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        FiltroReporte f = filtro == null ? new FiltroReporte() : filtro;</span>
+<span class="fc" id="L56">        LocalDate hoy = LocalDate.now(clock);</span>
+
+<span class="fc" id="L58">        List&lt;MaterialResponse&gt; materiales = materialRepository.buscarConInventario(&quot;&quot;).stream()</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">                .filter(m -&gt; f.getMaterialId() == null || m.getId().equals(f.getMaterialId()))</span>
+<span class="fc" id="L60">                .map(MaterialResponse::from).toList();</span>
+
+<span class="fc" id="L62">        List&lt;SolicitudResponse&gt; solicitudes = solicitudRepository</span>
+<span class="fc" id="L63">                .findAll(especificacionSolicitudes(f), Sort.by(Sort.Direction.DESC, &quot;fechaSolicitud&quot;))</span>
+<span class="fc" id="L64">                .stream().map(SolicitudResponse::from).toList();</span>
+<span class="fc" id="L65">        Map&lt;EstadoSolicitud, Long&gt; porEstado = new EnumMap&lt;&gt;(EstadoSolicitud.class);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (EstadoSolicitud e : EstadoSolicitud.values()) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            porEstado.put(e, solicitudes.stream().filter(s -&gt; s.estado() == e).count());</span>
+        }
+
+<span class="fc" id="L70">        List&lt;PrestamoResponse&gt; prestamos = prestamoRepository</span>
+<span class="fc" id="L71">                .findAll(especificacionPrestamos(f), Sort.by(Sort.Direction.DESC, &quot;fechaEntrega&quot;))</span>
+<span class="fc" id="L72">                .stream().map(p -&gt; PrestamoResponse.from(p, hoy)).toList();</span>
+        // Materiales pendientes de devolución: préstamos activos (sin filtro de periodo)
+<span class="fc" id="L74">        List&lt;PrestamoResponse&gt; pendientes = prestamoRepository.findByEstado(EstadoPrestamo.ACTIVO).stream()</span>
+<span class="fc" id="L75">                .filter(p -&gt; coincideProductorMaterial(p.getSolicitud(), f))</span>
+<span class="fc" id="L76">                .map(p -&gt; PrestamoResponse.from(p, hoy)).toList();</span>
+<span class="fc" id="L77">        List&lt;DevolucionResponse&gt; devoluciones = devolucionRepository</span>
+<span class="fc" id="L78">                .findAll(especificacionDevoluciones(f), Sort.by(Sort.Direction.DESC, &quot;fecha&quot;))</span>
+<span class="fc" id="L79">                .stream().map(DevolucionResponse::from).toList();</span>
+
+<span class="fc" id="L81">        return new ReporteConsolidado(</span>
+<span class="fc" id="L82">                resumirInventario(materiales),</span>
+                porEstado,
+<span class="fc bfc" id="L84" title="All 2 branches covered.">                prestamos.stream().filter(p -&gt; p.estado() == EstadoPrestamo.ACTIVO).count(),</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                prestamos.stream().filter(p -&gt; p.estado() == EstadoPrestamo.CERRADO).count(),</span>
+<span class="fc" id="L86">                devoluciones.size(),</span>
+<span class="fc" id="L87">                pendientes.stream().mapToInt(PrestamoResponse::cantidadPendiente).sum(),</span>
+                materiales, pendientes, solicitudes, prestamos, devoluciones);
+    }
+
+    public static ReporteConsolidado.ResumenInventario resumirInventario(List&lt;MaterialResponse&gt; materiales) {
+<span class="fc" id="L92">        return new ReporteConsolidado.ResumenInventario(</span>
+<span class="fc" id="L93">                materiales.size(),</span>
+<span class="fc" id="L94">                materiales.stream().mapToInt(MaterialResponse::cantidadTotal).sum(),</span>
+<span class="fc" id="L95">                materiales.stream().mapToInt(MaterialResponse::cantidadDisponible).sum(),</span>
+<span class="fc" id="L96">                materiales.stream().mapToInt(MaterialResponse::cantidadPrestada).sum(),</span>
+<span class="fc" id="L97">                materiales.stream().mapToInt(MaterialResponse::cantidadDanada).sum(),</span>
+<span class="fc" id="L98">                materiales.stream().mapToInt(MaterialResponse::cantidadMantenimiento).sum());</span>
+    }
+
+    private static boolean coincideProductorMaterial(Solicitud s, FiltroReporte f) {
+<span class="fc bfc" id="L102" title="All 4 branches covered.">        return (f.getProductorId() == null || s.getProductor().getId().equals(f.getProductorId()))</span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">                &amp;&amp; (f.getMaterialId() == null || s.getMaterial().getId().equals(f.getMaterialId()));</span>
+    }
+
+    private static Specification&lt;Solicitud&gt; especificacionSolicitudes(FiltroReporte f) {
+<span class="fc" id="L107">        return (root, query, cb) -&gt; {</span>
+<span class="fc" id="L108">            List&lt;Predicate&gt; p = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (f.getDesde() != null) {</span>
+<span class="fc" id="L110">                p.add(cb.greaterThanOrEqualTo(root.get(&quot;fechaSolicitud&quot;), f.getDesde().atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (f.getHasta() != null) {</span>
+<span class="fc" id="L113">                p.add(cb.lessThan(root.get(&quot;fechaSolicitud&quot;), f.getHasta().plusDays(1).atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            if (f.getProductorId() != null) {</span>
+<span class="fc" id="L116">                p.add(cb.equal(root.get(&quot;productor&quot;).get(&quot;id&quot;), f.getProductorId()));</span>
+            }
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (f.getMaterialId() != null) {</span>
+<span class="fc" id="L119">                p.add(cb.equal(root.get(&quot;material&quot;).get(&quot;id&quot;), f.getMaterialId()));</span>
+            }
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            if (f.getEstado() != null) {</span>
+<span class="fc" id="L122">                p.add(cb.equal(root.get(&quot;estado&quot;), f.getEstado()));</span>
+            }
+<span class="fc" id="L124">            return cb.and(p.toArray(new Predicate[0]));</span>
+        };
+    }
+
+    private static Specification&lt;Prestamo&gt; especificacionPrestamos(FiltroReporte f) {
+<span class="fc" id="L129">        return (root, query, cb) -&gt; {</span>
+<span class="fc" id="L130">            List&lt;Predicate&gt; p = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L131">            var solicitud = root.get(&quot;solicitud&quot;);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            if (f.getDesde() != null) {</span>
+<span class="fc" id="L133">                p.add(cb.greaterThanOrEqualTo(root.get(&quot;fechaEntrega&quot;), f.getDesde().atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (f.getHasta() != null) {</span>
+<span class="fc" id="L136">                p.add(cb.lessThan(root.get(&quot;fechaEntrega&quot;), f.getHasta().plusDays(1).atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (f.getProductorId() != null) {</span>
+<span class="fc" id="L139">                p.add(cb.equal(solicitud.get(&quot;productor&quot;).get(&quot;id&quot;), f.getProductorId()));</span>
+            }
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (f.getMaterialId() != null) {</span>
+<span class="fc" id="L142">                p.add(cb.equal(solicitud.get(&quot;material&quot;).get(&quot;id&quot;), f.getMaterialId()));</span>
+            }
+<span class="fc" id="L144">            return cb.and(p.toArray(new Predicate[0]));</span>
+        };
+    }
+
+    private static Specification&lt;Devolucion&gt; especificacionDevoluciones(FiltroReporte f) {
+<span class="fc" id="L149">        return (root, query, cb) -&gt; {</span>
+<span class="fc" id="L150">            List&lt;Predicate&gt; p = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L151">            var solicitud = root.get(&quot;prestamo&quot;).get(&quot;solicitud&quot;);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            if (f.getDesde() != null) {</span>
+<span class="fc" id="L153">                p.add(cb.greaterThanOrEqualTo(root.get(&quot;fecha&quot;), f.getDesde().atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            if (f.getHasta() != null) {</span>
+<span class="fc" id="L156">                p.add(cb.lessThan(root.get(&quot;fecha&quot;), f.getHasta().plusDays(1).atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L158" title="All 2 branches covered.">            if (f.getProductorId() != null) {</span>
+<span class="fc" id="L159">                p.add(cb.equal(solicitud.get(&quot;productor&quot;).get(&quot;id&quot;), f.getProductorId()));</span>
+            }
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            if (f.getMaterialId() != null) {</span>
+<span class="fc" id="L162">                p.add(cb.equal(solicitud.get(&quot;material&quot;).get(&quot;id&quot;), f.getMaterialId()));</span>
+            }
+<span class="fc" id="L164">            return cb.and(p.toArray(new Predicate[0]));</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

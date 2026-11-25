@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrestamoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">PrestamoService.java</span></div><h1>PrestamoService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.PrestamoResponse;
+import pe.edu.agroretorno.entity.EstadoPrestamo;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.entity.Prestamo;
+import pe.edu.agroretorno.entity.Productor;
+import pe.edu.agroretorno.entity.Solicitud;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.exception.OperacionNoPermitidaException;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.repository.PrestamoRepository;
+import pe.edu.agroretorno.repository.ProductorRepository;
+import pe.edu.agroretorno.repository.SolicitudRepository;
+
+/** Proceso 2 (segunda parte): registro de la entrega física y consulta de préstamos (RF08). */
+@Service
+public class PrestamoService {
+
+    private final PrestamoRepository prestamoRepository;
+    private final SolicitudRepository solicitudRepository;
+    private final ProductorRepository productorRepository;
+    private final InventarioService inventarioService;
+    private final UsuarioService usuarioService;
+    private final HistorialService historialService;
+    private final Clock clock;
+
+    public PrestamoService(PrestamoRepository prestamoRepository, SolicitudRepository solicitudRepository,
+                           ProductorRepository productorRepository, InventarioService inventarioService,
+<span class="fc" id="L38">                           UsuarioService usuarioService, HistorialService historialService, Clock clock) {</span>
+<span class="fc" id="L39">        this.prestamoRepository = prestamoRepository;</span>
+<span class="fc" id="L40">        this.solicitudRepository = solicitudRepository;</span>
+<span class="fc" id="L41">        this.productorRepository = productorRepository;</span>
+<span class="fc" id="L42">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L43">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L44">        this.historialService = historialService;</span>
+<span class="fc" id="L45">        this.clock = clock;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Registra la entrega de una solicitud APROBADA:
+     * revalida existencias con bloqueo, descuenta disponible, incrementa prestado,
+     * crea el préstamo (máximo uno por solicitud) y marca la solicitud como ENTREGADA.
+     */
+    @Transactional
+    public PrestamoResponse registrarEntrega(Long solicitudId, String usernameEncargado) {
+<span class="fc" id="L55">        Usuario encargado = usuarioService.obtenerPorUsername(usernameEncargado);</span>
+<span class="fc" id="L56">        Solicitud s = solicitudRepository.findByIdParaActualizar(solicitudId)</span>
+<span class="fc" id="L57">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Solicitud&quot;, solicitudId));</span>
+<span class="fc bfc" id="L58" title="All 4 branches covered.">        if (s.getEstado() == EstadoSolicitud.ENTREGADA || prestamoRepository.existsBySolicitudId(solicitudId)) {</span>
+<span class="fc" id="L59">            throw new ReglaNegocioException(&quot;La solicitud &quot; + solicitudId + &quot; ya fue entregada&quot;);</span>
+        }
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (s.getEstado() != EstadoSolicitud.APROBADA) {</span>
+<span class="fc" id="L62">            throw new ReglaNegocioException(&quot;No se puede entregar material sin aprobación. Estado actual: &quot;</span>
+<span class="fc" id="L63">                    + s.getEstado());</span>
+        }
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (!s.getMaterial().isActivo()) {</span>
+<span class="fc" id="L66">            throw new ReglaNegocioException(&quot;El material &quot; + s.getMaterial().getNombre() + &quot; está inactivo&quot;);</span>
+        }
+        // Revalida las existencias en el momento de la entrega (fila de inventario bloqueada)
+<span class="fc" id="L69">        inventarioService.descontarPorEntrega(s.getMaterial().getId(), s.getCantidad(), encargado,</span>
+<span class="fc" id="L70">                &quot;SOLICITUD-&quot; + s.getId());</span>
+
+<span class="fc" id="L72">        Prestamo prestamo = prestamoRepository.save(</span>
+<span class="fc" id="L73">                new Prestamo(s, s.getCantidad(), LocalDateTime.now(clock), encargado));</span>
+<span class="fc" id="L74">        s.setEstado(EstadoSolicitud.ENTREGADA);</span>
+<span class="fc" id="L75">        s.setPrestamo(prestamo);</span>
+<span class="fc" id="L76">        historialService.registrar(encargado.getUsername(), &quot;REGISTRAR_ENTREGA&quot;, &quot;Prestamo&quot;, prestamo.getId(),</span>
+<span class="fc" id="L77">                &quot;Entrega de &quot; + s.getCantidad() + &quot; &quot; + s.getMaterial().getUnidad() + &quot; de &quot;</span>
+<span class="fc" id="L78">                        + s.getMaterial().getNombre() + &quot; (solicitud &quot; + s.getId() + &quot;)&quot;);</span>
+<span class="fc" id="L79">        return PrestamoResponse.from(prestamo, hoy());</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoResponse&gt; listar(EstadoPrestamo estado) {
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        EstadoPrestamo filtro = estado == null ? EstadoPrestamo.ACTIVO : estado;</span>
+<span class="fc" id="L85">        LocalDate hoy = hoy();</span>
+<span class="fc" id="L86">        return prestamoRepository.findByEstado(filtro).stream().map(p -&gt; PrestamoResponse.from(p, hoy)).toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;PrestamoResponse&gt; listarPorProductor(String username) {
+<span class="fc" id="L91">        Productor productor = productorRepository.findByUsername(username)</span>
+<span class="fc" id="L92">                .orElseThrow(() -&gt; new OperacionNoPermitidaException(&quot;El usuario no es un productor&quot;));</span>
+<span class="fc" id="L93">        LocalDate hoy = hoy();</span>
+<span class="fc" id="L94">        return prestamoRepository.findByProductorId(productor.getId()).stream()</span>
+<span class="fc" id="L95">                .map(p -&gt; PrestamoResponse.from(p, hoy)).toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public PrestamoResponse obtener(Long prestamoId) {
+<span class="fc" id="L100">        Prestamo p = prestamoRepository.findById(prestamoId)</span>
+<span class="fc" id="L101">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Préstamo&quot;, prestamoId));</span>
+<span class="fc" id="L102">        return PrestamoResponse.from(p, hoy());</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Optional&lt;PrestamoResponse&gt; buscarPorSolicitud(Long solicitudId) {
+<span class="fc" id="L107">        LocalDate hoy = hoy();</span>
+<span class="fc" id="L108">        return prestamoRepository.findBySolicitudId(solicitudId).map(p -&gt; PrestamoResponse.from(p, hoy));</span>
+    }
+
+    private LocalDate hoy() {
+<span class="fc" id="L112">        return LocalDate.now(clock);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

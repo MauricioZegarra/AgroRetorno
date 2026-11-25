@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DatosDemoInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.config</a> &gt; <span class="el_source">DatosDemoInitializer.java</span></div><h1>DatosDemoInitializer.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.config;
+
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.DevolucionRequest;
+import pe.edu.agroretorno.dto.MaterialRequest;
+import pe.edu.agroretorno.dto.ProductorRequest;
+import pe.edu.agroretorno.dto.SolicitudRequest;
+import pe.edu.agroretorno.entity.CategoriaMaterial;
+import pe.edu.agroretorno.entity.EstadoMaterial;
+import pe.edu.agroretorno.entity.Rol;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.repository.UsuarioRepository;
+import pe.edu.agroretorno.service.DevolucionService;
+import pe.edu.agroretorno.service.MaterialService;
+import pe.edu.agroretorno.service.PrestamoService;
+import pe.edu.agroretorno.service.ProductorService;
+import pe.edu.agroretorno.service.SolicitudService;
+
+/**
+ * Carga datos FICTICIOS de demostración solo cuando la base está vacía (no duplica registros
+ * en cada inicio). Usa los mismos servicios de negocio, por lo que el inventario queda cuadrado
+ * y el historial registra cada operación.
+ */
+@Component
+@ConditionalOnProperty(name = &quot;agroretorno.datos-demo.habilitado&quot;, havingValue = &quot;true&quot;, matchIfMissing = true)
+public class DatosDemoInitializer implements ApplicationRunner {
+
+    public static final String ENCARGADO = &quot;encargado&quot;;
+    public static final String CLAVE_ENCARGADO = &quot;Encargado2026!&quot;;
+    public static final String CLAVE_PRODUCTOR = &quot;Productor2026!&quot;;
+
+<span class="fc" id="L42">    private static final Logger log = LoggerFactory.getLogger(DatosDemoInitializer.class);</span>
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ProductorService productorService;
+    private final MaterialService materialService;
+    private final SolicitudService solicitudService;
+    private final PrestamoService prestamoService;
+    private final DevolucionService devolucionService;
+    private final Clock clock;
+
+    public DatosDemoInitializer(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
+                                ProductorService productorService, MaterialService materialService,
+                                SolicitudService solicitudService, PrestamoService prestamoService,
+<span class="fc" id="L56">                                DevolucionService devolucionService, Clock clock) {</span>
+<span class="fc" id="L57">        this.usuarioRepository = usuarioRepository;</span>
+<span class="fc" id="L58">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L59">        this.productorService = productorService;</span>
+<span class="fc" id="L60">        this.materialService = materialService;</span>
+<span class="fc" id="L61">        this.solicitudService = solicitudService;</span>
+<span class="fc" id="L62">        this.prestamoService = prestamoService;</span>
+<span class="fc" id="L63">        this.devolucionService = devolucionService;</span>
+<span class="fc" id="L64">        this.clock = clock;</span>
+<span class="fc" id="L65">    }</span>
+
+    @Override
+    @Transactional
+    public void run(ApplicationArguments args) {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (usuarioRepository.count() &gt; 0) {</span>
+<span class="nc" id="L71">            log.info(&quot;Datos existentes detectados: no se cargan datos de demostración&quot;);</span>
+<span class="nc" id="L72">            return;</span>
+        }
+<span class="fc" id="L74">        log.info(&quot;Base vacía: cargando datos ficticios de demostración&quot;);</span>
+<span class="fc" id="L75">        usuarioRepository.save(new Usuario(ENCARGADO, passwordEncoder.encode(CLAVE_ENCARGADO),</span>
+<span class="fc" id="L76">                &quot;Rosa Huamaní Ccopa&quot;, Rol.ENCARGADO, LocalDateTime.now(clock)));</span>
+
+<span class="fc" id="L78">        productor(&quot;pquispe&quot;, &quot;40112233&quot;, &quot;Pedro&quot;, &quot;Quispe Mamani&quot;, &quot;951234567&quot;, &quot;Valle de Majes - Sección B&quot;);</span>
+<span class="fc" id="L79">        productor(&quot;lmamani&quot;, &quot;41223344&quot;, &quot;Lucía&quot;, &quot;Mamani Choque&quot;, &quot;952345678&quot;, &quot;Irrigación La Joya&quot;);</span>
+<span class="fc" id="L80">        productor(&quot;jcondori&quot;, &quot;42334455&quot;, &quot;Juan&quot;, &quot;Condori Apaza&quot;, &quot;953456789&quot;, &quot;Valle de Vítor&quot;);</span>
+<span class="fc" id="L81">        productor(&quot;ccutipa&quot;, &quot;43445566&quot;, &quot;Carmen&quot;, &quot;Cutipa Flores&quot;, &quot;954567890&quot;, &quot;Tiabaya - Anexo Alata&quot;);</span>
+<span class="fc" id="L82">        productor(&quot;rhuaman&quot;, &quot;44556677&quot;, &quot;Rubén&quot;, &quot;Huamán Ticona&quot;, &quot;955678901&quot;, &quot;Valle de Tambo - Cocachacra&quot;);</span>
+
+<span class="fc" id="L84">        long jabaPlastica = material(&quot;JAB-001&quot;, &quot;Jaba plástica de cosecha 20 kg&quot;, CategoriaMaterial.JABAS_COSECHA,</span>
+                &quot;Jaba apilable para cosecha de cebolla, ajo y frutas&quot;, &quot;jaba&quot;, 300);
+<span class="fc" id="L86">        long jabaMadera = material(&quot;JAB-002&quot;, &quot;Jaba de madera para frutas&quot;, CategoriaMaterial.JABAS_COSECHA,</span>
+                &quot;Jaba de madera tratada para transporte de frutas&quot;, &quot;jaba&quot;, 120);
+<span class="fc" id="L88">        long carretilla = material(&quot;CAR-001&quot;, &quot;Carretilla metálica 90 L&quot;, CategoriaMaterial.CARRETILLAS,</span>
+                &quot;Carretilla de tolva metálica&quot;, &quot;unidad&quot;, 15);
+<span class="fc" id="L90">        material(&quot;CAR-002&quot;, &quot;Carretilla de llanta neumática&quot;, CategoriaMaterial.CARRETILLAS,</span>
+                &quot;Carretilla para terreno irregular&quot;, &quot;unidad&quot;, 10);
+<span class="fc" id="L92">        long balanzaPlataforma = material(&quot;BAL-001&quot;, &quot;Balanza de plataforma 300 kg&quot;, CategoriaMaterial.BALANZAS,</span>
+                &quot;Balanza para pesaje de cosecha en campo&quot;, &quot;equipo&quot;, 4);
+<span class="fc" id="L94">        long balanzaColgante = material(&quot;BAL-002&quot;, &quot;Balanza colgante 50 kg&quot;, CategoriaMaterial.BALANZAS,</span>
+                &quot;Balanza de gancho para sacos&quot;, &quot;equipo&quot;, 8);
+<span class="fc" id="L96">        long fumigadora = material(&quot;FUM-001&quot;, &quot;Fumigadora de mochila 20 L&quot;, CategoriaMaterial.FUMIGADORAS,</span>
+                &quot;Fumigadora manual de palanca&quot;, &quot;equipo&quot;, 12);
+<span class="fc" id="L98">        long fumigadoraMotor = material(&quot;FUM-002&quot;, &quot;Fumigadora a motor 25 L&quot;, CategoriaMaterial.FUMIGADORAS,</span>
+                &quot;Fumigadora motorizada a gasolina&quot;, &quot;equipo&quot;, 5);
+<span class="fc" id="L100">        long lampa = material(&quot;HER-001&quot;, &quot;Lampa de acero&quot;, CategoriaMaterial.HERRAMIENTAS,</span>
+                &quot;Lampa con mango de madera&quot;, &quot;unidad&quot;, 40);
+<span class="fc" id="L102">        material(&quot;HER-002&quot;, &quot;Pico agrícola&quot;, CategoriaMaterial.HERRAMIENTAS, &quot;Pico de doble punta&quot;, &quot;unidad&quot;, 25);</span>
+<span class="fc" id="L103">        long tijera = material(&quot;HER-003&quot;, &quot;Tijera de podar&quot;, CategoriaMaterial.HERRAMIENTAS,</span>
+                &quot;Tijera para poda de frutales (retirada temporalmente)&quot;, &quot;unidad&quot;, 10);
+<span class="fc" id="L105">        inactivar(tijera);</span>
+
+        // Proceso completo con devolución parcial: 20 jabas, devuelve 5 buenas y 2 dañadas
+<span class="fc" id="L108">        long s1 = solicitud(&quot;pquispe&quot;, jabaPlastica, 20, 15, &quot;Cosecha de cebolla roja en parcela de 2 ha&quot;);</span>
+<span class="fc" id="L109">        entregar(s1);</span>
+<span class="fc" id="L110">        devolver(s1, 5, 2, 0, &quot;Dos jabas con base rota&quot;);</span>
+        // Préstamo cerrado con devolución total en buen estado
+<span class="fc" id="L112">        long s2 = solicitud(&quot;lmamani&quot;, carretilla, 2, 10, &quot;Traslado de abono a la parcela&quot;);</span>
+<span class="fc" id="L113">        entregar(s2);</span>
+<span class="fc" id="L114">        devolver(s2, 2, 0, 0, null);</span>
+        // Préstamo activo
+<span class="fc" id="L116">        long s3 = solicitud(&quot;jcondori&quot;, fumigadora, 1, 20, &quot;Control fitosanitario de alfalfa&quot;);</span>
+<span class="fc" id="L117">        entregar(s3);</span>
+        // Préstamo cerrado con unidad que requiere mantenimiento
+<span class="fc" id="L119">        long s4 = solicitud(&quot;jcondori&quot;, balanzaColgante, 1, 7, &quot;Pesaje de sacos de papa&quot;);</span>
+<span class="fc" id="L120">        entregar(s4);</span>
+<span class="fc" id="L121">        devolver(s4, 0, 0, 1, &quot;El gancho requiere calibración&quot;);</span>
+        // Solicitudes pendientes
+<span class="fc" id="L123">        solicitud(&quot;ccutipa&quot;, balanzaPlataforma, 1, 5, &quot;Pesaje de cosecha de zapallo&quot;);</span>
+<span class="fc" id="L124">        solicitud(&quot;lmamani&quot;, jabaMadera, 30, 12, &quot;Cosecha de palta para venta en mercado&quot;);</span>
+        // Solicitud aprobada (sin entregar)
+<span class="fc" id="L126">        long s7 = solicitud(&quot;pquispe&quot;, fumigadoraMotor, 2, 14, &quot;Fumigación preventiva de vid&quot;);</span>
+<span class="fc" id="L127">        solicitudService.aprobar(s7, ENCARGADO);</span>
+        // Solicitud rechazada
+<span class="fc" id="L129">        long s8 = solicitud(&quot;rhuaman&quot;, lampa, 10, 30, &quot;Limpieza de canal de riego comunal&quot;);</span>
+<span class="fc" id="L130">        solicitudService.rechazar(s8, &quot;La cantidad excede lo asignado por productor; solicite máximo 5&quot;, ENCARGADO);</span>
+<span class="fc" id="L131">        log.info(&quot;Datos de demostración cargados&quot;);</span>
+<span class="fc" id="L132">    }</span>
+
+    private void productor(String username, String dni, String nombres, String apellidos, String telefono,
+                           String sector) {
+<span class="fc" id="L136">        ProductorRequest r = new ProductorRequest();</span>
+<span class="fc" id="L137">        r.setUsername(username);</span>
+<span class="fc" id="L138">        r.setPassword(CLAVE_PRODUCTOR);</span>
+<span class="fc" id="L139">        r.setDni(dni);</span>
+<span class="fc" id="L140">        r.setNombres(nombres);</span>
+<span class="fc" id="L141">        r.setApellidos(apellidos);</span>
+<span class="fc" id="L142">        r.setTelefono(telefono);</span>
+<span class="fc" id="L143">        r.setSector(sector);</span>
+<span class="fc" id="L144">        r.setActivo(true);</span>
+<span class="fc" id="L145">        productorService.registrar(r, ENCARGADO);</span>
+<span class="fc" id="L146">    }</span>
+
+    private long material(String codigo, String nombre, CategoriaMaterial categoria, String descripcion,
+                          String unidad, int cantidad) {
+<span class="fc" id="L150">        MaterialRequest r = new MaterialRequest();</span>
+<span class="fc" id="L151">        r.setCodigo(codigo);</span>
+<span class="fc" id="L152">        r.setNombre(nombre);</span>
+<span class="fc" id="L153">        r.setCategoria(categoria);</span>
+<span class="fc" id="L154">        r.setDescripcion(descripcion);</span>
+<span class="fc" id="L155">        r.setUnidad(unidad);</span>
+<span class="fc" id="L156">        r.setCantidadInicial(cantidad);</span>
+<span class="fc" id="L157">        r.setEstado(EstadoMaterial.ACTIVO);</span>
+<span class="fc" id="L158">        return materialService.registrar(r, ENCARGADO).id();</span>
+    }
+
+    private void inactivar(long materialId) {
+<span class="fc" id="L162">        var m = materialService.obtener(materialId);</span>
+<span class="fc" id="L163">        MaterialRequest r = new MaterialRequest();</span>
+<span class="fc" id="L164">        r.setCodigo(m.codigo());</span>
+<span class="fc" id="L165">        r.setNombre(m.nombre());</span>
+<span class="fc" id="L166">        r.setCategoria(m.categoria());</span>
+<span class="fc" id="L167">        r.setDescripcion(m.descripcion());</span>
+<span class="fc" id="L168">        r.setUnidad(m.unidad());</span>
+<span class="fc" id="L169">        r.setEstado(EstadoMaterial.INACTIVO);</span>
+<span class="fc" id="L170">        materialService.actualizar(materialId, r, ENCARGADO);</span>
+<span class="fc" id="L171">    }</span>
+
+    private long solicitud(String productor, long materialId, int cantidad, int dias, String motivo) {
+<span class="fc" id="L174">        return solicitudService.registrar(productor,</span>
+<span class="fc" id="L175">                new SolicitudRequest(materialId, cantidad, LocalDate.now(clock).plusDays(dias), motivo)).id();</span>
+    }
+
+    private void entregar(long solicitudId) {
+<span class="fc" id="L179">        solicitudService.aprobar(solicitudId, ENCARGADO);</span>
+<span class="fc" id="L180">        prestamoService.registrarEntrega(solicitudId, ENCARGADO);</span>
+<span class="fc" id="L181">    }</span>
+
+    private void devolver(long solicitudId, int buen, int danado, int mant, String obs) {
+        // El préstamo se identifica por la solicitud (relación 1 a 1)
+<span class="fc" id="L185">        var prestamo = prestamoService.buscarPorSolicitud(solicitudId).orElseThrow();</span>
+<span class="fc" id="L186">        devolucionService.registrar(prestamo.id(), new DevolucionRequest(buen, danado, mant, obs), ENCARGADO);</span>
+<span class="fc" id="L187">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

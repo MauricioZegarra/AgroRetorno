@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventarioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">InventarioService.java</span></div><h1>InventarioService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.AjusteExistenciasRequest;
+import pe.edu.agroretorno.dto.DisponibilidadResponse;
+import pe.edu.agroretorno.dto.MaterialResponse;
+import pe.edu.agroretorno.dto.MovimientoResponse;
+import pe.edu.agroretorno.entity.CategoriaMaterial;
+import pe.edu.agroretorno.entity.Inventario;
+import pe.edu.agroretorno.entity.Material;
+import pe.edu.agroretorno.entity.MovimientoInventario;
+import pe.edu.agroretorno.entity.TipoMovimiento;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.exception.ValidacionException;
+import pe.edu.agroretorno.repository.InventarioRepository;
+import pe.edu.agroretorno.repository.MaterialRepository;
+import pe.edu.agroretorno.repository.MovimientoInventarioRepository;
+
+/**
+ * Componente 1 de negocio: disponibilidad y control de inventario (RF04, RF05, RF08, RF09).
+ * Toda modificación de existencias pasa por este servicio y conserva la igualdad:
+ * total = disponible + prestada + dañada + mantenimiento.
+ */
+@Service
+public class InventarioService {
+
+    private final InventarioRepository inventarioRepository;
+    private final MaterialRepository materialRepository;
+    private final MovimientoInventarioRepository movimientoRepository;
+    private final UsuarioService usuarioService;
+    private final HistorialService historialService;
+    private final Clock clock;
+
+    public InventarioService(InventarioRepository inventarioRepository, MaterialRepository materialRepository,
+                             MovimientoInventarioRepository movimientoRepository, UsuarioService usuarioService,
+<span class="fc" id="L42">                             HistorialService historialService, Clock clock) {</span>
+<span class="fc" id="L43">        this.inventarioRepository = inventarioRepository;</span>
+<span class="fc" id="L44">        this.materialRepository = materialRepository;</span>
+<span class="fc" id="L45">        this.movimientoRepository = movimientoRepository;</span>
+<span class="fc" id="L46">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L47">        this.historialService = historialService;</span>
+<span class="fc" id="L48">        this.clock = clock;</span>
+<span class="fc" id="L49">    }</span>
+
+    // ------------------------------------------------------------------ consultas (RF05)
+
+    /** Consulta si se puede atender una cantidad de un material. No modifica datos. */
+    @Transactional(readOnly = true)
+    public DisponibilidadResponse consultarDisponibilidad(Long materialId, int cantidad) {
+<span class="fc" id="L56">        validarCantidadPositiva(cantidad);</span>
+<span class="fc" id="L57">        Material material = materialRepository.findByIdConInventario(materialId)</span>
+<span class="fc" id="L58">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Material&quot;, materialId));</span>
+<span class="fc" id="L59">        int disponible = material.getInventario().getCantidadDisponible();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (!material.isActivo()) {</span>
+<span class="fc" id="L61">            return new DisponibilidadResponse(material.getId(), material.getNombre(), material.getEstado(),</span>
+                    disponible, cantidad, false, &quot;El material está inactivo y no puede solicitarse&quot;);
+        }
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        boolean alcanza = disponible &gt;= cantidad;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        String mensaje = alcanza</span>
+<span class="fc" id="L66">                ? &quot;Hay &quot; + disponible + &quot; unidades disponibles&quot;</span>
+<span class="pc" id="L67">                : &quot;Solo hay &quot; + disponible + &quot; unidades disponibles&quot;;</span>
+<span class="fc" id="L68">        return new DisponibilidadResponse(material.getId(), material.getNombre(), material.getEstado(),</span>
+                disponible, cantidad, alcanza, mensaje);
+    }
+
+    /**
+     * Regla de negocio: un material solo puede solicitarse si está activo y la cantidad
+     * no supera las unidades disponibles en ese momento.
+     */
+    public void validarDisponibilidad(Material material, int cantidad) {
+<span class="fc" id="L77">        validarCantidadPositiva(cantidad);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (!material.isActivo()) {</span>
+<span class="fc" id="L79">            throw new ReglaNegocioException(&quot;El material &quot; + material.getNombre() + &quot; está inactivo&quot;);</span>
+        }
+<span class="fc" id="L81">        int disponible = material.getInventario().getCantidadDisponible();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (cantidad &gt; disponible) {</span>
+<span class="fc" id="L83">            throw new ReglaNegocioException(&quot;Disponibilidad insuficiente: solicitó &quot; + cantidad</span>
+<span class="fc" id="L84">                    + &quot; y solo hay &quot; + disponible + &quot; unidades disponibles de &quot; + material.getNombre());</span>
+        }
+<span class="fc" id="L86">    }</span>
+
+    @Transactional(readOnly = true)
+    public List&lt;MaterialResponse&gt; listarInventario(String texto, boolean soloActivos) {
+<span class="fc" id="L90">        return listarInventario(texto, null, soloActivos);</span>
+    }
+
+    /** Búsqueda de materiales por texto (nombre o código) y categoría. */
+    @Transactional(readOnly = true)
+    public List&lt;MaterialResponse&gt; listarInventario(String texto, CategoriaMaterial categoria, boolean soloActivos) {
+<span class="fc" id="L96">        return materialRepository.buscarConInventario(normalizar(texto)).stream()</span>
+<span class="fc bfc" id="L97" title="All 4 branches covered.">                .filter(m -&gt; !soloActivos || m.isActivo())</span>
+<span class="pc bpc" id="L98" title="3 of 4 branches missed.">                .filter(m -&gt; categoria == null || m.getCategoria() == categoria)</span>
+<span class="fc" id="L99">                .map(MaterialResponse::from)</span>
+<span class="fc" id="L100">                .toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;MovimientoResponse&gt; listarMovimientos(Long materialId) {
+<span class="nc" id="L105">        return movimientoRepository.findByMaterialId(materialId).stream().map(MovimientoResponse::from).toList();</span>
+    }
+
+    // ------------------------------------------------------------------ altas y ajustes (RF04)
+
+    /** Crea las existencias iniciales de un material recién registrado. */
+    @Transactional
+    public Inventario crearInventarioInicial(Material material, int cantidadInicial, Usuario actor) {
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (cantidadInicial &lt; 0) {</span>
+<span class="fc" id="L114">            throw new ValidacionException(&quot;La cantidad inicial no puede ser negativa&quot;);</span>
+        }
+<span class="fc" id="L116">        LocalDateTime ahora = LocalDateTime.now(clock);</span>
+<span class="fc" id="L117">        Inventario inventario = inventarioRepository.save(new Inventario(material, cantidadInicial, ahora));</span>
+<span class="fc" id="L118">        material.setInventario(inventario);</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (cantidadInicial &gt; 0) {</span>
+<span class="fc" id="L120">            registrarMovimiento(material, TipoMovimiento.ALTA_INICIAL, cantidadInicial, actor,</span>
+<span class="fc" id="L121">                    &quot;MATERIAL-&quot; + material.getCodigo(), &quot;Existencias iniciales&quot;);</span>
+        }
+<span class="fc" id="L123">        return inventario;</span>
+    }
+
+    /** Ajustes manuales del encargado: ingresos, retiros, mantenimiento, reparación y bajas. */
+    @Transactional
+    public MaterialResponse ajustarExistencias(Long materialId, AjusteExistenciasRequest req, String username) {
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (req.getTipo() == null) {</span>
+<span class="nc" id="L130">            throw new ValidacionException(&quot;Seleccione el tipo de ajuste&quot;);</span>
+        }
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        int cantidad = req.getCantidad() == null ? 0 : req.getCantidad();</span>
+<span class="fc" id="L133">        validarCantidadPositiva(cantidad);</span>
+<span class="pc bpc" id="L134" title="2 of 4 branches missed.">        if (req.getObservacion() == null || req.getObservacion().isBlank()) {</span>
+<span class="nc" id="L135">            throw new ValidacionException(&quot;Indique el motivo del ajuste&quot;);</span>
+        }
+<span class="fc" id="L137">        Usuario actor = usuarioService.obtenerPorUsername(username);</span>
+<span class="fc" id="L138">        Inventario inv = bloquear(materialId);</span>
+<span class="fc bfc" id="L139" title="All 6 branches covered.">        switch (req.getTipo()) {</span>
+            case INGRESO -&gt; {
+<span class="fc" id="L141">                inv.setCantidadTotal(inv.getCantidadTotal() + cantidad);</span>
+<span class="fc" id="L142">                inv.setCantidadDisponible(inv.getCantidadDisponible() + cantidad);</span>
+<span class="fc" id="L143">            }</span>
+            case RETIRO -&gt; {
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                exigir(cantidad &lt;= inv.getCantidadDisponible(), &quot;No puede retirar más unidades de las disponibles (&quot;</span>
+<span class="fc" id="L146">                        + inv.getCantidadDisponible() + &quot;)&quot;);</span>
+<span class="fc" id="L147">                inv.setCantidadTotal(inv.getCantidadTotal() - cantidad);</span>
+<span class="fc" id="L148">                inv.setCantidadDisponible(inv.getCantidadDisponible() - cantidad);</span>
+<span class="fc" id="L149">            }</span>
+            case ENVIO_MANTENIMIENTO -&gt; {
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">                exigir(cantidad &lt;= inv.getCantidadDisponible(), &quot;No puede enviar a mantenimiento más unidades de las disponibles (&quot;</span>
+<span class="fc" id="L152">                        + inv.getCantidadDisponible() + &quot;)&quot;);</span>
+<span class="fc" id="L153">                inv.setCantidadDisponible(inv.getCantidadDisponible() - cantidad);</span>
+<span class="fc" id="L154">                inv.setCantidadMantenimiento(inv.getCantidadMantenimiento() + cantidad);</span>
+<span class="fc" id="L155">            }</span>
+            case REPARACION -&gt; {
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">                exigir(cantidad &lt;= inv.getCantidadMantenimiento(), &quot;Solo hay &quot; + inv.getCantidadMantenimiento()</span>
+                        + &quot; unidades en mantenimiento&quot;);
+<span class="fc" id="L159">                inv.setCantidadMantenimiento(inv.getCantidadMantenimiento() - cantidad);</span>
+<span class="fc" id="L160">                inv.setCantidadDisponible(inv.getCantidadDisponible() + cantidad);</span>
+<span class="fc" id="L161">            }</span>
+            case BAJA_DANADO -&gt; {
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                exigir(cantidad &lt;= inv.getCantidadDanada(), &quot;Solo hay &quot; + inv.getCantidadDanada()</span>
+                        + &quot; unidades dañadas&quot;);
+<span class="fc" id="L165">                inv.setCantidadDanada(inv.getCantidadDanada() - cantidad);</span>
+<span class="fc" id="L166">                inv.setCantidadTotal(inv.getCantidadTotal() - cantidad);</span>
+<span class="fc" id="L167">            }</span>
+<span class="fc" id="L168">            default -&gt; throw new ValidacionException(&quot;Tipo de ajuste no permitido: &quot; + req.getTipo().getEtiqueta());</span>
+        }
+<span class="fc" id="L170">        guardar(inv);</span>
+<span class="fc" id="L171">        registrarMovimiento(inv.getMaterial(), req.getTipo(), cantidad, actor, &quot;AJUSTE&quot;, req.getObservacion().trim());</span>
+<span class="fc" id="L172">        historialService.registrar(actor.getUsername(), &quot;AJUSTE_EXISTENCIAS&quot;, &quot;Material&quot;, materialId,</span>
+<span class="fc" id="L173">                req.getTipo().getEtiqueta() + &quot;: &quot; + cantidad + &quot; unidades. &quot; + req.getObservacion().trim());</span>
+<span class="fc" id="L174">        return MaterialResponse.from(inv.getMaterial());</span>
+    }
+
+    // ------------------------------------------------------------------ entregas y devoluciones
+
+    /**
+     * RF08: descuenta las unidades entregadas. Vuelve a validar el stock con la fila bloqueada,
+     * por lo que dos entregas simultáneas no pueden dejar existencias negativas.
+     */
+    @Transactional
+    public Inventario descontarPorEntrega(Long materialId, int cantidad, Usuario actor, String referencia) {
+<span class="fc" id="L185">        validarCantidadPositiva(cantidad);</span>
+<span class="fc" id="L186">        Inventario inv = bloquear(materialId);</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (cantidad &gt; inv.getCantidadDisponible()) {</span>
+<span class="fc" id="L188">            throw new ReglaNegocioException(&quot;Existencias insuficientes para la entrega: se requieren &quot; + cantidad</span>
+<span class="fc" id="L189">                    + &quot; y hay &quot; + inv.getCantidadDisponible() + &quot; disponibles&quot;);</span>
+        }
+<span class="fc" id="L191">        inv.setCantidadDisponible(inv.getCantidadDisponible() - cantidad);</span>
+<span class="fc" id="L192">        inv.setCantidadPrestada(inv.getCantidadPrestada() + cantidad);</span>
+<span class="fc" id="L193">        guardar(inv);</span>
+<span class="fc" id="L194">        registrarMovimiento(inv.getMaterial(), TipoMovimiento.ENTREGA, cantidad, actor, referencia, null);</span>
+<span class="fc" id="L195">        return inv;</span>
+    }
+
+    /**
+     * RF09: las unidades en buen estado vuelven a disponible; las dañadas y las que requieren
+     * mantenimiento quedan registradas como no disponibles.
+     */
+    @Transactional
+    public Inventario registrarRetorno(Long materialId, int buenEstado, int danadas, int mantenimiento,
+                                       Usuario actor, String referencia) {
+<span class="pc bpc" id="L205" title="3 of 6 branches missed.">        if (buenEstado &lt; 0 || danadas &lt; 0 || mantenimiento &lt; 0) {</span>
+<span class="nc" id="L206">            throw new ValidacionException(&quot;Las cantidades devueltas no pueden ser negativas&quot;);</span>
+        }
+<span class="fc" id="L208">        int total = buenEstado + danadas + mantenimiento;</span>
+<span class="fc" id="L209">        validarCantidadPositiva(total);</span>
+<span class="fc" id="L210">        Inventario inv = bloquear(materialId);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (total &gt; inv.getCantidadPrestada()) {</span>
+<span class="fc" id="L212">            throw new ReglaNegocioException(&quot;La devolución (&quot; + total + &quot;) supera las unidades prestadas del material (&quot;</span>
+<span class="fc" id="L213">                    + inv.getCantidadPrestada() + &quot;)&quot;);</span>
+        }
+<span class="fc" id="L215">        inv.setCantidadPrestada(inv.getCantidadPrestada() - total);</span>
+<span class="fc" id="L216">        inv.setCantidadDisponible(inv.getCantidadDisponible() + buenEstado);</span>
+<span class="fc" id="L217">        inv.setCantidadDanada(inv.getCantidadDanada() + danadas);</span>
+<span class="fc" id="L218">        inv.setCantidadMantenimiento(inv.getCantidadMantenimiento() + mantenimiento);</span>
+<span class="fc" id="L219">        guardar(inv);</span>
+<span class="fc" id="L220">        Material material = inv.getMaterial();</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (buenEstado &gt; 0) {</span>
+<span class="fc" id="L222">            registrarMovimiento(material, TipoMovimiento.DEVOLUCION_BUEN_ESTADO, buenEstado, actor, referencia, null);</span>
+        }
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (danadas &gt; 0) {</span>
+<span class="fc" id="L225">            registrarMovimiento(material, TipoMovimiento.DEVOLUCION_DANADO, danadas, actor, referencia, null);</span>
+        }
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (mantenimiento &gt; 0) {</span>
+<span class="fc" id="L228">            registrarMovimiento(material, TipoMovimiento.DEVOLUCION_MANTENIMIENTO, mantenimiento, actor, referencia, null);</span>
+        }
+<span class="fc" id="L230">        return inv;</span>
+    }
+
+    // ------------------------------------------------------------------ utilidades
+
+    private Inventario bloquear(Long materialId) {
+<span class="fc" id="L236">        return inventarioRepository.findByMaterialIdParaActualizar(materialId)</span>
+<span class="pc" id="L237">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Inventario del material&quot;, materialId));</span>
+    }
+
+    private void guardar(Inventario inv) {
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">        if (!inv.estaCuadrado()) {</span>
+            // Protección defensiva: nunca debe persistirse un inventario descuadrado.
+<span class="nc" id="L243">            throw new IllegalStateException(&quot;Inventario descuadrado para el material &quot; + inv.getMaterial().getId());</span>
+        }
+<span class="fc" id="L245">        inv.setFechaActualizacion(LocalDateTime.now(clock));</span>
+<span class="fc" id="L246">        inventarioRepository.save(inv);</span>
+<span class="fc" id="L247">    }</span>
+
+    private void registrarMovimiento(Material material, TipoMovimiento tipo, int cantidad, Usuario actor,
+                                     String referencia, String observacion) {
+<span class="fc" id="L251">        movimientoRepository.save(new MovimientoInventario(material, tipo, cantidad, LocalDateTime.now(clock),</span>
+                actor, referencia, observacion));
+<span class="fc" id="L253">    }</span>
+
+    static void validarCantidadPositiva(int cantidad) {
+<span class="fc bfc" id="L256" title="All 2 branches covered.">        if (cantidad &lt;= 0) {</span>
+<span class="fc" id="L257">            throw new ValidacionException(&quot;La cantidad debe ser un número entero positivo&quot;);</span>
+        }
+<span class="fc" id="L259">    }</span>
+
+    private static void exigir(boolean condicion, String mensaje) {
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (!condicion) {</span>
+<span class="fc" id="L263">            throw new ReglaNegocioException(mensaje);</span>
+        }
+<span class="fc" id="L265">    }</span>
+
+    static String normalizar(String texto) {
+<span class="fc bfc" id="L268" title="All 2 branches covered.">        return texto == null ? &quot;&quot; : texto.trim().toLowerCase();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.controller</a> &gt; <span class="el_source">ProductorController.java</span></div><h1>ProductorController.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.controller;
+
+import jakarta.validation.Valid;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.edu.agroretorno.config.ReglasNegocioProperties;
+import pe.edu.agroretorno.dto.MaterialResponse;
+import pe.edu.agroretorno.dto.PrestamoResponse;
+import pe.edu.agroretorno.dto.SolicitudRequest;
+import pe.edu.agroretorno.dto.SolicitudResponse;
+import pe.edu.agroretorno.entity.CategoriaMaterial;
+import pe.edu.agroretorno.entity.EstadoPrestamo;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.exception.AgroRetornoException;
+import pe.edu.agroretorno.service.DevolucionService;
+import pe.edu.agroretorno.service.InventarioService;
+import pe.edu.agroretorno.service.PrestamoService;
+import pe.edu.agroretorno.service.ProductorService;
+import pe.edu.agroretorno.service.SolicitudService;
+
+/** Pantallas del productor agrícola: inventario, solicitudes, préstamos e historial. */
+@Controller
+@RequestMapping(&quot;/productor&quot;)
+@PreAuthorize(&quot;hasRole('PRODUCTOR')&quot;)
+public class ProductorController {
+
+    private final InventarioService inventarioService;
+    private final SolicitudService solicitudService;
+    private final PrestamoService prestamoService;
+    private final DevolucionService devolucionService;
+    private final ProductorService productorService;
+    private final ReglasNegocioProperties reglas;
+    private final Clock clock;
+
+    public ProductorController(InventarioService inventarioService, SolicitudService solicitudService,
+                               PrestamoService prestamoService, DevolucionService devolucionService,
+<span class="fc" id="L49">                               ProductorService productorService, ReglasNegocioProperties reglas, Clock clock) {</span>
+<span class="fc" id="L50">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L51">        this.solicitudService = solicitudService;</span>
+<span class="fc" id="L52">        this.prestamoService = prestamoService;</span>
+<span class="fc" id="L53">        this.devolucionService = devolucionService;</span>
+<span class="fc" id="L54">        this.productorService = productorService;</span>
+<span class="fc" id="L55">        this.reglas = reglas;</span>
+<span class="fc" id="L56">        this.clock = clock;</span>
+<span class="fc" id="L57">    }</span>
+
+    @GetMapping(&quot;/panel&quot;)
+    public String panel(Authentication auth, Model model) {
+<span class="nc" id="L61">        List&lt;SolicitudResponse&gt; solicitudes = solicitudService.listarPorProductor(auth.getName());</span>
+<span class="nc" id="L62">        List&lt;PrestamoResponse&gt; activos = prestamoService.listarPorProductor(auth.getName()).stream()</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                .filter(p -&gt; p.estado() == EstadoPrestamo.ACTIVO).toList();</span>
+<span class="nc" id="L64">        model.addAttribute(&quot;productor&quot;, productorService.obtenerPorUsername(auth.getName()));</span>
+<span class="nc" id="L65">        model.addAttribute(&quot;pendientes&quot;, contar(solicitudes, EstadoSolicitud.PENDIENTE));</span>
+<span class="nc" id="L66">        model.addAttribute(&quot;aprobadas&quot;, contar(solicitudes, EstadoSolicitud.APROBADA));</span>
+<span class="nc" id="L67">        model.addAttribute(&quot;rechazadas&quot;, contar(solicitudes, EstadoSolicitud.RECHAZADA));</span>
+<span class="nc" id="L68">        model.addAttribute(&quot;prestamosActivos&quot;, activos);</span>
+<span class="nc" id="L69">        model.addAttribute(&quot;ultimasSolicitudes&quot;, solicitudes.stream().limit(5).toList());</span>
+<span class="nc" id="L70">        return &quot;productor/panel&quot;;</span>
+    }
+
+    /** RF05: inventario disponible con búsqueda por texto y categoría. */
+    @GetMapping(&quot;/inventario&quot;)
+    public String inventario(@RequestParam(name = &quot;q&quot;, required = false) String q,
+                             @RequestParam(name = &quot;categoria&quot;, required = false) CategoriaMaterial categoria,
+                             Model model) {
+<span class="fc" id="L78">        model.addAttribute(&quot;materiales&quot;, inventarioService.listarInventario(q, categoria, true));</span>
+<span class="fc" id="L79">        model.addAttribute(&quot;q&quot;, q);</span>
+<span class="fc" id="L80">        model.addAttribute(&quot;categoriaSeleccionada&quot;, categoria);</span>
+<span class="fc" id="L81">        model.addAttribute(&quot;categorias&quot;, CategoriaMaterial.values());</span>
+<span class="fc" id="L82">        return &quot;productor/inventario&quot;;</span>
+    }
+
+    /** RF06: formulario de solicitud. */
+    @GetMapping(&quot;/solicitudes/nueva&quot;)
+    public String nuevaSolicitud(@RequestParam(name = &quot;materialId&quot;, required = false) Long materialId, Model model) {
+<span class="nc" id="L88">        SolicitudRequest req = new SolicitudRequest();</span>
+<span class="nc" id="L89">        req.setMaterialId(materialId);</span>
+<span class="nc" id="L90">        req.setCantidad(1);</span>
+<span class="nc" id="L91">        return formulario(req, model);</span>
+    }
+
+    @PostMapping(&quot;/solicitudes&quot;)
+    public String registrarSolicitud(@Valid @ModelAttribute(&quot;solicitud&quot;) SolicitudRequest solicitud,
+                                     BindingResult binding, Authentication auth, Model model,
+                                     RedirectAttributes flash) {
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (binding.hasErrors()) {</span>
+<span class="fc" id="L99">            return formulario(solicitud, model);</span>
+        }
+        try {
+<span class="fc" id="L102">            SolicitudResponse creada = solicitudService.registrar(auth.getName(), solicitud);</span>
+<span class="fc" id="L103">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Solicitud N.° &quot; + creada.id() + &quot; registrada correctamente. Estado: &quot;</span>
+<span class="fc" id="L104">                    + creada.estado());</span>
+<span class="fc" id="L105">            flash.addFlashAttribute(&quot;idCreado&quot;, creada.id());</span>
+<span class="fc" id="L106">            return &quot;redirect:/productor/solicitudes&quot;;</span>
+<span class="nc" id="L107">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L108">            model.addAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L109">            return formulario(solicitud, model);</span>
+        }
+    }
+
+    @GetMapping(&quot;/solicitudes&quot;)
+    public String misSolicitudes(Authentication auth, Model model) {
+<span class="nc" id="L115">        model.addAttribute(&quot;solicitudes&quot;, solicitudService.listarPorProductor(auth.getName()));</span>
+<span class="nc" id="L116">        return &quot;productor/solicitudes&quot;;</span>
+    }
+
+    @GetMapping(&quot;/prestamos&quot;)
+    public String misPrestamos(Authentication auth, Model model) {
+<span class="nc" id="L121">        model.addAttribute(&quot;prestamos&quot;, prestamoService.listarPorProductor(auth.getName()));</span>
+<span class="nc" id="L122">        return &quot;productor/prestamos&quot;;</span>
+    }
+
+    @GetMapping(&quot;/historial&quot;)
+    public String historial(Authentication auth, Model model) {
+<span class="nc" id="L127">        model.addAttribute(&quot;solicitudes&quot;, solicitudService.listarPorProductor(auth.getName()));</span>
+<span class="nc" id="L128">        model.addAttribute(&quot;prestamos&quot;, prestamoService.listarPorProductor(auth.getName()));</span>
+<span class="nc" id="L129">        model.addAttribute(&quot;devoluciones&quot;, devolucionService.listarPorProductor(auth.getName()));</span>
+<span class="nc" id="L130">        return &quot;productor/historial&quot;;</span>
+    }
+
+    private String formulario(SolicitudRequest req, Model model) {
+<span class="fc" id="L134">        List&lt;MaterialResponse&gt; materiales = inventarioService.listarInventario(null, true);</span>
+<span class="fc" id="L135">        LocalDate hoy = LocalDate.now(clock);</span>
+<span class="fc" id="L136">        model.addAttribute(&quot;solicitud&quot;, req);</span>
+<span class="fc" id="L137">        model.addAttribute(&quot;materiales&quot;, materiales);</span>
+<span class="fc" id="L138">        model.addAttribute(&quot;materialSeleccionado&quot;, materiales.stream()</span>
+<span class="fc" id="L139">                .filter(m -&gt; m.id().equals(req.getMaterialId())).findFirst().orElse(null));</span>
+<span class="fc" id="L140">        model.addAttribute(&quot;fechaMinima&quot;, hoy.plusDays(reglas.getPlazoMinimoDias()));</span>
+<span class="fc" id="L141">        model.addAttribute(&quot;fechaMaxima&quot;, hoy.plusDays(reglas.getPlazoMaximoDias()));</span>
+<span class="fc" id="L142">        model.addAttribute(&quot;longitudMinimaMotivo&quot;, reglas.getLongitudMinimaMotivo());</span>
+<span class="fc" id="L143">        return &quot;productor/solicitud-form&quot;;</span>
+    }
+
+    private static long contar(List&lt;SolicitudResponse&gt; lista, EstadoSolicitud estado) {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        return lista.stream().filter(s -&gt; s.estado() == estado).count();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

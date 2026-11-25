@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SolicitudService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">SolicitudService.java</span></div><h1>SolicitudService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.config.ReglasNegocioProperties;
+import pe.edu.agroretorno.dto.SolicitudRequest;
+import pe.edu.agroretorno.dto.SolicitudResponse;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.entity.Material;
+import pe.edu.agroretorno.entity.Productor;
+import pe.edu.agroretorno.entity.Solicitud;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.exception.OperacionNoPermitidaException;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.exception.ValidacionException;
+import pe.edu.agroretorno.repository.MaterialRepository;
+import pe.edu.agroretorno.repository.ProductorRepository;
+import pe.edu.agroretorno.repository.SolicitudRepository;
+
+/**
+ * Componente 2 de negocio: registro, aprobación y rechazo de solicitudes
+ * (Proceso 1 y primera parte del Proceso 2; RF06 y RF07).
+ */
+@Service
+public class SolicitudService {
+
+    private final SolicitudRepository solicitudRepository;
+    private final ProductorRepository productorRepository;
+    private final MaterialRepository materialRepository;
+    private final InventarioService inventarioService;
+    private final UsuarioService usuarioService;
+    private final HistorialService historialService;
+    private final ReglasNegocioProperties reglas;
+    private final Clock clock;
+
+    public SolicitudService(SolicitudRepository solicitudRepository, ProductorRepository productorRepository,
+                            MaterialRepository materialRepository, InventarioService inventarioService,
+                            UsuarioService usuarioService, HistorialService historialService,
+<span class="fc" id="L44">                            ReglasNegocioProperties reglas, Clock clock) {</span>
+<span class="fc" id="L45">        this.solicitudRepository = solicitudRepository;</span>
+<span class="fc" id="L46">        this.productorRepository = productorRepository;</span>
+<span class="fc" id="L47">        this.materialRepository = materialRepository;</span>
+<span class="fc" id="L48">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L49">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L50">        this.historialService = historialService;</span>
+<span class="fc" id="L51">        this.reglas = reglas;</span>
+<span class="fc" id="L52">        this.clock = clock;</span>
+<span class="fc" id="L53">    }</span>
+
+    // ------------------------------------------------------------------ Proceso 1: registrar (RF06)
+
+    @Transactional
+    public SolicitudResponse registrar(String username, SolicitudRequest req) {
+<span class="fc" id="L59">        Productor productor = productorRepository.findByUsername(username)</span>
+<span class="fc" id="L60">                .orElseThrow(() -&gt; new OperacionNoPermitidaException(&quot;Solo los productores pueden registrar solicitudes&quot;));</span>
+<span class="fc" id="L61">        validarDatos(req);</span>
+<span class="fc" id="L62">        Material material = materialRepository.findByIdConInventario(req.getMaterialId())</span>
+<span class="fc" id="L63">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Material&quot;, req.getMaterialId()));</span>
+        // Comprueba que el material esté activo y que la cantidad no supere la disponibilidad actual
+<span class="fc" id="L65">        inventarioService.validarDisponibilidad(material, req.getCantidad());</span>
+
+<span class="fc" id="L67">        Solicitud solicitud = new Solicitud(productor, material, req.getCantidad(), LocalDateTime.now(clock),</span>
+<span class="fc" id="L68">                req.getFechaDevolucionPrevista(), req.getMotivo().trim());</span>
+<span class="fc" id="L69">        solicitud = solicitudRepository.save(solicitud);</span>
+<span class="fc" id="L70">        historialService.registrar(username, &quot;REGISTRAR_SOLICITUD&quot;, &quot;Solicitud&quot;, solicitud.getId(),</span>
+<span class="fc" id="L71">                req.getCantidad() + &quot; &quot; + material.getUnidad() + &quot; de &quot; + material.getNombre()</span>
+<span class="fc" id="L72">                        + &quot;; devolución prevista &quot; + req.getFechaDevolucionPrevista());</span>
+<span class="fc" id="L73">        return SolicitudResponse.from(solicitud);</span>
+    }
+
+    /** Validaciones de entrada en el backend (RNF05), independientes de la interfaz. */
+    void validarDatos(SolicitudRequest req) {
+<span class="pc bpc" id="L78" title="1 of 4 branches missed.">        if (req == null || req.getMaterialId() == null) {</span>
+<span class="fc" id="L79">            throw new ValidacionException(&quot;Seleccione un material&quot;);</span>
+        }
+<span class="fc bfc" id="L81" title="All 4 branches covered.">        if (req.getCantidad() == null || req.getCantidad() &lt;= 0) {</span>
+<span class="fc" id="L82">            throw new ValidacionException(&quot;La cantidad debe ser un número entero positivo&quot;);</span>
+        }
+<span class="fc" id="L84">        LocalDate fecha = req.getFechaDevolucionPrevista();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (fecha == null) {</span>
+<span class="fc" id="L86">            throw new ValidacionException(&quot;Indique la fecha prevista de devolución&quot;);</span>
+        }
+<span class="fc" id="L88">        LocalDate hoy = LocalDate.now(clock);</span>
+<span class="fc" id="L89">        LocalDate minima = hoy.plusDays(reglas.getPlazoMinimoDias());</span>
+<span class="fc" id="L90">        LocalDate maxima = hoy.plusDays(reglas.getPlazoMaximoDias());</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (fecha.isBefore(minima)) {</span>
+<span class="fc" id="L92">            throw new ValidacionException(&quot;La fecha prevista de devolución debe ser igual o posterior a &quot; + minima);</span>
+        }
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (fecha.isAfter(maxima)) {</span>
+<span class="fc" id="L95">            throw new ValidacionException(&quot;La fecha prevista de devolución no puede superar &quot;</span>
+<span class="fc" id="L96">                    + reglas.getPlazoMaximoDias() + &quot; días (máximo &quot; + maxima + &quot;)&quot;);</span>
+        }
+<span class="fc" id="L98">        validarMotivo(req.getMotivo(), &quot;El motivo de la solicitud&quot;);</span>
+<span class="fc" id="L99">    }</span>
+
+    private void validarMotivo(String motivo, String campo) {
+<span class="pc bpc" id="L102" title="1 of 4 branches missed.">        if (motivo == null || motivo.trim().length() &lt; reglas.getLongitudMinimaMotivo()) {</span>
+<span class="fc" id="L103">            throw new ValidacionException(campo + &quot; debe tener al menos &quot; + reglas.getLongitudMinimaMotivo()</span>
+                    + &quot; caracteres&quot;);
+        }
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (motivo.trim().length() &gt; 300) {</span>
+<span class="nc" id="L107">            throw new ValidacionException(campo + &quot; no puede superar 300 caracteres&quot;);</span>
+        }
+<span class="fc" id="L109">    }</span>
+
+    // ------------------------------------------------------------------ consultas
+
+    @Transactional(readOnly = true)
+    public List&lt;SolicitudResponse&gt; listarPorProductor(String username) {
+<span class="fc" id="L115">        Productor productor = productorRepository.findByUsername(username)</span>
+<span class="pc" id="L116">                .orElseThrow(() -&gt; new OperacionNoPermitidaException(&quot;El usuario no es un productor&quot;));</span>
+<span class="fc" id="L117">        return solicitudRepository.findByProductorId(productor.getId()).stream().map(SolicitudResponse::from).toList();</span>
+    }
+
+    /** Un productor solo puede consultar sus propias solicitudes (RNF02). */
+    @Transactional(readOnly = true)
+    public SolicitudResponse obtenerParaProductor(String username, Long solicitudId) {
+<span class="fc" id="L123">        Solicitud s = buscar(solicitudId);</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (!s.getProductor().getUsuario().getUsername().equals(username)) {</span>
+<span class="fc" id="L125">            throw new OperacionNoPermitidaException(&quot;No puede consultar solicitudes de otro productor&quot;);</span>
+        }
+<span class="fc" id="L127">        return SolicitudResponse.from(s);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;SolicitudResponse&gt; listar(EstadoSolicitud estado) {
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        List&lt;Solicitud&gt; lista = estado == null ? solicitudRepository.findAllOrdenadas()</span>
+<span class="fc" id="L133">                : solicitudRepository.findByEstado(estado);</span>
+<span class="fc" id="L134">        return lista.stream().map(SolicitudResponse::from).toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public SolicitudResponse obtener(Long solicitudId) {
+<span class="fc" id="L139">        return SolicitudResponse.from(buscar(solicitudId));</span>
+    }
+
+    // ------------------------------------------------------------------ Proceso 2: aprobar / rechazar (RF07)
+
+    /** Aprueba una solicitud PENDIENTE. La aprobación NO descuenta inventario; eso ocurre en la entrega. */
+    @Transactional
+    public SolicitudResponse aprobar(Long solicitudId, String usernameEncargado) {
+<span class="fc" id="L147">        Usuario encargado = usuarioService.obtenerPorUsername(usernameEncargado);</span>
+<span class="fc" id="L148">        Solicitud s = solicitudRepository.findByIdParaActualizar(solicitudId)</span>
+<span class="pc" id="L149">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Solicitud&quot;, solicitudId));</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (s.getEstado() != EstadoSolicitud.PENDIENTE) {</span>
+<span class="fc" id="L151">            throw new ReglaNegocioException(&quot;Solo se pueden aprobar solicitudes PENDIENTES. Estado actual: &quot;</span>
+<span class="fc" id="L152">                    + s.getEstado());</span>
+        }
+        // Verifica la disponibilidad en el momento de aprobar
+<span class="fc" id="L155">        inventarioService.validarDisponibilidad(s.getMaterial(), s.getCantidad());</span>
+<span class="fc" id="L156">        s.setEstado(EstadoSolicitud.APROBADA);</span>
+<span class="fc" id="L157">        s.setRespondidoPor(encargado);</span>
+<span class="fc" id="L158">        s.setFechaRespuesta(LocalDateTime.now(clock));</span>
+<span class="fc" id="L159">        historialService.registrar(encargado.getUsername(), &quot;APROBAR_SOLICITUD&quot;, &quot;Solicitud&quot;, s.getId(),</span>
+<span class="fc" id="L160">                &quot;Solicitud aprobada (&quot; + s.getCantidad() + &quot; de &quot; + s.getMaterial().getNombre() + &quot;)&quot;);</span>
+<span class="fc" id="L161">        return SolicitudResponse.from(s);</span>
+    }
+
+    /**
+     * Rechaza una solicitud con motivo. Se permite desde PENDIENTE o APROBADA (aún no entregada);
+     * una solicitud RECHAZADA o ENTREGADA no puede cambiar de estado.
+     */
+    @Transactional
+    public SolicitudResponse rechazar(Long solicitudId, String motivo, String usernameEncargado) {
+<span class="fc" id="L170">        validarMotivo(motivo, &quot;El motivo del rechazo&quot;);</span>
+<span class="fc" id="L171">        Usuario encargado = usuarioService.obtenerPorUsername(usernameEncargado);</span>
+<span class="fc" id="L172">        Solicitud s = solicitudRepository.findByIdParaActualizar(solicitudId)</span>
+<span class="pc" id="L173">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Solicitud&quot;, solicitudId));</span>
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">        if (s.getEstado() != EstadoSolicitud.PENDIENTE &amp;&amp; s.getEstado() != EstadoSolicitud.APROBADA) {</span>
+<span class="fc" id="L175">            throw new ReglaNegocioException(&quot;No se puede rechazar una solicitud en estado &quot; + s.getEstado());</span>
+        }
+<span class="fc" id="L177">        s.setEstado(EstadoSolicitud.RECHAZADA);</span>
+<span class="fc" id="L178">        s.setRespondidoPor(encargado);</span>
+<span class="fc" id="L179">        s.setFechaRespuesta(LocalDateTime.now(clock));</span>
+<span class="fc" id="L180">        s.setMotivoRechazo(motivo.trim());</span>
+<span class="fc" id="L181">        historialService.registrar(encargado.getUsername(), &quot;RECHAZAR_SOLICITUD&quot;, &quot;Solicitud&quot;, s.getId(),</span>
+<span class="fc" id="L182">                &quot;Motivo: &quot; + motivo.trim());</span>
+<span class="fc" id="L183">        return SolicitudResponse.from(s);</span>
+    }
+
+    private Solicitud buscar(Long id) {
+<span class="fc" id="L187">        return solicitudRepository.findById(id).orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Solicitud&quot;, id));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

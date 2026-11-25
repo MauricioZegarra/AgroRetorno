@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaterialRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.dto</a> &gt; <span class="el_source">MaterialRequest.java</span></div><h1>MaterialRequest.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.dto;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import pe.edu.agroretorno.entity.CategoriaMaterial;
+import pe.edu.agroretorno.entity.EstadoMaterial;
+
+/** Registro y actualización de materiales (RF04). cantidadInicial solo se usa al registrar. */
+<span class="fc" id="L13">public class MaterialRequest {</span>
+
+    @NotBlank(message = &quot;Indique el código&quot;)
+    @Pattern(regexp = &quot;^[A-Za-z0-9-]{3,20}$&quot;, message = &quot;Código: 3 a 20 letras, números o guiones&quot;)
+    private String codigo;
+
+    @NotBlank(message = &quot;Indique el nombre&quot;)
+    @Size(max = 100, message = &quot;Máximo 100 caracteres&quot;)
+    private String nombre;
+
+    @NotNull(message = &quot;Seleccione la categoría&quot;)
+    private CategoriaMaterial categoria;
+
+    @Size(max = 500, message = &quot;Máximo 500 caracteres&quot;)
+    private String descripcion;
+
+    @NotBlank(message = &quot;Indique la unidad de medida&quot;)
+    @Size(max = 30, message = &quot;Máximo 30 caracteres&quot;)
+    private String unidad;
+
+<span class="fc" id="L33">    @PositiveOrZero(message = &quot;La cantidad inicial no puede ser negativa&quot;)</span>
+    @Max(value = 100000, message = &quot;Cantidad fuera de rango&quot;)
+<span class="fc" id="L35">    private Integer cantidadInicial = 0;</span>
+
+<span class="fc" id="L37">    private EstadoMaterial estado = EstadoMaterial.ACTIVO;</span>
+
+<span class="fc" id="L39">    public String getCodigo() { return codigo; }</span>
+<span class="fc" id="L40">    public void setCodigo(String codigo) { this.codigo = codigo; }</span>
+<span class="fc" id="L41">    public String getNombre() { return nombre; }</span>
+<span class="fc" id="L42">    public void setNombre(String nombre) { this.nombre = nombre; }</span>
+<span class="fc" id="L43">    public CategoriaMaterial getCategoria() { return categoria; }</span>
+<span class="fc" id="L44">    public void setCategoria(CategoriaMaterial categoria) { this.categoria = categoria; }</span>
+<span class="fc" id="L45">    public String getDescripcion() { return descripcion; }</span>
+<span class="fc" id="L46">    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }</span>
+<span class="fc" id="L47">    public String getUnidad() { return unidad; }</span>
+<span class="fc" id="L48">    public void setUnidad(String unidad) { this.unidad = unidad; }</span>
+<span class="fc" id="L49">    public Integer getCantidadInicial() { return cantidadInicial; }</span>
+<span class="fc" id="L50">    public void setCantidadInicial(Integer cantidadInicial) { this.cantidadInicial = cantidadInicial; }</span>
+<span class="fc" id="L51">    public EstadoMaterial getEstado() { return estado; }</span>
+<span class="fc" id="L52">    public void setEstado(EstadoMaterial estado) { this.estado = estado; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaterialService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">MaterialService.java</span></div><h1>MaterialService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.MaterialRequest;
+import pe.edu.agroretorno.dto.MaterialResponse;
+import pe.edu.agroretorno.entity.EstadoMaterial;
+import pe.edu.agroretorno.entity.Material;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.repository.MaterialRepository;
+
+/** Registro y modificación de materiales (RF04). Las existencias se gestionan en InventarioService. */
+@Service
+public class MaterialService {
+
+    private final MaterialRepository materialRepository;
+    private final InventarioService inventarioService;
+    private final UsuarioService usuarioService;
+    private final HistorialService historialService;
+    private final Clock clock;
+
+    public MaterialService(MaterialRepository materialRepository, InventarioService inventarioService,
+<span class="fc" id="L27">                           UsuarioService usuarioService, HistorialService historialService, Clock clock) {</span>
+<span class="fc" id="L28">        this.materialRepository = materialRepository;</span>
+<span class="fc" id="L29">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L30">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L31">        this.historialService = historialService;</span>
+<span class="fc" id="L32">        this.clock = clock;</span>
+<span class="fc" id="L33">    }</span>
+
+    @Transactional
+    public MaterialResponse registrar(MaterialRequest req, String username) {
+<span class="fc" id="L37">        String codigo = req.getCodigo().trim().toUpperCase();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (materialRepository.existsByCodigo(codigo)) {</span>
+<span class="fc" id="L39">            throw new ReglaNegocioException(&quot;Ya existe un material con el código &quot; + codigo);</span>
+        }
+<span class="fc" id="L41">        Usuario actor = usuarioService.obtenerPorUsername(username);</span>
+<span class="fc" id="L42">        Material material = new Material(codigo, req.getNombre().trim(), req.getCategoria(),</span>
+<span class="fc" id="L43">                textoOpcional(req.getDescripcion()), req.getUnidad().trim(), LocalDateTime.now(clock));</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        material.setEstado(req.getEstado() == null ? EstadoMaterial.ACTIVO : req.getEstado());</span>
+<span class="fc" id="L45">        material = materialRepository.save(material);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        int cantidadInicial = req.getCantidadInicial() == null ? 0 : req.getCantidadInicial();</span>
+<span class="fc" id="L47">        inventarioService.crearInventarioInicial(material, cantidadInicial, actor);</span>
+<span class="fc" id="L48">        historialService.registrar(username, &quot;REGISTRAR_MATERIAL&quot;, &quot;Material&quot;, material.getId(),</span>
+<span class="fc" id="L49">                codigo + &quot; - &quot; + material.getNombre() + &quot; con &quot; + cantidadInicial + &quot; unidades&quot;);</span>
+<span class="fc" id="L50">        return MaterialResponse.from(material);</span>
+    }
+
+    /** Modifica los datos descriptivos y el estado; las cantidades solo cambian mediante ajustes. */
+    @Transactional
+    public MaterialResponse actualizar(Long id, MaterialRequest req, String username) {
+<span class="fc" id="L56">        Material material = materialRepository.findByIdConInventario(id)</span>
+<span class="pc" id="L57">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Material&quot;, id));</span>
+<span class="fc" id="L58">        material.setNombre(req.getNombre().trim());</span>
+<span class="fc" id="L59">        material.setCategoria(req.getCategoria());</span>
+<span class="fc" id="L60">        material.setDescripcion(textoOpcional(req.getDescripcion()));</span>
+<span class="fc" id="L61">        material.setUnidad(req.getUnidad().trim());</span>
+<span class="fc" id="L62">        EstadoMaterial anterior = material.getEstado();</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (req.getEstado() != null) {</span>
+<span class="fc" id="L64">            material.setEstado(req.getEstado());</span>
+        }
+<span class="fc" id="L66">        materialRepository.save(material);</span>
+<span class="fc" id="L67">        historialService.registrar(username, &quot;ACTUALIZAR_MATERIAL&quot;, &quot;Material&quot;, material.getId(),</span>
+<span class="fc" id="L68">                material.getCodigo() + &quot; - &quot; + material.getNombre() + &quot;; estado &quot; + anterior + &quot; -&gt; &quot;</span>
+<span class="fc" id="L69">                        + material.getEstado());</span>
+<span class="fc" id="L70">        return MaterialResponse.from(material);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public MaterialResponse obtener(Long id) {
+<span class="fc" id="L75">        return materialRepository.findByIdConInventario(id).map(MaterialResponse::from)</span>
+<span class="pc" id="L76">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Material&quot;, id));</span>
+    }
+
+    private static String textoOpcional(String s) {
+<span class="fc bfc" id="L80" title="All 4 branches covered.">        return s == null || s.isBlank() ? null : s.trim();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

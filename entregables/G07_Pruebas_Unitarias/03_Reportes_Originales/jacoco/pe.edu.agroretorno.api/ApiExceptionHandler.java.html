@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.api</a> &gt; <span class="el_source">ApiExceptionHandler.java</span></div><h1>ApiExceptionHandler.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.api;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import pe.edu.agroretorno.dto.ErrorResponse;
+import pe.edu.agroretorno.exception.OperacionNoPermitidaException;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.exception.ValidacionException;
+
+/** Manejo centralizado de errores de la API con códigos HTTP adecuados. */
+@RestControllerAdvice(basePackages = &quot;pe.edu.agroretorno.api&quot;)
+<span class="fc" id="L21">public class ApiExceptionHandler {</span>
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; validacion(MethodArgumentNotValidException ex) {
+<span class="fc" id="L25">        Map&lt;String, String&gt; errores = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L26">        ex.getBindingResult().getFieldErrors().forEach(e -&gt; errores.putIfAbsent(e.getField(), e.getDefaultMessage()));</span>
+<span class="fc" id="L27">        return respuesta(HttpStatus.BAD_REQUEST, &quot;Datos de entrada inválidos&quot;, errores);</span>
+    }
+
+    @ExceptionHandler(ValidacionException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; validacionNegocio(ValidacionException ex) {
+<span class="nc" id="L32">        return respuesta(HttpStatus.BAD_REQUEST, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler({HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class})
+    public ResponseEntity&lt;ErrorResponse&gt; formato(Exception ex) {
+<span class="fc" id="L37">        return respuesta(HttpStatus.BAD_REQUEST, &quot;Formato de datos incorrecto&quot;, Map.of());</span>
+    }
+
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; regla(ReglaNegocioException ex) {
+<span class="fc" id="L42">        return respuesta(HttpStatus.CONFLICT, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler(RecursoNoEncontradoException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; noEncontrado(RecursoNoEncontradoException ex) {
+<span class="fc" id="L47">        return respuesta(HttpStatus.NOT_FOUND, ex.getMessage(), Map.of());</span>
+    }
+
+    @ExceptionHandler(OperacionNoPermitidaException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; noPermitido(OperacionNoPermitidaException ex) {
+<span class="fc" id="L52">        return respuesta(HttpStatus.FORBIDDEN, ex.getMessage(), Map.of());</span>
+    }
+
+    private static ResponseEntity&lt;ErrorResponse&gt; respuesta(HttpStatus status, String mensaje, Map&lt;String, String&gt; errores) {
+<span class="fc" id="L56">        return ResponseEntity.status(status).body(</span>
+<span class="fc" id="L57">                new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), mensaje, errores));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HistorialService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">HistorialService.java</span></div><h1>HistorialService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.FiltroHistorial;
+import pe.edu.agroretorno.dto.HistorialResponse;
+import pe.edu.agroretorno.entity.HistorialOperacion;
+import pe.edu.agroretorno.repository.HistorialOperacionRepository;
+
+/**
+ * Registro y consulta del historial de operaciones (RF10, trazabilidad para G06).
+ * Se ejecuta dentro de la misma transacción de la operación: si la operación falla,
+ * tampoco queda registrado en el historial.
+ */
+@Service
+public class HistorialService {
+
+    static final int LIMITE_CONSULTA = 500;
+
+    private final HistorialOperacionRepository historialRepository;
+    private final Clock clock;
+
+<span class="fc" id="L30">    public HistorialService(HistorialOperacionRepository historialRepository, Clock clock) {</span>
+<span class="fc" id="L31">        this.historialRepository = historialRepository;</span>
+<span class="fc" id="L32">        this.clock = clock;</span>
+<span class="fc" id="L33">    }</span>
+
+    @Transactional
+    public void registrar(String actor, String accion, String entidad, Long entidadId, String detalle) {
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">        String detalleRecortado = detalle != null &amp;&amp; detalle.length() &gt; 1000 ? detalle.substring(0, 1000) : detalle;</span>
+<span class="fc" id="L38">        historialRepository.save(new HistorialOperacion(LocalDateTime.now(clock), actor, accion, entidad,</span>
+                entidadId, detalleRecortado));
+<span class="fc" id="L40">    }</span>
+
+    @Transactional(readOnly = true)
+    public List&lt;HistorialResponse&gt; consultar(FiltroHistorial filtro) {
+<span class="fc" id="L44">        Specification&lt;HistorialOperacion&gt; spec = construirEspecificacion(filtro);</span>
+<span class="fc" id="L45">        var pagina = PageRequest.of(0, LIMITE_CONSULTA, Sort.by(Sort.Direction.DESC, &quot;fechaHora&quot;, &quot;id&quot;));</span>
+<span class="fc" id="L46">        return historialRepository.findAll(spec, pagina).map(HistorialResponse::from).getContent();</span>
+    }
+
+    private Specification&lt;HistorialOperacion&gt; construirEspecificacion(FiltroHistorial f) {
+<span class="fc" id="L50">        return (root, query, cb) -&gt; {</span>
+<span class="fc" id="L51">            List&lt;jakarta.persistence.criteria.Predicate&gt; p = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (f.getDesde() != null) {</span>
+<span class="fc" id="L53">                p.add(cb.greaterThanOrEqualTo(root.get(&quot;fechaHora&quot;), f.getDesde().atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (f.getHasta() != null) {</span>
+<span class="fc" id="L56">                p.add(cb.lessThan(root.get(&quot;fechaHora&quot;), f.getHasta().plusDays(1).atStartOfDay()));</span>
+            }
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (tieneTexto(f.getActor())) {</span>
+<span class="fc" id="L59">                p.add(cb.equal(root.get(&quot;actor&quot;), f.getActor().trim()));</span>
+            }
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            if (tieneTexto(f.getEntidad())) {</span>
+<span class="fc" id="L62">                p.add(cb.equal(root.get(&quot;entidad&quot;), f.getEntidad().trim()));</span>
+            }
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (tieneTexto(f.getAccion())) {</span>
+<span class="fc" id="L65">                p.add(cb.equal(root.get(&quot;accion&quot;), f.getAccion().trim()));</span>
+            }
+<span class="fc" id="L67">            return cb.and(p.toArray(new jakarta.persistence.criteria.Predicate[0]));</span>
+        };
+    }
+
+    private static boolean tieneTexto(String s) {
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">        return s != null &amp;&amp; !s.isBlank();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

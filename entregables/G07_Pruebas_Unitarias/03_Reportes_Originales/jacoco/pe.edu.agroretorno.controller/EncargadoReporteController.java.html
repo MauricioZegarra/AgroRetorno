@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncargadoReporteController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.controller</a> &gt; <span class="el_source">EncargadoReporteController.java</span></div><h1>EncargadoReporteController.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.controller;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import pe.edu.agroretorno.dto.FiltroHistorial;
+import pe.edu.agroretorno.dto.FiltroReporte;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.service.HistorialService;
+import pe.edu.agroretorno.service.InventarioService;
+import pe.edu.agroretorno.service.ProductorService;
+import pe.edu.agroretorno.service.ReporteService;
+
+/** RF10: historial de operaciones y reporte consolidado. */
+@Controller
+@RequestMapping(&quot;/encargado&quot;)
+@PreAuthorize(&quot;hasRole('ENCARGADO')&quot;)
+public class EncargadoReporteController {
+
+    private final ReporteService reporteService;
+    private final HistorialService historialService;
+    private final ProductorService productorService;
+    private final InventarioService inventarioService;
+
+    public EncargadoReporteController(ReporteService reporteService, HistorialService historialService,
+<span class="fc" id="L29">                                      ProductorService productorService, InventarioService inventarioService) {</span>
+<span class="fc" id="L30">        this.reporteService = reporteService;</span>
+<span class="fc" id="L31">        this.historialService = historialService;</span>
+<span class="fc" id="L32">        this.productorService = productorService;</span>
+<span class="fc" id="L33">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L34">    }</span>
+
+    @GetMapping(&quot;/reportes&quot;)
+    public String reporte(@ModelAttribute(&quot;filtro&quot;) FiltroReporte filtro, Model model) {
+<span class="nc" id="L38">        model.addAttribute(&quot;reporte&quot;, reporteService.generar(filtro));</span>
+<span class="nc" id="L39">        model.addAttribute(&quot;productores&quot;, productorService.listar(null));</span>
+<span class="nc" id="L40">        model.addAttribute(&quot;materiales&quot;, inventarioService.listarInventario(null, false));</span>
+<span class="nc" id="L41">        model.addAttribute(&quot;estados&quot;, EstadoSolicitud.values());</span>
+<span class="nc" id="L42">        return &quot;encargado/reporte&quot;;</span>
+    }
+
+    @GetMapping(&quot;/historial&quot;)
+    public String historial(@ModelAttribute(&quot;filtro&quot;) FiltroHistorial filtro, Model model) {
+<span class="nc" id="L47">        model.addAttribute(&quot;operaciones&quot;, historialService.consultar(filtro));</span>
+<span class="nc" id="L48">        return &quot;encargado/historial&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

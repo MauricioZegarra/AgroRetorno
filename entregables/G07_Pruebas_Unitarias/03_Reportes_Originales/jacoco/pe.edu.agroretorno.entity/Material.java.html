@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Material.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">Material.java</span></div><h1>Material.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;materiales&quot;)
+public class Material {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 20)
+    private String codigo;
+
+    @Column(nullable = false, length = 100)
+    private String nombre;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private CategoriaMaterial categoria;
+
+    @Column(length = 500)
+    private String descripcion;
+
+    /** Unidad de medida (unidad, jaba, equipo...). */
+    @Column(nullable = false, length = 30)
+    private String unidad;
+
+<span class="fc" id="L31">    @Enumerated(EnumType.STRING)</span>
+    @Column(nullable = false, length = 10)
+    private EstadoMaterial estado = EstadoMaterial.ACTIVO;
+
+    @Column(name = &quot;fecha_registro&quot;, nullable = false)
+    private LocalDateTime fechaRegistro;
+
+    @OneToOne(mappedBy = &quot;material&quot;, fetch = FetchType.LAZY)
+    private Inventario inventario;
+
+<span class="fc" id="L41">    protected Material() {</span>
+<span class="fc" id="L42">    }</span>
+
+    public Material(String codigo, String nombre, CategoriaMaterial categoria, String descripcion,
+<span class="fc" id="L45">                    String unidad, LocalDateTime fechaRegistro) {</span>
+<span class="fc" id="L46">        this.codigo = codigo;</span>
+<span class="fc" id="L47">        this.nombre = nombre;</span>
+<span class="fc" id="L48">        this.categoria = categoria;</span>
+<span class="fc" id="L49">        this.descripcion = descripcion;</span>
+<span class="fc" id="L50">        this.unidad = unidad;</span>
+<span class="fc" id="L51">        this.fechaRegistro = fechaRegistro;</span>
+<span class="fc" id="L52">        this.estado = EstadoMaterial.ACTIVO;</span>
+<span class="fc" id="L53">    }</span>
+
+    public boolean isActivo() {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        return estado == EstadoMaterial.ACTIVO;</span>
+    }
+
+<span class="fc" id="L59">    public Long getId() { return id; }</span>
+<span class="fc" id="L60">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L61">    public String getCodigo() { return codigo; }</span>
+<span class="fc" id="L62">    public String getNombre() { return nombre; }</span>
+<span class="fc" id="L63">    public void setNombre(String nombre) { this.nombre = nombre; }</span>
+<span class="fc" id="L64">    public CategoriaMaterial getCategoria() { return categoria; }</span>
+<span class="fc" id="L65">    public void setCategoria(CategoriaMaterial categoria) { this.categoria = categoria; }</span>
+<span class="fc" id="L66">    public String getDescripcion() { return descripcion; }</span>
+<span class="fc" id="L67">    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }</span>
+<span class="fc" id="L68">    public String getUnidad() { return unidad; }</span>
+<span class="fc" id="L69">    public void setUnidad(String unidad) { this.unidad = unidad; }</span>
+<span class="fc" id="L70">    public EstadoMaterial getEstado() { return estado; }</span>
+<span class="fc" id="L71">    public void setEstado(EstadoMaterial estado) { this.estado = estado; }</span>
+<span class="nc" id="L72">    public LocalDateTime getFechaRegistro() { return fechaRegistro; }</span>
+<span class="fc" id="L73">    public Inventario getInventario() { return inventario; }</span>
+<span class="fc" id="L74">    public void setInventario(Inventario inventario) { this.inventario = inventario; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
