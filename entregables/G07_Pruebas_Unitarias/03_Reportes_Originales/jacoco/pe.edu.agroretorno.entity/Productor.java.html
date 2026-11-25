@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Productor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">Productor.java</span></div><h1>Productor.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;productores&quot;)
+public class Productor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;usuario_id&quot;, nullable = false, unique = true)
+    private Usuario usuario;
+
+    @Column(nullable = false, unique = true, length = 8)
+    private String dni;
+
+    @Column(nullable = false, length = 80)
+    private String nombres;
+
+    @Column(nullable = false, length = 80)
+    private String apellidos;
+
+    @Column(length = 9)
+    private String telefono;
+
+    /** Sector, anexo o comunidad del productor dentro de la región Arequipa. */
+    @Column(nullable = false, length = 100)
+    private String sector;
+
+    @Column(name = &quot;fecha_registro&quot;, nullable = false)
+    private LocalDateTime fechaRegistro;
+
+    @Column(name = &quot;fecha_actualizacion&quot;)
+    private LocalDateTime fechaActualizacion;
+
+<span class="fc" id="L40">    protected Productor() {</span>
+<span class="fc" id="L41">    }</span>
+
+    public Productor(Usuario usuario, String dni, String nombres, String apellidos, String telefono,
+<span class="fc" id="L44">                     String sector, LocalDateTime fechaRegistro) {</span>
+<span class="fc" id="L45">        this.usuario = usuario;</span>
+<span class="fc" id="L46">        this.dni = dni;</span>
+<span class="fc" id="L47">        this.nombres = nombres;</span>
+<span class="fc" id="L48">        this.apellidos = apellidos;</span>
+<span class="fc" id="L49">        this.telefono = telefono;</span>
+<span class="fc" id="L50">        this.sector = sector;</span>
+<span class="fc" id="L51">        this.fechaRegistro = fechaRegistro;</span>
+<span class="fc" id="L52">    }</span>
+
+    public String getNombreCompleto() {
+<span class="fc" id="L55">        return nombres + &quot; &quot; + apellidos;</span>
+    }
+
+<span class="fc" id="L58">    public Long getId() { return id; }</span>
+<span class="fc" id="L59">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L60">    public Usuario getUsuario() { return usuario; }</span>
+<span class="fc" id="L61">    public String getDni() { return dni; }</span>
+<span class="fc" id="L62">    public String getNombres() { return nombres; }</span>
+<span class="fc" id="L63">    public void setNombres(String nombres) { this.nombres = nombres; }</span>
+<span class="fc" id="L64">    public String getApellidos() { return apellidos; }</span>
+<span class="fc" id="L65">    public void setApellidos(String apellidos) { this.apellidos = apellidos; }</span>
+<span class="fc" id="L66">    public String getTelefono() { return telefono; }</span>
+<span class="fc" id="L67">    public void setTelefono(String telefono) { this.telefono = telefono; }</span>
+<span class="fc" id="L68">    public String getSector() { return sector; }</span>
+<span class="fc" id="L69">    public void setSector(String sector) { this.sector = sector; }</span>
+<span class="fc" id="L70">    public LocalDateTime getFechaRegistro() { return fechaRegistro; }</span>
+<span class="nc" id="L71">    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }</span>
+<span class="fc" id="L72">    public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

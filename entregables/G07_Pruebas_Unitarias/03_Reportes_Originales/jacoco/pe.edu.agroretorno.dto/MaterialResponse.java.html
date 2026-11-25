@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MaterialResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.dto</a> &gt; <span class="el_source">MaterialResponse.java</span></div><h1>MaterialResponse.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.dto;
+
+import pe.edu.agroretorno.entity.CategoriaMaterial;
+import pe.edu.agroretorno.entity.EstadoMaterial;
+import pe.edu.agroretorno.entity.Inventario;
+import pe.edu.agroretorno.entity.Material;
+
+/** Material con sus existencias (RF04, RF05). */
+<span class="fc" id="L9">public record MaterialResponse(</span>
+        Long id,
+        String codigo,
+        String nombre,
+        CategoriaMaterial categoria,
+        String categoriaEtiqueta,
+        String descripcion,
+        String unidad,
+        EstadoMaterial estado,
+        int cantidadTotal,
+        int cantidadDisponible,
+        int cantidadPrestada,
+        int cantidadDanada,
+        int cantidadMantenimiento) {
+
+    public static MaterialResponse from(Material m) {
+<span class="fc" id="L25">        Inventario i = m.getInventario();</span>
+<span class="fc" id="L26">        return new MaterialResponse(m.getId(), m.getCodigo(), m.getNombre(), m.getCategoria(),</span>
+<span class="fc" id="L27">                m.getCategoria().getEtiqueta(), m.getDescripcion(), m.getUnidad(), m.getEstado(),</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">                i == null ? 0 : i.getCantidadTotal(),</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">                i == null ? 0 : i.getCantidadDisponible(),</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">                i == null ? 0 : i.getCantidadPrestada(),</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">                i == null ? 0 : i.getCantidadDanada(),</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">                i == null ? 0 : i.getCantidadMantenimiento());</span>
+    }
+
+    public boolean activo() {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        return estado == EstadoMaterial.ACTIVO;</span>
+    }
+
+    /** Porcentaje disponible respecto al total (para el indicador visual). */
+    public int porcentajeDisponible() {
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        return cantidadTotal == 0 ? 0 : (int) Math.round(cantidadDisponible * 100.0 / cantidadTotal);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

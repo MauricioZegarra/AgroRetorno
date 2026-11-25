@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncargadoProductorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.controller</a> &gt; <span class="el_source">EncargadoProductorController.java</span></div><h1>EncargadoProductorController.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.edu.agroretorno.dto.ProductorRequest;
+import pe.edu.agroretorno.dto.ProductorResponse;
+import pe.edu.agroretorno.exception.AgroRetornoException;
+import pe.edu.agroretorno.service.ProductorService;
+
+/** RF03: registrar, actualizar y consultar productores agrícolas. */
+@Controller
+@RequestMapping(&quot;/encargado/productores&quot;)
+@PreAuthorize(&quot;hasRole('ENCARGADO')&quot;)
+public class EncargadoProductorController {
+
+    private final ProductorService productorService;
+
+<span class="fc" id="L29">    public EncargadoProductorController(ProductorService productorService) {</span>
+<span class="fc" id="L30">        this.productorService = productorService;</span>
+<span class="fc" id="L31">    }</span>
+
+    @GetMapping
+    public String listar(@RequestParam(name = &quot;q&quot;, required = false) String q, Model model) {
+<span class="nc" id="L35">        model.addAttribute(&quot;productores&quot;, productorService.listar(q));</span>
+<span class="nc" id="L36">        model.addAttribute(&quot;q&quot;, q);</span>
+<span class="nc" id="L37">        return &quot;encargado/productores&quot;;</span>
+    }
+
+    @GetMapping(&quot;/nuevo&quot;)
+    public String nuevo(Model model) {
+<span class="nc" id="L42">        return formulario(new ProductorRequest(), null, model);</span>
+    }
+
+    @PostMapping
+    public String registrar(@Valid @ModelAttribute(&quot;productor&quot;) ProductorRequest productor, BindingResult binding,
+                            Authentication auth, Model model, RedirectAttributes flash) {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (binding.hasErrors()) {</span>
+<span class="nc" id="L49">            return formulario(productor, null, model);</span>
+        }
+        try {
+<span class="nc" id="L52">            ProductorResponse creado = productorService.registrar(productor, auth.getName());</span>
+<span class="nc" id="L53">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Productor &quot; + creado.nombreCompleto() + &quot; registrado correctamente&quot;);</span>
+<span class="nc" id="L54">            return &quot;redirect:/encargado/productores&quot;;</span>
+<span class="nc" id="L55">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L56">            model.addAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L57">            return formulario(productor, null, model);</span>
+        }
+    }
+
+    @GetMapping(&quot;/{id}/editar&quot;)
+    public String editar(@PathVariable Long id, Model model) {
+<span class="nc" id="L63">        ProductorResponse p = productorService.obtener(id);</span>
+<span class="nc" id="L64">        ProductorRequest req = new ProductorRequest();</span>
+<span class="nc" id="L65">        req.setUsername(p.username());</span>
+<span class="nc" id="L66">        req.setDni(p.dni());</span>
+<span class="nc" id="L67">        req.setNombres(p.nombres());</span>
+<span class="nc" id="L68">        req.setApellidos(p.apellidos());</span>
+<span class="nc" id="L69">        req.setTelefono(p.telefono());</span>
+<span class="nc" id="L70">        req.setSector(p.sector());</span>
+<span class="nc" id="L71">        req.setActivo(p.activo());</span>
+<span class="nc" id="L72">        return formulario(req, id, model);</span>
+    }
+
+    @PostMapping(&quot;/{id}&quot;)
+    public String actualizar(@PathVariable Long id, @Valid @ModelAttribute(&quot;productor&quot;) ProductorRequest productor,
+                             BindingResult binding, Authentication auth, Model model, RedirectAttributes flash) {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (binding.hasErrors()) {</span>
+<span class="nc" id="L79">            return formulario(productor, id, model);</span>
+        }
+        try {
+<span class="nc" id="L82">            ProductorResponse actualizado = productorService.actualizar(id, productor, auth.getName());</span>
+<span class="nc" id="L83">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Productor &quot; + actualizado.nombreCompleto() + &quot; actualizado&quot;);</span>
+<span class="nc" id="L84">            return &quot;redirect:/encargado/productores&quot;;</span>
+<span class="nc" id="L85">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L86">            model.addAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L87">            return formulario(productor, id, model);</span>
+        }
+    }
+
+    private String formulario(ProductorRequest req, Long id, Model model) {
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (id != null &amp;&amp; req.getUsername() == null) {</span>
+            // El usuario no se envía al editar (campo deshabilitado); se recupera para mostrarlo
+<span class="nc" id="L94">            req.setUsername(productorService.obtener(id).username());</span>
+        }
+<span class="nc" id="L96">        model.addAttribute(&quot;productor&quot;, req);</span>
+<span class="nc" id="L97">        model.addAttribute(&quot;productorId&quot;, id);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        model.addAttribute(&quot;edicion&quot;, id != null);</span>
+<span class="nc" id="L99">        return &quot;encargado/productor-form&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

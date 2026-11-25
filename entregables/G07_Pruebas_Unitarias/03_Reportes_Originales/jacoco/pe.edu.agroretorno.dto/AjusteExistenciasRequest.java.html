@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AjusteExistenciasRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.dto</a> &gt; <span class="el_source">AjusteExistenciasRequest.java</span></div><h1>AjusteExistenciasRequest.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.dto;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import pe.edu.agroretorno.entity.TipoMovimiento;
+
+/** Ajuste manual de existencias por el encargado (RF04). */
+public class AjusteExistenciasRequest {
+
+    @NotNull(message = &quot;Seleccione el tipo de ajuste&quot;)
+    private TipoMovimiento tipo;
+
+    @NotNull(message = &quot;Indique la cantidad&quot;)
+    @Positive(message = &quot;La cantidad debe ser un número entero positivo&quot;)
+    @Max(value = 100000, message = &quot;Cantidad fuera de rango&quot;)
+    private Integer cantidad;
+
+    @NotBlank(message = &quot;Indique el motivo del ajuste&quot;)
+    @Size(max = 300, message = &quot;Máximo 300 caracteres&quot;)
+    private String observacion;
+
+<span class="nc" id="L25">    public AjusteExistenciasRequest() {</span>
+<span class="nc" id="L26">    }</span>
+
+<span class="fc" id="L28">    public AjusteExistenciasRequest(TipoMovimiento tipo, Integer cantidad, String observacion) {</span>
+<span class="fc" id="L29">        this.tipo = tipo;</span>
+<span class="fc" id="L30">        this.cantidad = cantidad;</span>
+<span class="fc" id="L31">        this.observacion = observacion;</span>
+<span class="fc" id="L32">    }</span>
+
+<span class="fc" id="L34">    public TipoMovimiento getTipo() { return tipo; }</span>
+<span class="nc" id="L35">    public void setTipo(TipoMovimiento tipo) { this.tipo = tipo; }</span>
+<span class="fc" id="L36">    public Integer getCantidad() { return cantidad; }</span>
+<span class="nc" id="L37">    public void setCantidad(Integer cantidad) { this.cantidad = cantidad; }</span>
+<span class="fc" id="L38">    public String getObservacion() { return observacion; }</span>
+<span class="nc" id="L39">    public void setObservacion(String observacion) { this.observacion = observacion; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EncargadoSolicitudController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.controller</a> &gt; <span class="el_source">EncargadoSolicitudController.java</span></div><h1>EncargadoSolicitudController.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pe.edu.agroretorno.dto.PrestamoResponse;
+import pe.edu.agroretorno.dto.RechazoRequest;
+import pe.edu.agroretorno.dto.SolicitudResponse;
+import pe.edu.agroretorno.entity.EstadoSolicitud;
+import pe.edu.agroretorno.exception.AgroRetornoException;
+import pe.edu.agroretorno.service.InventarioService;
+import pe.edu.agroretorno.service.PrestamoService;
+import pe.edu.agroretorno.service.ProductorService;
+import pe.edu.agroretorno.service.SolicitudService;
+
+/** Proceso 2: revisión, aprobación, rechazo (RF07) y entrega (RF08) de solicitudes. */
+@Controller
+@RequestMapping(&quot;/encargado/solicitudes&quot;)
+@PreAuthorize(&quot;hasRole('ENCARGADO')&quot;)
+public class EncargadoSolicitudController {
+
+    private final SolicitudService solicitudService;
+    private final PrestamoService prestamoService;
+    private final ProductorService productorService;
+    private final InventarioService inventarioService;
+
+    public EncargadoSolicitudController(SolicitudService solicitudService, PrestamoService prestamoService,
+<span class="fc" id="L38">                                        ProductorService productorService, InventarioService inventarioService) {</span>
+<span class="fc" id="L39">        this.solicitudService = solicitudService;</span>
+<span class="fc" id="L40">        this.prestamoService = prestamoService;</span>
+<span class="fc" id="L41">        this.productorService = productorService;</span>
+<span class="fc" id="L42">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L43">    }</span>
+
+    /** Lista por estado; por defecto muestra las PENDIENTES. estado=TODAS muestra todas. */
+    @GetMapping
+    public String listar(@RequestParam(name = &quot;estado&quot;, defaultValue = &quot;PENDIENTE&quot;) String estado, Model model) {
+<span class="nc" id="L48">        EstadoSolicitud filtro = convertirEstado(estado);</span>
+<span class="nc" id="L49">        model.addAttribute(&quot;solicitudes&quot;, solicitudService.listar(filtro));</span>
+<span class="nc" id="L50">        model.addAttribute(&quot;estadoSeleccionado&quot;, estado);</span>
+<span class="nc" id="L51">        model.addAttribute(&quot;estados&quot;, EstadoSolicitud.values());</span>
+<span class="nc" id="L52">        return &quot;encargado/solicitudes&quot;;</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public String detalle(@PathVariable Long id, Model model) {
+<span class="nc" id="L57">        return vistaDetalle(id, new RechazoRequest(), model);</span>
+    }
+
+    @PostMapping(&quot;/{id}/aprobar&quot;)
+    public String aprobar(@PathVariable Long id, Authentication auth, RedirectAttributes flash) {
+        try {
+<span class="nc" id="L63">            solicitudService.aprobar(id, auth.getName());</span>
+<span class="nc" id="L64">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Solicitud N.° &quot; + id + &quot; APROBADA. Registre la entrega física.&quot;);</span>
+<span class="nc" id="L65">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L66">            flash.addFlashAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L67">        }</span>
+<span class="nc" id="L68">        return &quot;redirect:/encargado/solicitudes/&quot; + id;</span>
+    }
+
+    @PostMapping(&quot;/{id}/rechazar&quot;)
+    public String rechazar(@PathVariable Long id, @Valid @ModelAttribute(&quot;rechazo&quot;) RechazoRequest rechazo,
+                           BindingResult binding, Authentication auth, Model model, RedirectAttributes flash) {
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (binding.hasErrors()) {</span>
+<span class="nc" id="L75">            return vistaDetalle(id, rechazo, model);</span>
+        }
+        try {
+<span class="nc" id="L78">            solicitudService.rechazar(id, rechazo.getMotivo(), auth.getName());</span>
+<span class="nc" id="L79">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Solicitud N.° &quot; + id + &quot; RECHAZADA&quot;);</span>
+<span class="nc" id="L80">            return &quot;redirect:/encargado/solicitudes/&quot; + id;</span>
+<span class="nc" id="L81">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L82">            model.addAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L83">            return vistaDetalle(id, rechazo, model);</span>
+        }
+    }
+
+    @PostMapping(&quot;/{id}/entregar&quot;)
+    public String entregar(@PathVariable Long id, Authentication auth, RedirectAttributes flash) {
+        try {
+<span class="nc" id="L90">            PrestamoResponse p = prestamoService.registrarEntrega(id, auth.getName());</span>
+<span class="nc" id="L91">            flash.addFlashAttribute(&quot;exito&quot;, &quot;Entrega registrada: préstamo N.° &quot; + p.id() + &quot; con &quot;</span>
+<span class="nc" id="L92">                    + p.cantidadEntregada() + &quot; &quot; + p.unidad() + &quot;. Inventario actualizado.&quot;);</span>
+<span class="nc" id="L93">        } catch (AgroRetornoException e) {</span>
+<span class="nc" id="L94">            flash.addFlashAttribute(&quot;error&quot;, e.getMessage());</span>
+<span class="nc" id="L95">        }</span>
+<span class="nc" id="L96">        return &quot;redirect:/encargado/solicitudes/&quot; + id;</span>
+    }
+
+    private static EstadoSolicitud convertirEstado(String estado) {
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (EstadoSolicitud e : EstadoSolicitud.values()) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (e.name().equals(estado)) {</span>
+<span class="nc" id="L102">                return e;</span>
+            }
+        }
+<span class="nc" id="L105">        return null; // &quot;TODAS&quot; o valor desconocido: sin filtro</span>
+    }
+
+    private String vistaDetalle(Long id, RechazoRequest rechazo, Model model) {
+<span class="nc" id="L109">        SolicitudResponse s = solicitudService.obtener(id);</span>
+<span class="nc" id="L110">        model.addAttribute(&quot;solicitud&quot;, s);</span>
+<span class="nc" id="L111">        model.addAttribute(&quot;productor&quot;, productorService.obtener(s.productorId()));</span>
+<span class="nc" id="L112">        model.addAttribute(&quot;disponibilidad&quot;, inventarioService.consultarDisponibilidad(s.materialId(), s.cantidad()));</span>
+<span class="nc" id="L113">        model.addAttribute(&quot;prestamo&quot;, prestamoService.buscarPorSolicitud(id).orElse(null));</span>
+<span class="nc" id="L114">        model.addAttribute(&quot;rechazo&quot;, rechazo);</span>
+<span class="nc" id="L115">        return &quot;encargado/solicitud-detalle&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

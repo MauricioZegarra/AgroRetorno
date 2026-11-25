@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TipoMovimiento.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">TipoMovimiento.java</span></div><h1>TipoMovimiento.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+/** Tipos de movimiento de existencias registrados en movimientos_inventario. */
+<span class="fc" id="L4">public enum TipoMovimiento {</span>
+<span class="fc" id="L5">    ALTA_INICIAL(&quot;Alta inicial&quot;),</span>
+<span class="fc" id="L6">    INGRESO(&quot;Ingreso de unidades&quot;),</span>
+<span class="fc" id="L7">    RETIRO(&quot;Retiro de unidades disponibles&quot;),</span>
+<span class="fc" id="L8">    ENVIO_MANTENIMIENTO(&quot;Envío a mantenimiento&quot;),</span>
+<span class="fc" id="L9">    REPARACION(&quot;Retorno de mantenimiento&quot;),</span>
+<span class="fc" id="L10">    BAJA_DANADO(&quot;Baja de unidades dañadas&quot;),</span>
+<span class="fc" id="L11">    ENTREGA(&quot;Entrega por préstamo&quot;),</span>
+<span class="fc" id="L12">    DEVOLUCION_BUEN_ESTADO(&quot;Devolución en buen estado&quot;),</span>
+<span class="fc" id="L13">    DEVOLUCION_DANADO(&quot;Devolución dañada&quot;),</span>
+<span class="fc" id="L14">    DEVOLUCION_MANTENIMIENTO(&quot;Devolución para mantenimiento&quot;);</span>
+
+    private final String etiqueta;
+
+<span class="fc" id="L18">    TipoMovimiento(String etiqueta) {</span>
+<span class="fc" id="L19">        this.etiqueta = etiqueta;</span>
+<span class="fc" id="L20">    }</span>
+
+    public String getEtiqueta() {
+<span class="fc" id="L23">        return etiqueta;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

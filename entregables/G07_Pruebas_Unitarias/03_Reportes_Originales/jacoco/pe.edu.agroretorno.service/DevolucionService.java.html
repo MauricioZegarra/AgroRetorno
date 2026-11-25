@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DevolucionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.service</a> &gt; <span class="el_source">DevolucionService.java</span></div><h1>DevolucionService.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.service;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pe.edu.agroretorno.dto.DevolucionRequest;
+import pe.edu.agroretorno.dto.DevolucionResponse;
+import pe.edu.agroretorno.entity.CondicionDevolucion;
+import pe.edu.agroretorno.entity.Devolucion;
+import pe.edu.agroretorno.entity.EstadoPrestamo;
+import pe.edu.agroretorno.entity.Prestamo;
+import pe.edu.agroretorno.entity.Productor;
+import pe.edu.agroretorno.entity.Usuario;
+import pe.edu.agroretorno.exception.OperacionNoPermitidaException;
+import pe.edu.agroretorno.exception.RecursoNoEncontradoException;
+import pe.edu.agroretorno.exception.ReglaNegocioException;
+import pe.edu.agroretorno.exception.ValidacionException;
+import pe.edu.agroretorno.repository.DevolucionRepository;
+import pe.edu.agroretorno.repository.PrestamoRepository;
+import pe.edu.agroretorno.repository.ProductorRepository;
+
+/**
+ * Componente 3 de negocio: devoluciones totales o parciales (Proceso 3, RF09).
+ * El préstamo se cierra cuando todas las unidades entregadas han sido devueltas y clasificadas.
+ */
+@Service
+public class DevolucionService {
+
+    private final DevolucionRepository devolucionRepository;
+    private final PrestamoRepository prestamoRepository;
+    private final ProductorRepository productorRepository;
+    private final InventarioService inventarioService;
+    private final UsuarioService usuarioService;
+    private final HistorialService historialService;
+    private final Clock clock;
+
+    public DevolucionService(DevolucionRepository devolucionRepository, PrestamoRepository prestamoRepository,
+                             ProductorRepository productorRepository, InventarioService inventarioService,
+<span class="fc" id="L41">                             UsuarioService usuarioService, HistorialService historialService, Clock clock) {</span>
+<span class="fc" id="L42">        this.devolucionRepository = devolucionRepository;</span>
+<span class="fc" id="L43">        this.prestamoRepository = prestamoRepository;</span>
+<span class="fc" id="L44">        this.productorRepository = productorRepository;</span>
+<span class="fc" id="L45">        this.inventarioService = inventarioService;</span>
+<span class="fc" id="L46">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L47">        this.historialService = historialService;</span>
+<span class="fc" id="L48">        this.clock = clock;</span>
+<span class="fc" id="L49">    }</span>
+
+    @Transactional
+    public DevolucionResponse registrar(Long prestamoId, DevolucionRequest req, String usernameEncargado) {
+<span class="fc" id="L53">        int buen = valor(req.getCantidadBuenEstado());</span>
+<span class="fc" id="L54">        int danadas = valor(req.getCantidadDanada());</span>
+<span class="fc" id="L55">        int mant = valor(req.getCantidadMantenimiento());</span>
+<span class="fc bfc" id="L56" title="All 6 branches covered.">        if (buen &lt; 0 || danadas &lt; 0 || mant &lt; 0) {</span>
+<span class="fc" id="L57">            throw new ValidacionException(&quot;Las cantidades devueltas no pueden ser negativas&quot;);</span>
+        }
+<span class="fc" id="L59">        int total = buen + danadas + mant;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (total == 0) {</span>
+<span class="fc" id="L61">            throw new ValidacionException(&quot;Registre al menos una unidad devuelta&quot;);</span>
+        }
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        String observaciones = req.getObservaciones() == null ? null : req.getObservaciones().trim();</span>
+<span class="fc bfc" id="L64" title="All 8 branches covered.">        if ((danadas &gt; 0 || mant &gt; 0) &amp;&amp; (observaciones == null || observaciones.isEmpty())) {</span>
+<span class="fc" id="L65">            throw new ValidacionException(</span>
+                    &quot;Registre observaciones cuando haya unidades dañadas o que requieren mantenimiento&quot;);
+        }
+
+<span class="fc" id="L69">        Usuario encargado = usuarioService.obtenerPorUsername(usernameEncargado);</span>
+<span class="fc" id="L70">        Prestamo prestamo = prestamoRepository.findByIdParaActualizar(prestamoId)</span>
+<span class="fc" id="L71">                .orElseThrow(() -&gt; new RecursoNoEncontradoException(&quot;Préstamo&quot;, prestamoId));</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        if (prestamo.getEstado() == EstadoPrestamo.CERRADO) {</span>
+<span class="fc" id="L73">            throw new ReglaNegocioException(&quot;El préstamo &quot; + prestamoId + &quot; ya está cerrado&quot;);</span>
+        }
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (total &gt; prestamo.getCantidadPendiente()) {</span>
+<span class="fc" id="L76">            throw new ReglaNegocioException(&quot;La cantidad devuelta (&quot; + total + &quot;) supera las unidades pendientes (&quot;</span>
+<span class="fc" id="L77">                    + prestamo.getCantidadPendiente() + &quot;)&quot;);</span>
+        }
+
+<span class="fc" id="L80">        inventarioService.registrarRetorno(prestamo.getSolicitud().getMaterial().getId(), buen, danadas, mant,</span>
+<span class="fc" id="L81">                encargado, &quot;PRESTAMO-&quot; + prestamo.getId());</span>
+
+<span class="fc" id="L83">        prestamo.setCantidadDevuelta(prestamo.getCantidadDevuelta() + total);</span>
+<span class="fc" id="L84">        prestamo.setCantidadBuenEstado(prestamo.getCantidadBuenEstado() + buen);</span>
+<span class="fc" id="L85">        prestamo.setCantidadDanada(prestamo.getCantidadDanada() + danadas);</span>
+<span class="fc" id="L86">        prestamo.setCantidadMantenimiento(prestamo.getCantidadMantenimiento() + mant);</span>
+<span class="fc" id="L87">        LocalDateTime ahora = LocalDateTime.now(clock);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (prestamo.getCantidadPendiente() == 0) {</span>
+            // Todas las unidades entregadas están justificadas: se cierra el préstamo
+<span class="fc" id="L90">            prestamo.setEstado(EstadoPrestamo.CERRADO);</span>
+<span class="fc" id="L91">            prestamo.setFechaCierre(ahora);</span>
+        }
+
+<span class="fc" id="L94">        Devolucion devolucion = new Devolucion(prestamo, ahora, encargado, observaciones);</span>
+<span class="fc" id="L95">        devolucion.agregarDetalle(CondicionDevolucion.BUEN_ESTADO, buen);</span>
+<span class="fc" id="L96">        devolucion.agregarDetalle(CondicionDevolucion.DANADO, danadas);</span>
+<span class="fc" id="L97">        devolucion.agregarDetalle(CondicionDevolucion.REQUIERE_MANTENIMIENTO, mant);</span>
+<span class="fc" id="L98">        devolucion = devolucionRepository.save(devolucion);</span>
+<span class="fc" id="L99">        prestamoRepository.save(prestamo);</span>
+
+<span class="fc" id="L101">        historialService.registrar(encargado.getUsername(), &quot;REGISTRAR_DEVOLUCION&quot;, &quot;Prestamo&quot;, prestamo.getId(),</span>
+                &quot;Devueltas &quot; + total + &quot; (buen estado &quot; + buen + &quot;, dañadas &quot; + danadas + &quot;, mantenimiento &quot; + mant
+<span class="fc" id="L103">                        + &quot;). Pendientes: &quot; + prestamo.getCantidadPendiente()</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                        + (prestamo.getEstado() == EstadoPrestamo.CERRADO ? &quot;. Préstamo cerrado&quot; : &quot;&quot;));</span>
+<span class="fc" id="L105">        return DevolucionResponse.from(devolucion);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;DevolucionResponse&gt; listarPorPrestamo(Long prestamoId) {
+<span class="fc" id="L110">        return devolucionRepository.findByPrestamoId(prestamoId).stream().map(DevolucionResponse::from).toList();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;DevolucionResponse&gt; listarPorProductor(String username) {
+<span class="fc" id="L115">        Productor productor = productorRepository.findByUsername(username)</span>
+<span class="fc" id="L116">                .orElseThrow(() -&gt; new OperacionNoPermitidaException(&quot;El usuario no es un productor&quot;));</span>
+<span class="fc" id="L117">        return devolucionRepository.findByProductorId(productor.getId()).stream()</span>
+<span class="fc" id="L118">                .map(DevolucionResponse::from).toList();</span>
+    }
+
+    private static int valor(Integer v) {
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        return v == null ? 0 : v;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

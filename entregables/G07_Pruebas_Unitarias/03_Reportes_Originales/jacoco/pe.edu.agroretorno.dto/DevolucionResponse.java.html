@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DevolucionResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.dto</a> &gt; <span class="el_source">DevolucionResponse.java</span></div><h1>DevolucionResponse.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.dto;
+
+import java.time.LocalDateTime;
+import pe.edu.agroretorno.entity.CondicionDevolucion;
+import pe.edu.agroretorno.entity.Devolucion;
+import pe.edu.agroretorno.entity.EstadoPrestamo;
+
+<span class="fc" id="L8">public record DevolucionResponse(</span>
+        Long id,
+        Long prestamoId,
+        String materialNombre,
+        LocalDateTime fecha,
+        String recibidoPor,
+        String observaciones,
+        int cantidadBuenEstado,
+        int cantidadDanada,
+        int cantidadMantenimiento,
+        int cantidadTotal,
+        int pendienteDespues,
+        EstadoPrestamo estadoPrestamo) {
+
+    public static DevolucionResponse from(Devolucion d) {
+<span class="fc" id="L23">        var p = d.getPrestamo();</span>
+<span class="fc" id="L24">        return new DevolucionResponse(d.getId(), p.getId(), p.getSolicitud().getMaterial().getNombre(),</span>
+<span class="fc" id="L25">                d.getFecha(), d.getRecibidoPor().getNombreCompleto(), d.getObservaciones(),</span>
+<span class="fc" id="L26">                d.cantidadPor(CondicionDevolucion.BUEN_ESTADO), d.cantidadPor(CondicionDevolucion.DANADO),</span>
+<span class="fc" id="L27">                d.cantidadPor(CondicionDevolucion.REQUIERE_MANTENIMIENTO), d.getCantidadTotal(),</span>
+<span class="fc" id="L28">                p.getCantidadPendiente(), p.getEstado());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RespuestaJsonSeguridad.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.security</a> &gt; <span class="el_source">RespuestaJsonSeguridad.java</span></div><h1>RespuestaJsonSeguridad.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.security;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+import pe.edu.agroretorno.dto.ErrorResponse;
+
+/** Respuestas JSON 401/403 para la API REST (/api/**). */
+@Component
+public class RespuestaJsonSeguridad implements AuthenticationEntryPoint, AccessDeniedHandler {
+
+    private final ObjectMapper objectMapper;
+
+<span class="fc" id="L24">    public RespuestaJsonSeguridad(ObjectMapper objectMapper) {</span>
+<span class="fc" id="L25">        this.objectMapper = objectMapper;</span>
+<span class="fc" id="L26">    }</span>
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException {
+<span class="fc" id="L31">        response.setHeader(&quot;WWW-Authenticate&quot;, &quot;Basic realm=\&quot;AgroRetorno API\&quot;&quot;);</span>
+<span class="fc" id="L32">        escribir(response, HttpStatus.UNAUTHORIZED, &quot;Autenticación requerida o credenciales inválidas&quot;);</span>
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response,
+                       AccessDeniedException accessDeniedException) throws IOException {
+<span class="fc" id="L38">        escribir(response, HttpStatus.FORBIDDEN, &quot;No tiene permisos para esta operación&quot;);</span>
+<span class="fc" id="L39">    }</span>
+
+    private void escribir(HttpServletResponse response, HttpStatus status, String mensaje) throws IOException {
+<span class="fc" id="L42">        response.setStatus(status.value());</span>
+<span class="fc" id="L43">        response.setContentType(MediaType.APPLICATION_JSON_VALUE);</span>
+<span class="fc" id="L44">        response.setCharacterEncoding(&quot;UTF-8&quot;);</span>
+<span class="fc" id="L45">        objectMapper.writeValue(response.getOutputStream(),</span>
+<span class="fc" id="L46">                new ErrorResponse(LocalDateTime.now(), status.value(), status.getReasonPhrase(), mensaje, Map.of()));</span>
+<span class="fc" id="L47">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Inventario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">Inventario.java</span></div><h1>Inventario.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+/**
+ * Existencias de un material.
+ * Invariante: total = disponible + prestada + dañada + mantenimiento
+ * (también protegida con un CHECK en PostgreSQL).
+ */
+@Entity
+@Table(name = &quot;inventario&quot;)
+public class Inventario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;material_id&quot;, nullable = false, unique = true)
+    private Material material;
+
+    @Column(name = &quot;cantidad_total&quot;, nullable = false)
+    private int cantidadTotal;
+
+    @Column(name = &quot;cantidad_disponible&quot;, nullable = false)
+    private int cantidadDisponible;
+
+    @Column(name = &quot;cantidad_prestada&quot;, nullable = false)
+    private int cantidadPrestada;
+
+    @Column(name = &quot;cantidad_danada&quot;, nullable = false)
+    private int cantidadDanada;
+
+    @Column(name = &quot;cantidad_mantenimiento&quot;, nullable = false)
+    private int cantidadMantenimiento;
+
+    @Column(name = &quot;fecha_actualizacion&quot;, nullable = false)
+    private LocalDateTime fechaActualizacion;
+
+<span class="fc" id="L41">    protected Inventario() {</span>
+<span class="fc" id="L42">    }</span>
+
+<span class="fc" id="L44">    public Inventario(Material material, int cantidadInicial, LocalDateTime fecha) {</span>
+<span class="fc" id="L45">        this.material = material;</span>
+<span class="fc" id="L46">        this.cantidadTotal = cantidadInicial;</span>
+<span class="fc" id="L47">        this.cantidadDisponible = cantidadInicial;</span>
+<span class="fc" id="L48">        this.fechaActualizacion = fecha;</span>
+<span class="fc" id="L49">    }</span>
+
+    /** Comprueba la igualdad de cuadre de existencias. */
+    public boolean estaCuadrado() {
+<span class="pc bpc" id="L53" title="6 of 12 branches missed.">        return cantidadTotal == cantidadDisponible + cantidadPrestada + cantidadDanada + cantidadMantenimiento</span>
+                &amp;&amp; cantidadTotal &gt;= 0 &amp;&amp; cantidadDisponible &gt;= 0 &amp;&amp; cantidadPrestada &gt;= 0
+                &amp;&amp; cantidadDanada &gt;= 0 &amp;&amp; cantidadMantenimiento &gt;= 0;
+    }
+
+<span class="nc" id="L58">    public Long getId() { return id; }</span>
+<span class="fc" id="L59">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L60">    public Material getMaterial() { return material; }</span>
+<span class="fc" id="L61">    public int getCantidadTotal() { return cantidadTotal; }</span>
+<span class="fc" id="L62">    public void setCantidadTotal(int cantidadTotal) { this.cantidadTotal = cantidadTotal; }</span>
+<span class="fc" id="L63">    public int getCantidadDisponible() { return cantidadDisponible; }</span>
+<span class="fc" id="L64">    public void setCantidadDisponible(int cantidadDisponible) { this.cantidadDisponible = cantidadDisponible; }</span>
+<span class="fc" id="L65">    public int getCantidadPrestada() { return cantidadPrestada; }</span>
+<span class="fc" id="L66">    public void setCantidadPrestada(int cantidadPrestada) { this.cantidadPrestada = cantidadPrestada; }</span>
+<span class="fc" id="L67">    public int getCantidadDanada() { return cantidadDanada; }</span>
+<span class="fc" id="L68">    public void setCantidadDanada(int cantidadDanada) { this.cantidadDanada = cantidadDanada; }</span>
+<span class="fc" id="L69">    public int getCantidadMantenimiento() { return cantidadMantenimiento; }</span>
+<span class="fc" id="L70">    public void setCantidadMantenimiento(int cantidadMantenimiento) { this.cantidadMantenimiento = cantidadMantenimiento; }</span>
+<span class="nc" id="L71">    public LocalDateTime getFechaActualizacion() { return fechaActualizacion; }</span>
+<span class="fc" id="L72">    public void setFechaActualizacion(LocalDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

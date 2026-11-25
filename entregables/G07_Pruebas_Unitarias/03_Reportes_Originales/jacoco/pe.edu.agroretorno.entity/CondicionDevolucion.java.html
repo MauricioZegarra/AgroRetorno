@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CondicionDevolucion.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">CondicionDevolucion.java</span></div><h1>CondicionDevolucion.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+/** Estado en que se reciben las unidades devueltas (RF09). */
+<span class="fc" id="L4">public enum CondicionDevolucion {</span>
+<span class="fc" id="L5">    BUEN_ESTADO(&quot;Buen estado&quot;),</span>
+<span class="fc" id="L6">    DANADO(&quot;Dañado&quot;),</span>
+<span class="fc" id="L7">    REQUIERE_MANTENIMIENTO(&quot;Requiere mantenimiento&quot;);</span>
+
+    private final String etiqueta;
+
+<span class="fc" id="L11">    CondicionDevolucion(String etiqueta) {</span>
+<span class="fc" id="L12">        this.etiqueta = etiqueta;</span>
+<span class="fc" id="L13">    }</span>
+
+    public String getEtiqueta() {
+<span class="nc" id="L16">        return etiqueta;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

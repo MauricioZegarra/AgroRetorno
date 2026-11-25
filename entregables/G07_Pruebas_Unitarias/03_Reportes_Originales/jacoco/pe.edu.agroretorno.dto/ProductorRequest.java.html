@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductorRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.dto</a> &gt; <span class="el_source">ProductorRequest.java</span></div><h1>ProductorRequest.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+/**
+ * Registro y actualización de productores (RF03).
+ * username, dni y password se exigen al registrar; al actualizar, password es opcional.
+ */
+<span class="fc" id="L11">public class ProductorRequest {</span>
+
+    @Pattern(regexp = &quot;^[a-z0-9._]{4,30}$&quot;,
+            message = &quot;Usuario: 4 a 30 caracteres en minúscula, números, punto o guion bajo&quot;)
+    private String username;
+
+    @Size(max = 72, message = &quot;La contraseña no puede superar 72 caracteres&quot;)
+    private String password;
+
+    @NotBlank(message = &quot;Indique el DNI&quot;)
+    @Pattern(regexp = &quot;^[0-9]{8}$&quot;, message = &quot;El DNI debe tener exactamente 8 dígitos&quot;)
+    private String dni;
+
+    @NotBlank(message = &quot;Indique los nombres&quot;)
+    @Size(max = 80, message = &quot;Máximo 80 caracteres&quot;)
+    @Pattern(regexp = &quot;^[\\p{L} .'-]+$&quot;, message = &quot;Los nombres solo pueden contener letras&quot;)
+    private String nombres;
+
+    @NotBlank(message = &quot;Indique los apellidos&quot;)
+    @Size(max = 80, message = &quot;Máximo 80 caracteres&quot;)
+    @Pattern(regexp = &quot;^[\\p{L} .'-]+$&quot;, message = &quot;Los apellidos solo pueden contener letras&quot;)
+    private String apellidos;
+
+    @Pattern(regexp = &quot;^(9[0-9]{8})?$&quot;, message = &quot;El teléfono debe tener 9 dígitos y empezar con 9&quot;)
+    private String telefono;
+
+    @NotBlank(message = &quot;Indique el sector o comunidad&quot;)
+    @Size(max = 100, message = &quot;Máximo 100 caracteres&quot;)
+    private String sector;
+
+<span class="fc" id="L41">    private boolean activo = true;</span>
+
+<span class="fc" id="L43">    public String getUsername() { return username; }</span>
+<span class="fc" id="L44">    public void setUsername(String username) { this.username = username; }</span>
+<span class="fc" id="L45">    public String getPassword() { return password; }</span>
+<span class="fc" id="L46">    public void setPassword(String password) { this.password = password; }</span>
+<span class="fc" id="L47">    public String getDni() { return dni; }</span>
+<span class="fc" id="L48">    public void setDni(String dni) { this.dni = dni; }</span>
+<span class="fc" id="L49">    public String getNombres() { return nombres; }</span>
+<span class="fc" id="L50">    public void setNombres(String nombres) { this.nombres = nombres; }</span>
+<span class="fc" id="L51">    public String getApellidos() { return apellidos; }</span>
+<span class="fc" id="L52">    public void setApellidos(String apellidos) { this.apellidos = apellidos; }</span>
+<span class="fc" id="L53">    public String getTelefono() { return telefono; }</span>
+<span class="fc" id="L54">    public void setTelefono(String telefono) { this.telefono = telefono; }</span>
+<span class="fc" id="L55">    public String getSector() { return sector; }</span>
+<span class="fc" id="L56">    public void setSector(String sector) { this.sector = sector; }</span>
+<span class="fc" id="L57">    public boolean isActivo() { return activo; }</span>
+<span class="fc" id="L58">    public void setActivo(boolean activo) { this.activo = activo; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

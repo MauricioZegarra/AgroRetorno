@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Solicitud.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AgroRetorno</a> &gt; <a href="index.source.html" class="el_package">pe.edu.agroretorno.entity</a> &gt; <span class="el_source">Solicitud.java</span></div><h1>Solicitud.java</h1><pre class="source lang-java linenums">package pe.edu.agroretorno.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;solicitudes&quot;)
+public class Solicitud {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;productor_id&quot;, nullable = false)
+    private Productor productor;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = &quot;material_id&quot;, nullable = false)
+    private Material material;
+
+    @Column(nullable = false)
+    private int cantidad;
+
+    @Column(name = &quot;fecha_solicitud&quot;, nullable = false)
+    private LocalDateTime fechaSolicitud;
+
+    @Column(name = &quot;fecha_devolucion_prevista&quot;, nullable = false)
+    private LocalDate fechaDevolucionPrevista;
+
+    @Column(nullable = false, length = 300)
+    private String motivo;
+
+<span class="fc" id="L35">    @Enumerated(EnumType.STRING)</span>
+    @Column(nullable = false, length = 15)
+    private EstadoSolicitud estado = EstadoSolicitud.PENDIENTE;
+
+    /** Encargado que aprobó o rechazó la solicitud. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;respondido_por&quot;)
+    private Usuario respondidoPor;
+
+    @Column(name = &quot;fecha_respuesta&quot;)
+    private LocalDateTime fechaRespuesta;
+
+    @Column(name = &quot;motivo_rechazo&quot;, length = 300)
+    private String motivoRechazo;
+
+    @OneToOne(mappedBy = &quot;solicitud&quot;, fetch = FetchType.LAZY)
+    private Prestamo prestamo;
+
+<span class="fc" id="L53">    protected Solicitud() {</span>
+<span class="fc" id="L54">    }</span>
+
+    public Solicitud(Productor productor, Material material, int cantidad, LocalDateTime fechaSolicitud,
+<span class="fc" id="L57">                     LocalDate fechaDevolucionPrevista, String motivo) {</span>
+<span class="fc" id="L58">        this.productor = productor;</span>
+<span class="fc" id="L59">        this.material = material;</span>
+<span class="fc" id="L60">        this.cantidad = cantidad;</span>
+<span class="fc" id="L61">        this.fechaSolicitud = fechaSolicitud;</span>
+<span class="fc" id="L62">        this.fechaDevolucionPrevista = fechaDevolucionPrevista;</span>
+<span class="fc" id="L63">        this.motivo = motivo;</span>
+<span class="fc" id="L64">        this.estado = EstadoSolicitud.PENDIENTE;</span>
+<span class="fc" id="L65">    }</span>
+
+<span class="fc" id="L67">    public Long getId() { return id; }</span>
+<span class="fc" id="L68">    public void setId(Long id) { this.id = id; }</span>
+<span class="fc" id="L69">    public Productor getProductor() { return productor; }</span>
+<span class="fc" id="L70">    public Material getMaterial() { return material; }</span>
+<span class="fc" id="L71">    public int getCantidad() { return cantidad; }</span>
+<span class="fc" id="L72">    public LocalDateTime getFechaSolicitud() { return fechaSolicitud; }</span>
+<span class="fc" id="L73">    public LocalDate getFechaDevolucionPrevista() { return fechaDevolucionPrevista; }</span>
+<span class="fc" id="L74">    public String getMotivo() { return motivo; }</span>
+<span class="fc" id="L75">    public EstadoSolicitud getEstado() { return estado; }</span>
+<span class="fc" id="L76">    public void setEstado(EstadoSolicitud estado) { this.estado = estado; }</span>
+<span class="fc" id="L77">    public Usuario getRespondidoPor() { return respondidoPor; }</span>
+<span class="fc" id="L78">    public void setRespondidoPor(Usuario respondidoPor) { this.respondidoPor = respondidoPor; }</span>
+<span class="fc" id="L79">    public LocalDateTime getFechaRespuesta() { return fechaRespuesta; }</span>
+<span class="fc" id="L80">    public void setFechaRespuesta(LocalDateTime fechaRespuesta) { this.fechaRespuesta = fechaRespuesta; }</span>
+<span class="fc" id="L81">    public String getMotivoRechazo() { return motivoRechazo; }</span>
+<span class="fc" id="L82">    public void setMotivoRechazo(String motivoRechazo) { this.motivoRechazo = motivoRechazo; }</span>
+<span class="nc" id="L83">    public Prestamo getPrestamo() { return prestamo; }</span>
+<span class="fc" id="L84">    public void setPrestamo(Prestamo prestamo) { this.prestamo = prestamo; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
