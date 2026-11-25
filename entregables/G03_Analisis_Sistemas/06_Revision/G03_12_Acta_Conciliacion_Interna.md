@@ -1,7 +1,7 @@
 # G03 — Paso 1.12 | Conciliacion interna de los tres casos detallados
 
-**Rama:** `feature/cielo-g03-analisis-de-sistemas`  
-**Commit de base:** `1fef1d211096d4ac3ba46f6adb16d3a5e5869ef2`  
+**Rama:** `feature/cielo-g03-analisis-de-sistemas`
+**Commit de base:** `1fef1d211096d4ac3ba46f6adb16d3a5e5869ef2`
 **Condicion:** revision de trazabilidad contra la linea base G03, sin aprobacion G01.
 
 ## Resultado
