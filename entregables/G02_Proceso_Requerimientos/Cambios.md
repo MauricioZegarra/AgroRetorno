@@ -9,7 +9,7 @@
 | Requisitos | RF01 y RNF02 como control complementario de configuración de cuentas. RNF03 como regresión de autorización y CSRF. |
 | Hallazgo | El valor de aplicación y la condición del componente habilitaban el inicializador ante ausencia de configuración. En una base vacía esto permitía sembrar cuentas y registros de demostración. |
 | Alcance de decisión | Alcance técnico autorizado para esta rama de práctica. La aprobación nominal y el cierre académico quedan pendientes de registro. |
-| Autoría | Implementación técnica preparada por Codex a solicitud de Ower. La asignación de ejecución personal requiere evidencia de Ower. |
+| Ejecución | Implementación de referencia verificada en laboratorio. El registro de ejecución personal de Ower permanece pendiente. |
 | Versión objetivo | Etiqueta SVN de práctica `v1.0.0`. |
 
 ### Impacto
@@ -47,9 +47,10 @@ flowchart LR
 
 - ERS, apartado de arranque vinculado: [especificación](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g01-requerimientos/entregables/G01_Requerimientos/ERS.md#aclaración-de-configuración-vinculada-a-cr-01).
 - Configuración y componente: [application.properties](../../src/main/resources/application.properties) y [DatosDemoInitializer.java](../../src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java).
-- Revisión Git de la implementación y la prueba. [Commit de CR-01](https://github.com/MauricioZegarra/AgroRetorno/commit/eaa20e9d9c3b0404bd2b946a1a078a2f3e7e5acd).
+- Revisión Git de la implementación y la prueba. [Commit de CR-01](https://github.com/MauricioZegarra/AgroRetorno/commit/383505a9b4e577a1575aaaa2cb495b5ff7a7767c).
 - Prueba nueva: [DemoDataDefaultTest](../../src/test/java/pe/edu/agroretorno/config/DemoDataDefaultTest.java). Observa el registro del componente, con dependencias aisladas.
 - Revisiones SVN, prueba repetida y estado: [registros G05](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g05-gestion-de-configuracion/entregables/G05_Gestion_Configuracion/README.md#regresión-de-cr-01).
+- [Verificación con PostgreSQL](verificacion/README.md) y [acta técnica de CR-01](Acta_Cierre_CR01.md).
 - Cierre técnico: el registro de evidencias documenta la prueba repetida y el alcance. Cierre académico y acreditación de Ower pendientes de registro.
 
 ## CR-02

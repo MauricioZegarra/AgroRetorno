@@ -1,6 +1,6 @@
 # AgroRetorno | Entrega de Ower
 
-G01 documenta la línea base del primer avance con **15 requisitos funcionales y 10 no funcionales**. G02 sigue los requisitos y las solicitudes. G05 documenta la integración SVN y la restauración. Los enlaces abren los entregables en la rama Git de cada guía.
+El equipo de ingeniería desarrolla AgroRetorno para el curso universitario de Calidad de Software. G01 documenta la línea base del primer avance con **15 requisitos funcionales y 10 no funcionales**. G02 sigue los requisitos y las solicitudes. G05 documenta la integración SVN y la restauración. Los enlaces abren los entregables en la rama Git de cada guía.
 
 | Entregable | Contenido |
 |---|---|
@@ -10,6 +10,7 @@ G01 documenta la línea base del primer avance con **15 requisitos funcionales y
 | [G02 · Proceso](../README.md) | Seguimiento de cinco requisitos y exportación CSV. |
 | [G02 · Cambios](../Cambios.md) | CR-01, CR-02, impacto, diseño y verificación. |
 | [G05 · Configuración](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g05-gestion-de-configuracion/entregables/G05_Gestion_Configuracion/README.md) | Historial, conflicto, etiqueta, recuperación y respaldo SVN portable. |
+| [Verificación con PostgreSQL](../verificacion/README.md) | Inicio de la aplicación, persistencia y recuperación con datos sintéticos. |
 | [Trazabilidad](Matriz_Trazabilidad.md) | Del requisito al diseño, código, casos, cambio y evidencia. |
 | [Revisión del primer avance](Revision_Primer_Avance.md) | Hallazgos para el grupo y para preparar la sustentación. |
 | [Cobertura de la asignación](Cobertura_Asignacion.md) | Estado y evidencia de los 25 pasos. |

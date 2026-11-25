@@ -1,5 +1,11 @@
 # G02 | Gestión y seguimiento de requisitos
 
+**Responsable de la guía** · Ower López Arela.\
+**Curso** · Calidad de Software · 2026-B · Escuela Profesional de Ingeniería de Sistemas, UNSA.\
+**Proyecto** · AgroRetorno · Equipo de ingeniería.
+
+[Informe G02 en PDF](Informe_G02_AgroRetorno.pdf).
+
 ## Objetivo y procedimiento
 
 Registrar requisitos y decisiones de cambio con referencias a su diseño, implementación y verificación. Se configuró un gestor local con **SQLite 3.53.1** mediante Python, un catálogo ERS en Markdown y un historial versionado con **Apache Subversion 1.14.5**. El esquema del gestor es la versión 1, con identificador único, referencia del evento al requisito y catálogo de estados. El CSV usa UTF-8, coma y fechas ISO 8601 en UTC y se puede importar a Excel.
@@ -11,7 +17,7 @@ Registrar requisitos y decisiones de cambio con referencias a su diseño, implem
 | `referencia`, `evidencia` | Fijan revisión o caso y dónde inspeccionar el resultado. |
 | `aceptacion_funcional` | Registra si existe decisión de un representante de negocio. |
 
-La ERS de G01 es el catálogo de alcance. [ERS versionada](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g01-requerimientos/entregables/G01_Requerimientos/ERS.md). El gestor reconstruye la vista operativa de los cinco requisitos seleccionados. [Configuración y eventos SQL](gestor.sql) · [Exportación CSV](historial_requisitos.csv) · [Matriz de trazabilidad](trazabilidad/Matriz_Trazabilidad.md) · [Solicitudes y diseño](Cambios.md) · [Índice de G01, G02 y G05](trazabilidad/README.md).
+La ERS de G01 es el catálogo de alcance. [ERS versionada](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g01-requerimientos/entregables/G01_Requerimientos/ERS.md). El gestor reconstruye la vista operativa de los cinco requisitos seleccionados. [Configuración y eventos SQL](gestor.sql) · [Exportación CSV](historial_requisitos.csv) · [Matriz de trazabilidad](trazabilidad/Matriz_Trazabilidad.md) · [Solicitudes y diseño](Cambios.md) · [Acta de CR-01](Acta_Cierre_CR01.md) · [Índice de G01, G02 y G05](trazabilidad/README.md).
 
 Para verificar el esquema y generar la misma exportación desde este directorio:
 
@@ -81,6 +87,10 @@ La hoja contiene eventos de registro, análisis, observación de la implementaci
 | Historial | Eventos exportables en CSV y revisiones auditables con SVN. | Gestión mediante aplicación web y reportes. |
 | Flujo | Registro local por procedimiento, reglas de datos y revisión. | Configuración en una aplicación compartida y gestión de usuarios. |
 | Adecuación | Suficiente para el volumen de este bloque y para una exportación portable. | Atractivo para más revisores y cambios simultáneos. Requiere instalar y mantener el servicio. |
+
+## Verificación de laboratorio
+
+[Pruebas sobre PostgreSQL](verificacion/README.md).
 
 ## Análisis y conclusiones
 

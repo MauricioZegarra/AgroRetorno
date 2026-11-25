@@ -1,0 +1,14 @@
+Fecha UTC: 2026-11-25T21:02:45Z
+Revisión Git del código: 383505a9b4e577a1575aaaa2cb495b5ff7a7767c
+PostgreSQL: 16.11 (Debian 16.11-1.pgdg13+1)
+Imagen: postgres@sha256:468e1f126ca5af849799cda06ac9b03d8090aae9fa5163408b3e8da44fad0702
+Java: openjdk version "21.0.13.1" 2026-11-17 LTS
+Flyway aplicó el esquema. Login HTTP 200 en los tres arranques.
+Sin DEMO_DATA: 0 filas en 10 tablas de la aplicación.
+Con DEMO_DATA=true: 6 usuarios sintéticos creados.
+Tras reiniciar PostgreSQL y la aplicación: las 10 tablas coinciden en conteos y huellas.
+Tras restaurar en otra instancia: las 10 tablas coinciden en conteos y huellas.
+[INFO] Tests run: 76, Failures: 0, Errors: 0, Skipped: 0
+[INFO] All coverage checks have been met.
+[INFO] BUILD SUCCESS
+JaCoCo capa de servicios: 496/508 líneas (97.64%).
