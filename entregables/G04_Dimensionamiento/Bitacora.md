@@ -197,3 +197,30 @@ Corte PARCIAL.
 - Commit base al documentar: cb7e69dcdb85070d9acaac9fa1f0455499964212.
 - Verificacion externa y ERS G01: pendientes. Sin merge.
 - Informes en 04_Comparaciones/G04_09_*.
+
+## G04 - Cierre tecnico interno (25/11/2026)
+
+Actividad:
+Consolidacion y cierre tecnico de dimensionamiento y estimacion.
+
+Resultados:
+- NESMA: 131 UFP del modelo de trabajo.
+- COSMIC: 117 CFP del modelo interno G03.
+- COCOMO: 3.491 KLOC Java, 8.91884 PM y 5.74192 meses.
+- Costos directos estimados: S/ 28540.30 (1 persona)
+  y S/ 33576.83 (3 personas).
+- Auditoria independiente: 32 OK, 0 REVISAR.
+- Libro actualizado de 37 hojas.
+- Informe final G04_24 publicado en Word, PDF y Markdown.
+- Horas reales: sin registros; corte PARCIAL.
+
+Evidencias:
+- G04_21: decisiones internas COSMIC.
+- G04_22: integracion del Excel.
+- G04_23: auditoria independiente.
+- G04_24: informe de cierre tecnico.
+
+Estado:
+CIERRE TECNICO INTERNO AUDITADO.
+Sin conformidad formal de G01, certificacion COSMIC
+ni revision externa. No se realizo merge a main.
