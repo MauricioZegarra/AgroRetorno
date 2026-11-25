@@ -1,0 +1,7 @@
+﻿ID,Fase,Peso,Predecesor,Entregable,Inicio_1p_mes,Fin_1p_mes,Inicio_3p_mes,Fin_3p_mes,Horas_1p,Horas_3p
+F01,Requisitos y análisis,0.15,Inicio,"ERS, contexto y trazabilidad",0,1.6723,0,0.8613,214.05,251.83
+F02,Diseño y arquitectura,0.18,F01,"SDD, diagramas y decisiones",1.6723,3.679,0.8613,1.8948,256.86,302.19
+F03,Implementación,0.32,F02,"Servicios, interfaz y base de datos",3.679,7.2466,1.8948,3.7322,456.64,537.23
+F04,Integración y configuración,0.1,F03,"Versiones, despliegue y ajustes",7.2466,8.3614,3.7322,4.3064,142.7,167.88
+F05,Pruebas y correcciones,0.18,F04,"JUnit, JMeter, Selenium y defectos",8.3614,10.3682,4.3064,5.34,256.86,302.19
+F06,Entrega y documentación,0.07,F05,"Informe, sustentación y cierre",10.3682,11.1486,5.34,5.7419,99.89,117.52

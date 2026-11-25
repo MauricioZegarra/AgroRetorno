@@ -19,6 +19,11 @@ database/backups/*.sql
 Thumbs.db
 *.log
 
+# Archivos temporales de Office y LibreOffice
+.~lock.*#
+~$*
+*.tmp
+
 # Herramientas portátiles descargadas por run.bat / run.sh (Java 21, PostgreSQL)
 .runtime/
 
