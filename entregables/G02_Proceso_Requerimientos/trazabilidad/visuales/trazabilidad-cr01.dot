@@ -1,0 +1,11 @@
+digraph Cambio {
+  graph [bgcolor="#F4F7F2", rankdir=LR, pad=0.25, nodesep=0.40, ranksep=0.50, dpi=150];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=11, margin="0.18,0.15", color="#477159", fontcolor="#173D2C", fillcolor="#E4EFE6"];
+  edge [color="#54745E"];
+  requisito [label="RF01 y RNF02\nArranque del sistema"];
+  solicitud [label="CR-01\nModo demo explícito"];
+  rama [label="Rama SVN · r6\nConfiguración y prueba"];
+  integracion [label="Trunk · r9\nMerge y regresión"];
+  etiqueta [label="v1.0.0\nVersión de práctica", fillcolor="#F8E8D5", color="#A16B38"];
+  requisito -> solicitud -> rama -> integracion -> etiqueta;
+}

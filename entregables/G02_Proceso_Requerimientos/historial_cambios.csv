@@ -1,0 +1,10 @@
+fecha_utc,solicitud,estado,revision_svn,evidencia,ejecutor
+2026-11-25T20:10:24.006935Z,CR-01,registrado,r4,Hallazgo de inicialización por omisión en a28b7e4,Codex
+2026-11-25T20:10:24.006935Z,CR-01,analizado,r4,Impacto de configuración y plan de prueba,Codex
+2026-11-25T20:10:24.006935Z,CR-02,registrado,r4,Hallazgo de valores de laboratorio en a28b7e4,Codex
+2026-11-25T20:10:24.006935Z,CR-02,analizado,r4,Impacto en perfiles y arranque PostgreSQL,Codex
+2026-11-25T20:10:24.006935Z,CR-02,diferido,r4,Revisión pendiente con responsable de despliegue,Codex
+2026-11-25T20:10:41.316062Z,CR-01,implementado_en_practica,r6,"Configuración, inicializador, prueba y fragmento ERS",Codex
+2026-11-25T20:11:58.980902Z,CR-01,integrado,r9,Merge y resolución del conflicto de documentación,Codex
+2026-11-25T20:12:59Z,CR-01,verificado,r9,Cuatro casos CR-01 y 76 pruebas de regresión aprobadas,Codex
+2026-11-25T20:12:59Z,CR-01,cerrado_tecnicamente,r9,Objetivo técnico verificado; aprobación y ejecución personal pendientes de registro,Codex
