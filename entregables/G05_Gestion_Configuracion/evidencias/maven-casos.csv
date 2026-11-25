@@ -1,0 +1,85 @@
+ejecucion,clase,caso,resultado
+r2-prueba-nueva,pe.edu.agroretorno.config.DemoDataDefaultTest,noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion,failure
+r2-prueba-nueva,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoFaltaLaVariableDeEntorno,failure
+r2-prueba-nueva,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoLaConfiguracionEstaDesactivada,passed
+r2-prueba-nueva,pe.edu.agroretorno.config.DemoDataDefaultTest,habilitaElInicializadorCuandoLaDemostracionSeActivaExplicitamente,passed
+r6-rama,pe.edu.agroretorno.config.DemoDataDefaultTest,noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion,passed
+r6-rama,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoFaltaLaVariableDeEntorno,passed
+r6-rama,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoLaConfiguracionEstaDesactivada,passed
+r6-rama,pe.edu.agroretorno.config.DemoDataDefaultTest,habilitaElInicializadorCuandoLaDemostracionSeActivaExplicitamente,passed
+r9-integrado,pe.edu.agroretorno.config.DemoDataDefaultTest,noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion,passed
+r9-integrado,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoFaltaLaVariableDeEntorno,passed
+r9-integrado,pe.edu.agroretorno.config.DemoDataDefaultTest,noCargaDatosCuandoLaConfiguracionEstaDesactivada,passed
+r9-integrado,pe.edu.agroretorno.config.DemoDataDefaultTest,habilitaElInicializadorCuandoLaDemostracionSeActivaExplicitamente,passed
+r9-integrado,Integración - procesos de negocio,procesoCompleto,passed
+r9-integrado,Integración - procesos de negocio,gestionDeProductores,passed
+r9-integrado,Integración - procesos de negocio,validacionNoModificaDatos,passed
+r9-integrado,Integración - procesos de negocio,gestionDeMateriales,passed
+r9-integrado,Integración - procesos de negocio,reporteEHistorial,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",restriccionApi,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",transaccionesCriticas,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",proteccionDatosDeProductor,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",inicioYCierreDeSesion,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",restriccionWebPorRol,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",csrfObligatorio,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",contrasenasConHash,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",validacionDeEntradas,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",validacionWeb,passed
+r9-integrado,"Integración - seguridad, autorización y validación HTTP",flujoApiEncargado,passed
+r9-integrado,Componente 3 - DevolucionService,devolucionMantenimiento,passed
+r9-integrado,Componente 3 - DevolucionService,cierreTrasVariasParciales,passed
+r9-integrado,Componente 3 - DevolucionService,"cantidadesInvalidas(int, int, int)[1]",passed
+r9-integrado,Componente 3 - DevolucionService,"cantidadesInvalidas(int, int, int)[2]",passed
+r9-integrado,Componente 3 - DevolucionService,"cantidadesInvalidas(int, int, int)[3]",passed
+r9-integrado,Componente 3 - DevolucionService,"cantidadesInvalidas(int, int, int)[4]",passed
+r9-integrado,Componente 3 - DevolucionService,devolucionParcial,passed
+r9-integrado,Componente 3 - DevolucionService,consultas,passed
+r9-integrado,Componente 3 - DevolucionService,devolucionTotalBuenEstado,passed
+r9-integrado,Componente 3 - DevolucionService,devolucionSuperiorAPendientes,passed
+r9-integrado,Componente 3 - DevolucionService,observacionesObligatorias,passed
+r9-integrado,Componente 3 - DevolucionService,prestamoCerrado,passed
+r9-integrado,Componente 3 - DevolucionService,devolucionDanadas,passed
+r9-integrado,Ajustes de existencias (RF04),retiroYBaja,passed
+r9-integrado,Ajustes de existencias (RF04),altaInicial,passed
+r9-integrado,Ajustes de existencias (RF04),mantenimientoYReparacion,passed
+r9-integrado,Ajustes de existencias (RF04),ajustesInvalidos,passed
+r9-integrado,Ajustes de existencias (RF04),ingreso,passed
+r9-integrado,Retorno de unidades (RF09),retornoMayorQuePrestado,passed
+r9-integrado,Retorno de unidades (RF09),retornoClasificado,passed
+r9-integrado,Entregas (RF08),entregaConExistenciasInsuficientes,passed
+r9-integrado,Entregas (RF08),entregaConExistenciasSuficientes,passed
+r9-integrado,Consulta de disponibilidad (RF05),valorLimiteDisponibilidad,passed
+r9-integrado,Consulta de disponibilidad (RF05),materialInexistente,passed
+r9-integrado,Consulta de disponibilidad (RF05),cantidadNoPositiva(int)[1],passed
+r9-integrado,Consulta de disponibilidad (RF05),cantidadNoPositiva(int)[2],passed
+r9-integrado,Consulta de disponibilidad (RF05),cantidadNoPositiva(int)[3],passed
+r9-integrado,Consulta de disponibilidad (RF05),consultaDisponibilidadCorrecta,passed
+r9-integrado,Consulta de disponibilidad (RF05),listadoSoloActivos,passed
+r9-integrado,Consulta de disponibilidad (RF05),materialInactivo,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),revalidacionDeExistencias,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),entregaSinAprobacion,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),consultas,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),entregaCorrecta,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),entregaDuplicada,passed
+r9-integrado,Componente 2 - PrestamoService (entregas),materialInactivoOSolicitudInexistente,passed
+r9-integrado,Aprobación y rechazo (RF07),rechazoCorrecto,passed
+r9-integrado,Aprobación y rechazo (RF07),aprobacionCorrecta,passed
+r9-integrado,Aprobación y rechazo (RF07),rechazoInvalido,passed
+r9-integrado,Aprobación y rechazo (RF07),noAprobarRechazada,passed
+r9-integrado,Aprobación y rechazo (RF07),consultas,passed
+r9-integrado,Aprobación y rechazo (RF07),aprobacionSinDisponibilidad,passed
+r9-integrado,Registro de solicitudes (RF06),registroCorrecto,passed
+r9-integrado,Registro de solicitudes (RF06),restriccionesDePropiedad,passed
+r9-integrado,Registro de solicitudes (RF06),limitesDeFecha,passed
+r9-integrado,Registro de solicitudes (RF06),materialInactivoOInexistente,passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[1]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[2]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[3]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[4]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[5]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[6]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[7]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[8]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[9]",passed
+r9-integrado,Registro de solicitudes (RF06),"datosInvalidos(String, SolicitudRequest)[10]",passed
+r9-integrado,Registro de solicitudes (RF06),cantidadSuperiorADisponible,passed

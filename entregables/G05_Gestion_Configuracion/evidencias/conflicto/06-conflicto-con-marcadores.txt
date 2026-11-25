@@ -1,0 +1,9 @@
+# Arranque de la práctica SVN
+
+<<<<<<< .working
+Modo de demostración: ejecutar únicamente sobre una base aislada de laboratorio.
+||||||| .merge-left.r4
+Modo de demostración: configuración original de la aplicación.
+=======
+Modo de demostración: habilitar DEMO_DATA=true de forma explícita.
+>>>>>>> .merge-right.r8

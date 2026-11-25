@@ -1,0 +1,37 @@
+agroretorno-svn-r12.dump.gz: OK
+------- Committed revision 1 >>>
+------- Committed revision 2 >>>
+------- Committed revision 3 >>>
+------- Committed revision 4 >>>
+------- Committed revision 5 >>>
+------- Committed revision 6 >>>
+------- Committed revision 7 >>>
+------- Committed revision 8 >>>
+------- Committed revision 9 >>>
+------- Committed revision 10 >>>
+------- Committed revision 11 >>>
+------- Committed revision 12 >>>
+* Verifying metadata at revision 0 ...
+* Verifying repository metadata ...
+* Verifying metadata at revision 1 ...
+* Verifying metadata at revision 10 ...
+* Verifying metadata at revision 1 ...
+* Verified revision 0.
+* Verified revision 1.
+* Verified revision 2.
+* Verified revision 3.
+* Verified revision 4.
+* Verified revision 5.
+* Verified revision 6.
+* Verified revision 7.
+* Verified revision 8.
+* Verified revision 9.
+* Verified revision 10.
+* Verified revision 11.
+* Verified revision 12.
+
+Última revisión original: 12
+Última revisión restaurada: 12
+Historial original y restaurado: coinciden tras normalizar el orden de atributos XML
+Archivos de la etiqueta original y restaurada: idénticos
+Configuración del gestor restaurada de trunk: idéntica al original

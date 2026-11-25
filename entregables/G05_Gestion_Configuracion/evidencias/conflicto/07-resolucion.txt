@@ -1,0 +1,7 @@
+Merge conflicts in 'entregables/G05_Gestion_Configuracion/Notas_Practica.md' marked as resolved.
+ M      .
+M       entregables/G01_Requerimientos/ERS.md
+M       entregables/G05_Gestion_Configuracion/Notas_Practica.md
+M       src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+M       src/main/resources/application.properties
+A  +    src/test/java/pe/edu/agroretorno/config

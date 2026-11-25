@@ -1,0 +1,44 @@
+Sending        .gitignore
+Sending        README.md
+Adding         entregables/G01_Requerimientos/Informe.md
+Sending        entregables/G01_Requerimientos/Plan_y_Revision.md
+Sending        entregables/G02_Proceso_Requerimientos/Cambios.md
+Sending        entregables/G02_Proceso_Requerimientos/README.md
+Adding         entregables/G02_Proceso_Requerimientos/gestor.sql
+Adding         entregables/G02_Proceso_Requerimientos/historial_cambios.csv
+Adding         entregables/G02_Proceso_Requerimientos/historial_requisitos.csv
+Adding         entregables/G05_Gestion_Configuracion/README.md
+Adding         entregables/G05_Gestion_Configuracion/evidencias
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/01-base-r4.md
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/02-trunk-antes.md
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/03-rama-antes.md
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/04-salida-merge.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/05-status-conflicto.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/06-conflicto-con-marcadores.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/07-resolucion.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/08-despues.md
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/09-commit.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.merge-left.r4.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.merge-right.r8.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.working.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/cr01-diff-svn.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/herramientas.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/maven-casos.csv
+Adding         entregables/G05_Gestion_Configuracion/evidencias/maven-resumen.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/svn-checkout.txt
+Adding         entregables/G05_Gestion_Configuracion/evidencias/svn-update.txt
+Adding         entregables/G05_Gestion_Configuracion/respaldo
+Adding         entregables/Ower_Integracion
+Adding         entregables/Ower_Integracion/Cobertura_Asignacion.md
+Adding         entregables/Ower_Integracion/Matriz_Trazabilidad.md
+Adding         entregables/Ower_Integracion/README.md
+Adding         entregables/Ower_Integracion/Revision_Primer_Avance.md
+Adding         entregables/Ower_Integracion/visuales
+Adding         entregables/Ower_Integracion/visuales/ciclo-prestamo.dot
+Adding  (bin)  entregables/Ower_Integracion/visuales/ciclo-prestamo.png
+Adding         entregables/Ower_Integracion/visuales/trazabilidad-cr01.dot
+Adding  (bin)  entregables/Ower_Integracion/visuales/trazabilidad-cr01.png
+Transmitting file data ....................................done
+Committing transaction...
+Committed revision 10.

@@ -1,0 +1,295 @@
+------------------------------------------------------------------------
+r12 | codex | 2026-11-25 20:19:28 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/gestor.sql
+   M /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/README.md
+   M /trunk/AgroRetorno/entregables/Ower_Integracion/Revision_Primer_Avance.md
+
+Corregir la restauración del gestor y completar la revisión de entrega
+------------------------------------------------------------------------
+r11 | codex | 2026-11-25 20:18:04 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /tags/v1.0.0 (from /trunk/AgroRetorno:10)
+
+Etiquetar v1.0.0 de práctica desde trunk en r10
+------------------------------------------------------------------------
+r10 | codex | 2026-11-25 20:18:04 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /trunk/AgroRetorno/.gitignore
+   M /trunk/AgroRetorno/README.md
+   A /trunk/AgroRetorno/entregables/G01_Requerimientos/Informe.md
+   M /trunk/AgroRetorno/entregables/G01_Requerimientos/Plan_y_Revision.md
+   M /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/Cambios.md
+   M /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/README.md
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/gestor.sql
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/historial_cambios.csv
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/historial_requisitos.csv
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/README.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/01-base-r4.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/02-trunk-antes.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/03-rama-antes.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/04-salida-merge.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/05-status-conflicto.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/06-conflicto-con-marcadores.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/07-resolucion.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/08-despues.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/09-commit.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.merge-left.r4.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.merge-right.r8.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/conflicto/variante.working.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/cr01-diff-svn.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/herramientas.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/maven-casos.csv
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/maven-resumen.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/svn-checkout.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/evidencias/svn-update.txt
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/respaldo
+   A /trunk/AgroRetorno/entregables/Ower_Integracion
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/Cobertura_Asignacion.md
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/Matriz_Trazabilidad.md
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/README.md
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/Revision_Primer_Avance.md
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/visuales
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/visuales/ciclo-prestamo.dot
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/visuales/ciclo-prestamo.png
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/visuales/trazabilidad-cr01.dot
+   A /trunk/AgroRetorno/entregables/Ower_Integracion/visuales/trazabilidad-cr01.png
+
+Consolidar gestor, informes, pruebas y trazabilidad de la entrega
+------------------------------------------------------------------------
+r9 | codex | 2026-11-25 20:11:58 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /trunk/AgroRetorno
+   M /trunk/AgroRetorno/entregables/G01_Requerimientos/ERS.md
+   M /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/Notas_Practica.md
+   M /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+   M /trunk/AgroRetorno/src/main/resources/application.properties
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/config (from /branches/CR-01-demo-opt-in/src/test/java/pe/edu/agroretorno/config:8)
+
+Integrar CR-01 y resolver el conflicto de documentación en trunk
+------------------------------------------------------------------------
+r8 | codex | 2026-11-25 20:11:31 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/Notas_Practica.md
+
+Documentar el aislamiento de la base en la práctica de configuración
+------------------------------------------------------------------------
+r7 | codex | 2026-11-25 20:11:31 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /branches/CR-01-demo-opt-in/entregables/G05_Gestion_Configuracion/Notas_Practica.md
+
+CR-01: documentar la activación explícita para la práctica
+------------------------------------------------------------------------
+r6 | codex | 2026-11-25 20:10:41 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   M /branches/CR-01-demo-opt-in/entregables/G01_Requerimientos/ERS.md
+   M /branches/CR-01-demo-opt-in/src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+   M /branches/CR-01-demo-opt-in/src/main/resources/application.properties
+   A /branches/CR-01-demo-opt-in/src/test/java/pe/edu/agroretorno/config
+   A /branches/CR-01-demo-opt-in/src/test/java/pe/edu/agroretorno/config/DemoDataDefaultTest.java
+
+CR-01: exigir activación explícita e incorporar su prueba y adenda ERS
+------------------------------------------------------------------------
+r5 | codex | 2026-11-25 20:10:24 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /branches/CR-01-demo-opt-in (from /trunk/AgroRetorno:4)
+
+Crear rama de configuración para CR-01
+------------------------------------------------------------------------
+r4 | codex | 2026-11-25 20:10:24 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/Cambios.md
+   A /trunk/AgroRetorno/entregables/G02_Proceso_Requerimientos/README.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/Notas_Practica.md
+   A /trunk/AgroRetorno/entregables/G05_Gestion_Configuracion/Politica.md
+
+Registrar solicitudes, flujo del gestor y política de configuración SVN
+------------------------------------------------------------------------
+r3 | codex | 2026-11-25 20:08:16 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /trunk/AgroRetorno/entregables
+   A /trunk/AgroRetorno/entregables/G01_Requerimientos
+   A /trunk/AgroRetorno/entregables/G01_Requerimientos/ERS.md
+   A /trunk/AgroRetorno/entregables/G01_Requerimientos/Elicitacion.md
+   A /trunk/AgroRetorno/entregables/G01_Requerimientos/Plan_y_Revision.md
+
+Cotejar la ERS con los 25 requisitos del primer avance y preparar la elicitación
+------------------------------------------------------------------------
+r2 | codex | 2026-11-25 20:06:16 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /trunk/AgroRetorno/.gitignore
+   A /trunk/AgroRetorno/.mvn
+   A /trunk/AgroRetorno/.mvn/wrapper
+   A /trunk/AgroRetorno/.mvn/wrapper/maven-wrapper.properties
+   A /trunk/AgroRetorno/mvnw
+   A /trunk/AgroRetorno/mvnw.cmd
+   A /trunk/AgroRetorno/pom.xml
+
+Incorporar build reproducible y Maven Wrapper de G07
+------------------------------------------------------------------------
+r1 | codex | 2026-11-25 20:06:05 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /branches
+   A /tags
+   A /trunk
+   A /trunk/AgroRetorno
+   A /trunk/AgroRetorno/README.md
+   A /trunk/AgroRetorno/src
+   A /trunk/AgroRetorno/src/main
+   A /trunk/AgroRetorno/src/main/java
+   A /trunk/AgroRetorno/src/main/java/pe
+   A /trunk/AgroRetorno/src/main/java/pe/edu
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/AgroRetornoApplication.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api/ApiExceptionHandler.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api/AuthApiController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api/EncargadoApiController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api/MaterialApiController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/api/ProductorApiController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/config
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/config/AppConfig.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/config/ReglasNegocioProperties.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoMaterialController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoPanelController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoPrestamoController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoProductorController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoReporteController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/EncargadoSolicitudController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/InicioController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/ProductorController.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/controller/WebExceptionHandler.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/AjusteExistenciasRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/DevolucionRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/DevolucionResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/DisponibilidadResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/ErrorResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/FiltroHistorial.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/FiltroReporte.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/HistorialResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/MaterialRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/MaterialResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/MovimientoResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/PrestamoResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/ProductorRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/ProductorResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/RechazoRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/ReporteConsolidado.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/SolicitudRequest.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/SolicitudResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/dto/UsuarioActualResponse.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/CategoriaMaterial.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/CondicionDevolucion.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/DetalleDevolucion.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Devolucion.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/EstadoMaterial.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/EstadoPrestamo.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/EstadoSolicitud.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/HistorialOperacion.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Inventario.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Material.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/MovimientoInventario.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Prestamo.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Productor.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Rol.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Solicitud.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/TipoMovimiento.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/entity/Usuario.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception/AgroRetornoException.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception/OperacionNoPermitidaException.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception/RecursoNoEncontradoException.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception/ReglaNegocioException.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/exception/ValidacionException.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/DevolucionRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/HistorialOperacionRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/InventarioRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/MaterialRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/MovimientoInventarioRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/PrestamoRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/ProductorRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/SolicitudRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/repository/UsuarioRepository.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/security
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/security/RespuestaJsonSeguridad.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/security/SecurityConfig.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/security/UsuarioDetailsService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/DevolucionService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/HistorialService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/InventarioService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/MaterialService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/PrestamoService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/ProductorService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/ReporteService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/SolicitudService.java
+   A /trunk/AgroRetorno/src/main/java/pe/edu/agroretorno/service/UsuarioService.java
+   A /trunk/AgroRetorno/src/main/resources
+   A /trunk/AgroRetorno/src/main/resources/application.properties
+   A /trunk/AgroRetorno/src/main/resources/db
+   A /trunk/AgroRetorno/src/main/resources/db/migration
+   A /trunk/AgroRetorno/src/main/resources/db/migration/V1__esquema_inicial.sql
+   A /trunk/AgroRetorno/src/main/resources/static
+   A /trunk/AgroRetorno/src/main/resources/static/css
+   A /trunk/AgroRetorno/src/main/resources/static/css/agroretorno.css
+   A /trunk/AgroRetorno/src/main/resources/static/images
+   A /trunk/AgroRetorno/src/main/resources/static/images/logo.svg
+   A /trunk/AgroRetorno/src/main/resources/static/js
+   A /trunk/AgroRetorno/src/main/resources/static/js/agroretorno.js
+   A /trunk/AgroRetorno/src/main/resources/templates
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/existencias-detalle.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/existencias.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/historial.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/material-form.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/materiales.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/panel.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/prestamo-detalle.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/prestamos.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/productor-form.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/productores.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/reporte.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/solicitud-detalle.html
+   A /trunk/AgroRetorno/src/main/resources/templates/encargado/solicitudes.html
+   A /trunk/AgroRetorno/src/main/resources/templates/error
+   A /trunk/AgroRetorno/src/main/resources/templates/error/403.html
+   A /trunk/AgroRetorno/src/main/resources/templates/error/404.html
+   A /trunk/AgroRetorno/src/main/resources/templates/error.html
+   A /trunk/AgroRetorno/src/main/resources/templates/fragments
+   A /trunk/AgroRetorno/src/main/resources/templates/fragments/layout.html
+   A /trunk/AgroRetorno/src/main/resources/templates/login.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/historial.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/inventario.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/panel.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/prestamos.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/solicitud-form.html
+   A /trunk/AgroRetorno/src/main/resources/templates/productor/solicitudes.html
+   A /trunk/AgroRetorno/src/test
+   A /trunk/AgroRetorno/src/test/java
+   A /trunk/AgroRetorno/src/test/java/pe
+   A /trunk/AgroRetorno/src/test/java/pe/edu
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/integracion
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/integracion/ProcesosNegocioIntegrationTest.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/integracion/SeguridadIntegrationTest.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service/DevolucionServiceTest.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service/Fixtures.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service/InventarioServiceTest.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service/PrestamoServiceTest.java
+   A /trunk/AgroRetorno/src/test/java/pe/edu/agroretorno/service/SolicitudServiceTest.java
+   A /trunk/AgroRetorno/src/test/resources
+   A /trunk/AgroRetorno/src/test/resources/application-test.properties
+
+Importar AgroRetorno desde Git y crear la estructura SVN
+------------------------------------------------------------------------

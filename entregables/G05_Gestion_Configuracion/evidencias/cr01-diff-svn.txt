@@ -1,0 +1,118 @@
+Index: entregables/G01_Requerimientos/ERS.md
+===================================================================
+--- entregables/G01_Requerimientos/ERS.md	(revision 5)
++++ entregables/G01_Requerimientos/ERS.md	(working copy)
+@@ -80,6 +80,10 @@
+ | RNF09 | Alcanzar cobertura de líneas de servicios de al menos 80 %. | §3.5 RNF09 | Media | Calidad G07 | JaCoCo de la revisión sometida a pruebas. Publicar líneas cubiertas y totales del paquete de servicios. Es una meta del proceso de pruebas. |
+ | RNF10 | Restaurar la base con los mismos registros. | §3.5 RNF10 | Alta | Operaciones | Restaurar PostgreSQL en una instancia separada y comprobar identidades, conteos y relaciones de la muestra. El dump de SVN cubre un elemento de configuración diferente. |
+ 
++### Aclaración de configuración vinculada a CR-01
++
++El requisito original RNF02 conserva su contenido. La revisión integra un control complementario de arranque: ante la ausencia de `DEMO_DATA`, se omite la carga de cuentas y datos ficticios. El modo demostración requiere optar por él expresamente. La prueba de esta configuración se vincula a RNF02 y RF01 como control complementario. [Diseño y cambio](../G02_Proceso_Requerimientos/Cambios.md#cr-01).
++
+ ## 5. Decisiones y revisiones
+ 
+ | Hallazgo | Resolución o seguimiento | Evidencia |
+Index: src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+===================================================================
+--- src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java	(revision 5)
++++ src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java	(working copy)
+@@ -27,12 +27,11 @@
+ import pe.edu.agroretorno.service.SolicitudService;
+ 
+ /**
+- * Carga datos FICTICIOS de demostración solo cuando la base está vacía (no duplica registros
+- * en cada inicio). Usa los mismos servicios de negocio, por lo que el inventario queda cuadrado
+- * y el historial registra cada operación.
++ * Carga datos ficticios cuando se habilita el modo de demostración y la base está vacía.
++ * Usa los servicios de negocio para mantener el inventario y registrar el historial.
+  */
+ @Component
+-@ConditionalOnProperty(name = "agroretorno.datos-demo.habilitado", havingValue = "true", matchIfMissing = true)
++@ConditionalOnProperty(name = "agroretorno.datos-demo.habilitado", havingValue = "true")
+ public class DatosDemoInitializer implements ApplicationRunner {
+ 
+     public static final String ENCARGADO = "encargado";
+Index: src/main/resources/application.properties
+===================================================================
+--- src/main/resources/application.properties	(revision 5)
++++ src/main/resources/application.properties	(working copy)
+@@ -51,8 +51,8 @@
+ agroretorno.reglas.plazo-maximo-dias=90
+ # Longitud mínima del motivo de la solicitud y del rechazo
+ agroretorno.reglas.longitud-minima-motivo=5
+-# Carga de datos de demostración al iniciar (solo si la base está vacía)
+-agroretorno.datos-demo.habilitado=${DEMO_DATA:true}
++# Carga de datos ficticios en una base vacía. Activar solo en un entorno de demostración aislado.
++agroretorno.datos-demo.habilitado=${DEMO_DATA:false}
+ 
+ # ---------- Logs ----------
+ logging.level.root=INFO
+Index: src/test/java/pe/edu/agroretorno/config/DemoDataDefaultTest.java
+===================================================================
+--- src/test/java/pe/edu/agroretorno/config/DemoDataDefaultTest.java	(nonexistent)
++++ src/test/java/pe/edu/agroretorno/config/DemoDataDefaultTest.java	(working copy)
+@@ -0,0 +1,63 @@
++package pe.edu.agroretorno.config;
++
++import java.time.Clock;
++import java.util.Map;
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
++import org.springframework.boot.test.context.runner.ApplicationContextRunner;
++import org.springframework.core.env.StandardEnvironment;
++import org.springframework.core.env.SystemEnvironmentPropertySource;
++import org.springframework.security.crypto.password.PasswordEncoder;
++import pe.edu.agroretorno.repository.UsuarioRepository;
++import pe.edu.agroretorno.service.DevolucionService;
++import pe.edu.agroretorno.service.MaterialService;
++import pe.edu.agroretorno.service.PrestamoService;
++import pe.edu.agroretorno.service.ProductorService;
++import pe.edu.agroretorno.service.SolicitudService;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.mockito.Mockito.mock;
++
++class DemoDataDefaultTest {
++
++    private final ApplicationContextRunner contexto = new ApplicationContextRunner()
++            .withInitializer(context -> {
++                String fuente = StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME;
++                context.getEnvironment().getPropertySources().replace(fuente,
++                        new SystemEnvironmentPropertySource(fuente, Map.of()));
++            })
++            .withUserConfiguration(DatosDemoInitializer.class)
++            .withBean(UsuarioRepository.class, () -> mock(UsuarioRepository.class))
++            .withBean(PasswordEncoder.class, () -> mock(PasswordEncoder.class))
++            .withBean(ProductorService.class, () -> mock(ProductorService.class))
++            .withBean(MaterialService.class, () -> mock(MaterialService.class))
++            .withBean(SolicitudService.class, () -> mock(SolicitudService.class))
++            .withBean(PrestamoService.class, () -> mock(PrestamoService.class))
++            .withBean(DevolucionService.class, () -> mock(DevolucionService.class))
++            .withBean(Clock.class, Clock::systemUTC);
++
++    private final ApplicationContextRunner aplicacion = contexto
++            .withInitializer(new ConfigDataApplicationContextInitializer());
++
++    @Test
++    void noCargaDatosCuandoFaltaLaVariableDeEntorno() {
++        aplicacion.run(context -> assertThat(context).doesNotHaveBean(DatosDemoInitializer.class));
++    }
++
++    @Test
++    void noCargaDatosCuandoLaConfiguracionEstaDesactivada() {
++        aplicacion.withPropertyValues("DEMO_DATA=false")
++                .run(context -> assertThat(context).doesNotHaveBean(DatosDemoInitializer.class));
++    }
++
++    @Test
++    void habilitaElInicializadorCuandoLaDemostracionSeActivaExplicitamente() {
++        aplicacion.withPropertyValues("DEMO_DATA=true")
++                .run(context -> assertThat(context).hasSingleBean(DatosDemoInitializer.class));
++    }
++
++    @Test
++    void noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion() {
++        contexto.run(context -> assertThat(context).doesNotHaveBean(DatosDemoInitializer.class));
++    }
++}

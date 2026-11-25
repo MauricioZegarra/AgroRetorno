@@ -1,0 +1,54 @@
+r2-sin-cambio | mvn -B -ntp clean verify
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.698 s -- in Ajustes de existencias (RF04)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in Retorno de unidades (RF09)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in Entregas (RF08)
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.369 s -- in Consulta de disponibilidad (RF05)
+[INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.217 s -- in Componente 1 - InventarioService
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.967 s -- in Componente 3 - DevolucionService
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 26.44 s -- in Integración - seguridad, autorización y validación HTTP
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.245 s -- in Componente 2 - PrestamoService (entregas)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.064 s -- in Aprobación y rechazo (RF07)
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.103 s -- in Registro de solicitudes (RF06)
+[INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.173 s -- in Componente 2 - SolicitudService
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.276 s -- in Integración - procesos de negocio
+[INFO] Tests run: 72, Failures: 0, Errors: 0, Skipped: 0
+[INFO] All coverage checks have been met.
+[INFO] BUILD SUCCESS
+[INFO] Finished at: 2026-11-25T20:09:19Z
+
+r2-prueba-nueva | mvn -B -ntp -Dtest=DemoDataDefaultTest test
+[ERROR] Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 5.832 s <<< FAILURE! -- in pe.edu.agroretorno.config.DemoDataDefaultTest
+[ERROR] pe.edu.agroretorno.config.DemoDataDefaultTest.noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion -- Time elapsed: 4.397 s <<< FAILURE!
+[ERROR] pe.edu.agroretorno.config.DemoDataDefaultTest.noCargaDatosCuandoFaltaLaVariableDeEntorno -- Time elapsed: 0.953 s <<< FAILURE!
+[ERROR]   DemoDataDefaultTest.noCargaDatosCuandoFaltaLaVariableDeEntorno:44->lambda$noCargaDatosCuandoFaltaLaVariableDeEntorno$8:44
+[ERROR]   DemoDataDefaultTest.noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion:61->lambda$noRegistraElInicializadorSiFaltaLaPropiedadDeAplicacion$11:61
+[ERROR] Tests run: 4, Failures: 2, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE
+[INFO] Finished at: 2026-11-25T20:10:41Z
+
+r6-rama | mvn -B -ntp -Dtest=DemoDataDefaultTest test
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.156 s -- in pe.edu.agroretorno.config.DemoDataDefaultTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Finished at: 2026-11-25T20:11:00Z
+
+r9-integrado | mvn -B -ntp clean verify
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 25.07 s -- in Integración - procesos de negocio
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.101 s -- in pe.edu.agroretorno.config.DemoDataDefaultTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.720 s -- in Componente 2 - PrestamoService (entregas)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.132 s -- in Aprobación y rechazo (RF07)
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.288 s -- in Registro de solicitudes (RF06)
+[INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.435 s -- in Componente 2 - SolicitudService
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.418 s -- in Componente 3 - DevolucionService
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.77 s -- in Integración - seguridad, autorización y validación HTTP
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.051 s -- in Ajustes de existencias (RF04)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s -- in Retorno de unidades (RF09)
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in Entregas (RF08)
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.065 s -- in Consulta de disponibilidad (RF05)
+[INFO] Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.190 s -- in Componente 1 - InventarioService
+[INFO] Tests run: 76, Failures: 0, Errors: 0, Skipped: 0
+[INFO] All coverage checks have been met.
+[INFO] BUILD SUCCESS
+[INFO] Finished at: 2026-11-25T20:12:59Z
+
+JaCoCo r9 | servicio | líneas cubiertas: 496/508 (97.64%)
