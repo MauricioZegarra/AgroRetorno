@@ -12,20 +12,7 @@ Fechas de hitos tomadas del primer avance, §8. Las actividades intermedias repr
 | 26–30 nov 2026 | Repetición de pruebas, inspección de la etiqueta y restauración | Ower y revisión de calidad | Reportes por revisión y dump verificable |
 | 2 dic 2026 | Entrega final y sustentación de 20 minutos | Equipo | Paquete integrado y demostración |
 
-```mermaid
-flowchart TB
-    D["Docente · valida alcance y evidencias"]
-    R["Cooperativa representada · productor y encargado"]
-    A["Ower · G01, G02 y G05"]
-    C["Cielo · G03 y G04"]
-    M["Marco · G06 y G07"]
-    Z["Mauricio · G08 y G09"]
-    D --> A
-    R --> A
-    A --- C
-    A --- M
-    A --- Z
-```
+![Equipo académico y responsabilidades por guía](visuales/organigrama.png)
 
 ## Comparación de gestores
 

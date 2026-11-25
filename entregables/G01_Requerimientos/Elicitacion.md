@@ -1,6 +1,6 @@
 # Instrumentos de elicitación
 
-**Estado al corte** · Instrumentos listos. Aplicación y respuestas de participantes pendientes. El primer avance declara un caso representado. Los hallazgos documentales sirven para preparar las sesiones.
+**Estado al corte** · Una consulta técnica escrita al equipo de ingeniería está registrada. La entrevista y el cuestionario a personas que representen a usuarios siguen pendientes. El primer avance declara un caso representado.
 
 ## Entrevista semiestructurada
 
@@ -36,3 +36,16 @@ Duración prevista de cinco minutos. Aplicar después de una demostración corta
 | Cuestionario | Pendiente | Pendiente | Pendiente | Pendiente | Según respuesta |
 
 Tras la aplicación, devolver el resumen al participante y registrar fecha y conformidad. Los cambios a la ERS siguen el flujo de G02.
+
+## Consulta técnica del equipo
+
+**Fecha** · 25 de noviembre de 2026.\
+**Fuente** · Consulta escrita con una integrante del equipo de ingeniería. Registro parafraseado. La consulta aporta el criterio del equipo sobre el alcance y el flujo de negocio.
+
+| Punto discutido | Respuesta sintetizada | Decisión y trazabilidad |
+|---|---|---|
+| Devolución parcial | De 20 jabas entregadas, primero regresan cinco en buen estado y dos dañadas. Quedan 13 por devolver. | El préstamo permanece activo. Se distingue saldo pendiente de condición de las unidades. RF11–RF14 y AC-03. |
+| Devolución final | Al recibir las 13 restantes en buen estado, el saldo llega a cero. El préstamo pasa a CERRADO. | Registrar 18 en buen estado y dos dañadas en total. El cierre y la clasificación quedan consultables. RF12–RF14 y AC-03. |
+| Compensación por daños | AgroRetorno registra la condición y su relación con el productor y el préstamo. La compensación depende de las políticas de la organización. | Compensación y evaluación de responsabilidad quedan fuera del alcance de esta versión. Una ampliación requiere reglas aprobadas y una solicitud de cambio. RF13–RF14. |
+
+[Protocolo AC-03](Verificacion.md#flujos-funcionales-que-requieren-demostración) · [Decisiones de la ERS](ERS.md#5-decisiones-y-revisiones).

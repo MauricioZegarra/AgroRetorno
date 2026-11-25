@@ -1,5 +1,11 @@
 # G01 | Informe de la práctica
 
+**Responsable de la guía** · Ower López Arela.\
+**Curso** · Calidad de Software · 2026-B · Escuela Profesional de Ingeniería de Sistemas, UNSA.\
+**Proyecto** · AgroRetorno · Equipo de ingeniería.
+
+[Informe G01 en PDF](Informe_G01_AgroRetorno.pdf).
+
 ## Objetivo y procedimiento
 
 Convertir la línea base del primer avance en una especificación verificable siguiendo la estructura de IEEE 830. Se compararon las tablas de las pp. 6–7 con el código, se fijaron los criterios y se vincularon casos de prueba. El modelo de proceso es iterativo: elicitación y revisión, decisión, implementación aislada y retroalimentación de pruebas.
@@ -7,7 +13,8 @@ Convertir la línea base del primer avance en una especificación verificable si
 ## Resultados
 
 - [ERS](ERS.md) con 15 RF, 10 RNF y tabla de decisiones.
-- [Instrumentos](Elicitacion.md) con entrevista y cuestionario para roles representados.
+- [Elicitación](Elicitacion.md) con instrumentos para usuarios representados y registro de la consulta interna.
+- [Protocolos de aceptación](Verificacion.md) con escenarios reproducibles y preparación de mediciones.
 - [Plan](Plan_y_Revision.md) con cronograma, organigrama, comparación de gestores y lista de verificación.
 
 La matriz de G02 vincula cada requisito con diseño, casos de prueba y evidencia. [Matriz de trazabilidad](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g02-proceso-de-requerimientos/entregables/G02_Proceso_Requerimientos/trazabilidad/Matriz_Trazabilidad.md).

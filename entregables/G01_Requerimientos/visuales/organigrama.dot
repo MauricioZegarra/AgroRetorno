@@ -1,0 +1,17 @@
+digraph Organigrama {
+  graph [bgcolor="#F1F6F3", rankdir=TB, pad=0.24, nodesep=0.15, ranksep=0.47, dpi=150];
+  node [shape=box, style="rounded,filled", color="#A8C3B3", fillcolor="#FFFFFF",
+        fontcolor="#133127", fontname="DejaVu Sans", fontsize=10, margin="0.18,0.12"];
+  edge [color="#568071", arrowsize=0.68];
+  d [label="Docente\nEvalúa la entrega"];
+  e [label="EQUIPO DE INGENIERÍA\nAgroRetorno · Calidad de Software", fillcolor="#DCECE5"];
+  u [label="Usuarios representados\nProductor y encargado", fillcolor="#FAEDDC"];
+  o [label="Ower\nG01 · G02 · G05\nRequisitos y configuración"];
+  c [label="Cielo\nG03 · G04\nAnálisis y estimación"];
+  m [label="Marco\nG06 · G07\nRiesgos y pruebas unitarias"];
+  z [label="Mauricio\nG08 · G09\nRendimiento y calidad"];
+  d -> e;
+  u -> e [style=dashed];
+  e -> {o c m z};
+  {rank=same; d; u;}
+}

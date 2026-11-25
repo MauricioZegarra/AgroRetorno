@@ -3,11 +3,12 @@
 | Control | Dato |
 |---|---|
 | Identificador | AR-ERS |
-| Versión documental | 1.1.0 |
+| Versión documental | 1.2.0 |
 | Fuente de alcance | Primer avance, §§1–4, pp. 2–8 |
 | Línea base del código cotejado | Git `a28b7e46875d362b5074cff7149343457a4e01a6` |
 | Estado | Cotejada con el primer avance. Validación por usuarios representados y aprobación docente pendientes de registro. |
 | Responsable asignado | Ower López Arela, G01/G02/G05 |
+| Proyecto académico | Calidad de Software · Ingeniería de Sistemas, UNSA · 2026-B |
 | Referencia de estructura | IEEE 830-1998 |
 
 ## 1. Introducción
@@ -18,7 +19,7 @@ Las cooperativas agrícolas de Arequipa almacenan y prestan materiales reutiliza
 
 ### 1.2 Alcance
 
-Incluye acceso por rol, gestión de productores, catálogo de cinco categorías, existencias, solicitudes, decisión del almacén, entrega, devolución parcial o total, historial y reporte. Quedan fuera los pagos, ventas, geolocalización, aplicación móvil nativa, predicción y servicios externos de negocio.
+Incluye acceso por rol, gestión de productores, catálogo de cinco categorías, existencias, solicitudes, decisión del almacén, entrega, devolución parcial o total, historial y reporte. Quedan fuera los pagos, ventas, geolocalización, aplicación móvil nativa, predicción, servicios externos de negocio y la gestión de compensaciones o evaluación de responsabilidad por daños.
 
 | Rol o interesado | Necesidad |
 |---|---|
@@ -92,9 +93,13 @@ El requisito original RNF02 conserva su contenido. La revisión integra un contr
 | La ERS previa propuso RNF con otros IDs y métricas. | Se recupera íntegra la identificación oficial. Objetivos adicionales como RPO/RTO quedan fuera de la línea base hasta una solicitud aprobada. | Primer avance §3.5, ERS §§3–4. |
 | Aprobación frente a entrega. | Se conserva APROBADA sin movimiento de stock. La entrega revalida saldo y asigna ENTREGADA. | §3.2 del informe, `SolicitudService` y `PrestamoService`. |
 | Estado VENCIDO. | Se registra como condición calculada del préstamo activo. Verificar su exposición en los listados de cada rol. | `PrestamoResponse` y revisión de vistas. |
+| Alcance ante devoluciones con daño. | Se registra la clasificación con trazabilidad al préstamo y su productor. Cualquier compensación requiere reglas de la organización y un cambio aprobado. | [Consulta técnica del equipo](Elicitacion.md#consulta-técnica-del-equipo). |
 | Etiquetas antiguas de casos. | La matriz usa IDs del primer avance y el ID PU/IT/SEG del caso ejecutado. Las anotaciones del código pueden contener una asociación histórica. | [Matriz](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g02-proceso-de-requerimientos/entregables/G02_Proceso_Requerimientos/trazabilidad/Matriz_Trazabilidad.md). |
 
 | Versión | Cambio |
 |---|---|
 | 1.0 documental previa | Borrador basado en G03 y código, con RNF propuestos. |
 | 1.1.0 | Cotejo con las secciones 3.4 y 3.5 del primer avance y aclaración de configuración CR-01. |
+| 1.2.0 | Escenarios y protocolos de aceptación para los mismos 15 RF y 10 RNF. Se documenta el alcance de devoluciones con daño. |
+
+[Protocolos de aceptación](Verificacion.md).
