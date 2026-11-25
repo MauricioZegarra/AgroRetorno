@@ -1,0 +1,9 @@
+Sending        .
+Sending        entregables/G01_Requerimientos/ERS.md
+Sending        entregables/G05_Gestion_Configuracion/Notas_Practica.md
+Sending        src/main/java/pe/edu/agroretorno/config/DatosDemoInitializer.java
+Sending        src/main/resources/application.properties
+Adding         src/test/java/pe/edu/agroretorno/config
+Transmitting file data ....done
+Committing transaction...
+Committed revision 9.

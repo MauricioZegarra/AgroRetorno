@@ -1,0 +1,8 @@
+Updating '/workspace/agroretorno-svn/trunk':
+At revision 3.
+Updating '/workspace/agroretorno-svn/trunk':
+At revision 8.
+Updating '.':
+At revision 9.
+Updating '.':
+At revision 11.

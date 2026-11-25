@@ -1,0 +1,12 @@
+A    /workspace/agroretorno-svn/trunk/README.md
+A    /workspace/agroretorno-svn/trunk/src
+A    /workspace/agroretorno-svn/trunk/src/main
+A    /workspace/agroretorno-svn/trunk/src/main/java
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe/edu
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe/edu/agroretorno
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe/edu/agroretorno/AgroRetornoApplication.java
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe/edu/agroretorno/api
+A    /workspace/agroretorno-svn/trunk/src/main/java/pe/edu/agroretorno/api/ApiExceptionHandler.java
+...
+Checked out revision 1.

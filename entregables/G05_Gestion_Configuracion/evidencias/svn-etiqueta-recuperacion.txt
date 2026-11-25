@@ -1,0 +1,27 @@
+Etiqueta
+------------------------------------------------------------------------
+r11 | codex | 2026-11-25 20:18:04 +0000 (Wed, 25 Nov 2026) | 1 line
+Changed paths:
+   A /tags/v1.0.0 (from /trunk/AgroRetorno:10)
+
+Etiquetar v1.0.0 de práctica desde trunk en r10
+------------------------------------------------------------------------
+
+Histórico separado
+URL: file:///workspace/agroretorno-svn/repository/trunk/AgroRetorno
+Relative URL: ^/trunk/AgroRetorno
+Revision: 3
+agroretorno.datos-demo.habilitado=${DEMO_DATA:true}
+
+Trunk vigente
+URL: file:///workspace/agroretorno-svn/repository/trunk/AgroRetorno
+Relative URL: ^/trunk/AgroRetorno
+Revision: 11
+agroretorno.datos-demo.habilitado=${DEMO_DATA:false}
+
+Comparación del código y los descriptores de tag SVN frente a rama Git
+src: contenido idéntico
+pom.xml: contenido idéntico
+.mvn: contenido idéntico
+mvnw: contenido idéntico
+mvnw.cmd: contenido idéntico

@@ -1,0 +1,10 @@
+svn: 1.14.5
+svnadmin: 1.14.5
+svnlook: 1.14.5
+Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)
+Maven home: /tmp/agro-tools/apache-maven-3.9.16
+Java version: 21.0.13.1, vendor: Amazon.com Inc., runtime: /tmp/agro-tools/jdk21
+Default locale: en, platform encoding: UTF-8
+OS name: "linux", version: "6.18.57", arch: "amd64", family: "unix"
+Python 3.12.14 / SQLite 3.53.1
+Sistema: Debian GNU/Linux 13 (trixie)
