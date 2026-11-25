@@ -1,0 +1,23 @@
+# G06 — Evaluación de PILAR, Alternativa Utilizada y Matriz RMAT vs. PILAR (Pasos 3.1 y 3.8)
+
+## 1. Registro de verificación e impedimento de PILAR (Paso 3.1)
+- **Entorno verificado:** Nobara Linux 44 (`7.2.11-200.nobara.fc44.x86_64`), OpenJDK 25.0.4.1 / Eclipse Temurin JDK 17.0.17.
+- **Impedimentos objetivos constatados:**
+  1. **Licenciamiento propietario:** PILAR (CCN-CERT / ARST) requiere licencia comercial o institucional anual. Las ediciones de demostración bloquean la exportación completa de reportes y limitan el guardado/portabilidad de proyectos `.car`.
+  2. **Soporte nativo en Linux:** No existe instalador libre oficial comunitario en repositorios Linux sin licencia previa.
+  3. **Auditabilidad y colaboración del equipo:** Para asegurar que todos los integrantes y el docente puedan revisar, modificar y recalcular el modelo MAGERIT sin licencias comerciales, se construyó la alternativa editable en Excel/LibreOffice (`G06_Matriz_Riesgos_MAGERIT_AgroRetorno.xlsx`) implementando el método MAGERIT v3 completo con **220 fórmulas verificadas (0 errores)**. Esta sustitución queda documentada para validación explícita del docente conforme al Paso 3.1.
+
+## 2. Matriz comparativa de actividades: PILAR vs. RMAT vs. Alternativa Excel vs. Pirani (Paso 3.8 y LAB06)
+| Actividad / Fase | PILAR (CCN-CERT / MAGERIT) | RMAT | Alternativa Excel MAGERIT v3 | Pirani (Cloud SaaS — ref.) | Limitaciones clave |
+|---|---|---|---|---|---|
+| Identificación de activos | Catálogo jerárquico MAGERIT (`[D],[S],[SW],[HW],[COM],[P]`). | Registro tabular simplificado. | Hoja `Activos_y_Dependencias` con codificación MAGERIT v3. | Registro web por procesos/activos (límite plan gratuito). | PILAR exige licencia comercial/institucional. |
+| Dependencias entre activos | Grafo formal con propagación automática (acumulado vs. repercutido). | Evaluación plana sin propagación multinivel automática. | Dependencias explícitas + grafo visual `G06_03_Grafo_Dependencias_Activos.png`. | Asociación proceso–riesgo sin árbol MAGERIT multinivel. | RMAT/Excel requieren auditoría manual de cascada. |
+| Amenazas y dimensiones | Catálogo MAGERIT Libro II (`[N],[I],[E],[A]`) y 5 dimensiones C/I/D/A/T. | Probabilidad × impacto genérico. | 10 escenarios con códigos `[A.x]/[E.x]/[I.x]` y 5 dimensiones C/I/D/A/T. | Catálogo ISO 31000 configurable. | RMAT no incluye nativamente catálogo MAGERIT ni 5 dimensiones. |
+| Análisis cualitativo y cuantitativo | Ambos modos (niveles y valoración monetaria con ROI). | Predominantemente cualitativo/semicuantitativo (3×3 / 5×5). | Semicuantitativo transparente (0–25 y % reducción con fórmulas). | Mapa de calor 5×5 cualitativo en la nube. | Análisis monetario exige históricos inexistentes en sistemas nuevos. |
+| Salvaguardas y riesgo residual | Perfiles ENS / ISO 27002, madurez L0–L5 y evolución por fases. | Registro básico de controles y recálculo simple. | Fórmulas de eficacia en degradación y frecuencia, KPI, costo y enlace a pruebas reales. | Planes de acción y alertas (restringido en plan Free). | RMAT carece de perfiles de cumplimiento ENS/ISO 27002. |
+| Exportación y reproducibilidad | RTF/HTML/CSV/XML y `.car` (restringido en demo). | Exportación básica CSV/Excel/PDF. | `.xlsx` 100 % abierto, versionable en Git y verificable en Excel/LibreOffice. | Dependiente de cuenta cloud; exportaciones en planes pagos. | Sin paquete libre oficial de PILAR para Linux académico. |
+
+## 3. Cuestionario de la Guía LAB06
+- **a) ¿Qué atributos de riesgo se deben conocer?** Activo y valor por dimensiones (C, I, D, A, T), dependencias, amenaza (origen/código), vulnerabilidad, degradación (%), impacto (acumulado y repercutido), frecuencia/probabilidad, riesgo inherente, salvaguardas (eficacia y madurez), propietario, riesgo residual y criterio de aceptación.
+- **b) ¿Cuál sería el protocolo para mitigar riesgos?** (1) Identificar y valorar activos/amenazas; (2) calcular y priorizar riesgo inherente; (3) elegir tratamiento (mitigar, evitar, transferir o aceptar); (4) implementar salvaguardas con responsable, plazo, costo y KPI; (5) verificar empíricamente el control con pruebas reales; (6) monitorear el riesgo residual ante cambios del sistema.
+- **c) ¿Para qué sirve MAGERIT y cuáles son sus limitaciones?** Sirve para analizar y gestionar sistemáticamente riesgos de sistemas de información, justificar inversiones en salvaguardas y respaldar cumplimiento (ENS, ISO 27001/27005). Limitaciones: alto esfuerzo inicial para mapear dependencias, subjetividad en frecuencias sin datos históricos, curva de aprendizaje de catálogos y dependencia de herramientas licenciadas (PILAR) para propagación automática.
