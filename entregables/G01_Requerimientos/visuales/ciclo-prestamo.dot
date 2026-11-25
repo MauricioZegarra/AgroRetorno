@@ -1,0 +1,15 @@
+digraph AgroRetorno {
+  graph [bgcolor="#F4F7F2", rankdir=LR, pad=0.25, nodesep=0.45, ranksep=0.56, dpi=160];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=12, margin="0.20,0.14", color="#477159", fontcolor="#173D2C", fillcolor="#E4EFE6"];
+  edge [color="#54745E", fontname="DejaVu Sans", fontsize=10, fontcolor="#294F39"];
+  pendiente [label="Solicitud pendiente\nProductor"];
+  aprobada [label="Solicitud aprobada\nEncargado"];
+  rechazada [label="Solicitud rechazada\nMotivo visible", fillcolor="#F8E8D5", color="#A16B38"];
+  activa [label="Solicitud entregada\nPréstamo activo"];
+  cerrada [label="Préstamo cerrado\nSin unidades pendientes"];
+  pendiente -> aprobada [label="Valida stock"];
+  pendiente -> rechazada [label="Registra motivo"];
+  aprobada -> activa [label="Revalida y mueve unidades"];
+  activa -> activa [label="Devolución parcial"];
+  activa -> cerrada [label="Completa devolución"];
+}
