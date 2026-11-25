@@ -1,7 +1,7 @@
 ﻿G03 - AUDITORIA LOCAL AUTOMATICA (no equivale a revision visual)
-Fecha/hora local: 2026-11-24 03:17:28
+Fecha/hora local: 2026-11-24 21:34:37
 Rama: feature/cielo-g03-analisis-de-sistemas
-Commit: 393a35d
+Commit: a327f87
 
 ARCHIVOS OBLIGATORIOS
 OK: G03_02_Casos_de_Uso.puml
@@ -26,12 +26,23 @@ OK: G03_04_03_Entrega -> RF11
 OK: G03_04_Flujo_Integral_Resumen -> RF07, RF09, RF11
 
 REVISION DE DOCX: deteccion de texto en encabezados/pies
-ATENCION: se detecto texto en encabezados/pies DOCX:
-word/header1.xml: AGRORETORNO  /  CALIDAD DE SOFTWARE  /  GUÍA 03
-word/footer1.xml: CIELO MEZA VIZCARRA   ·   G03   |
+NO VERIFICADO DOCX: Excepción al llamar a "OpenRead" con los argumentos "1": "El proceso no puede obtener acceso al archivo 'C:\Users\usuario\Documents\AgroRetorno\entregables\G03_Analisis_Sistemas\01_SDD\G03_06_SDD_IEEE1016_AgroRetorno_Cielo.docx' porque está siendo utilizado en otro proceso."
 
 CAPTURAS PERSONALES
-Capturas encontradas: 0
+Capturas encontradas: 13
+ - G03_09_00_Auditoria_PowerShell.png
+ - G03_09_01_Casos_Uso_Revision.png
+ - G03_09_02_Clases_Revision.png
+ - G03_09_03_Secuencia_Solicitud_RF07.png
+ - G03_09_04_Secuencia_Aprobacion_RF09.png
+ - G03_09_05_Secuencia_Entrega_RF11.png
+ - G03_09_06_Flujo_Integral.png
+ - G03_09_07_Mockup_Solicitud.png
+ - G03_09_08_Mockup_Revision.png
+ - G03_09_09_Mockup_Entrega.png
+ - G03_09_10_Mockup_Devolucion.png
+ - G03_09_11_SDD_Word_Revision.png
+ - G03_09_12_SDD_PDF_Revision.png
 
 Resultado comprobaciones automaticas: 1 INCIDENCIAS
 PENDIENTE: comprobar visualmente documentos, diagramas y mockups; capturar pantalla y llenar acta.

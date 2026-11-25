@@ -1,0 +1,37 @@
+﻿G03 - AUDITORIA LOCAL AUTOMATICA (no equivale a revision visual)
+Fecha/hora local: 2026-11-24 03:17:28
+Rama: feature/cielo-g03-analisis-de-sistemas
+Commit: 393a35d
+
+ARCHIVOS OBLIGATORIOS
+OK: G03_02_Casos_de_Uso.puml
+OK: G03_03_Clases_Completo.puml
+OK: G03_Arquitectura_Componentes.puml
+OK: G03_04_Secuencia_01_Registro_Solicitud.puml
+OK: G03_04_Secuencia_02_Aprobacion.puml
+OK: G03_04_Secuencia_03_Entrega.puml
+OK: G03_04_Secuencia_Flujo_Integral.puml
+OK: G03_06_SDD_IEEE1016_AgroRetorno_Cielo.docx
+OK: G03_06_SDD_IEEE1016_AgroRetorno_Cielo.pdf
+OK: G03_05_M01_Solicitud.html
+OK: G03_05_M02_Revision.html
+OK: G03_05_M03_Entrega.html
+OK: G03_05_M04_Devolucion.html
+OK: G03_05_Estilos_Mockups.css
+
+EXPORTACIONES DE SECUENCIA: RF EN SVG (NO sustituye inspeccion visual)
+OK: G03_04_01_Registro_Solicitud -> RF07
+OK: G03_04_02_Aprobacion -> RF09
+OK: G03_04_03_Entrega -> RF11
+OK: G03_04_Flujo_Integral_Resumen -> RF07, RF09, RF11
+
+REVISION DE DOCX: deteccion de texto en encabezados/pies
+ATENCION: se detecto texto en encabezados/pies DOCX:
+word/header1.xml: AGRORETORNO  /  CALIDAD DE SOFTWARE  /  GUÍA 03
+word/footer1.xml: CIELO MEZA VIZCARRA   ·   G03   |
+
+CAPTURAS PERSONALES
+Capturas encontradas: 0
+
+Resultado comprobaciones automaticas: 1 INCIDENCIAS
+PENDIENTE: comprobar visualmente documentos, diagramas y mockups; capturar pantalla y llenar acta.

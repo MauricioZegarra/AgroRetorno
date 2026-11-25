@@ -19,7 +19,7 @@ SDD, UML, casos de uso, arquitectura y mockups.
 - Revision del SDD
 
 ## Estado
-En desarrollo.
-
+Documentación preparada y revisión local realizada el 24/11/2026. Pendiente conciliación final de RF con la ERS de G01 y revisión externa del SDD.
 ## Evidencias
 Consultar las carpetas y Bitacora.md.
+
