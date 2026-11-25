@@ -42,4 +42,4 @@ SemVer distingue cambios incompatibles, funciones compatibles y correcciones. La
 
 Se verificaron `svn` y `svnadmin` **1.14.5** con su salida de versión en Debian 13. La referencia Windows del avance reporta 1.7.8. Para el respaldo de esta ejecución se usa un cliente y servidor compatibles con SVN 1.14 o posterior.
 
-TortoiseSVN integra el Explorador de Windows. La ejecución actual se hizo en Linux con la CLI y queda pendiente evidencia de instalación, versión y una operación en Windows para el paso 1.17. En un equipo Windows, abrir **TortoiseSVN → About** y registrar la versión exacta del cliente. Hacer un checkout o update sobre una copia de práctica y conservar su salida junto a la versión.
+TortoiseSVN integra el Explorador de Windows. La ejecución actual se hizo en Linux con la CLI y queda pendiente evidencia de instalación, versión y una operación en Windows para el paso 1.17. En un equipo Windows, abrir **TortoiseSVN → About** y registrar la versión exacta del cliente. Hacer un checkout o update sobre una copia de práctica y conservar su salida junto a la versión. [Procedimiento Windows](TortoiseSVN.md).

@@ -1,8 +1,16 @@
 # G05 | Informe de práctica de configuración
 
+**Responsable de la guía** · Ower López Arela.\
+**Curso** · Calidad de Software · 2026-B · Escuela Profesional de Ingeniería de Sistemas, UNSA.\
+**Proyecto** · AgroRetorno · Equipo de ingeniería.
+
+[Informe G05 en PDF](Informe_G05_AgroRetorno.pdf).
+
 ## Objetivo
 
 Demostrar que la línea base de AgroRetorno, un cambio controlado y su resultado se pueden identificar, reconstruir y restaurar mediante Subversion. [Guía G05](https://drive.google.com/file/d/1pnAS96WmcBGbDNEc6ol0eNS3Ate5x9kg/view).
+
+![Línea de revisiones SVN desde la rama hasta la restauración](visuales/ciclo-svn.png)
 
 ## Procedimiento y resultados
 
@@ -46,26 +54,20 @@ La regresión corresponde a Maven/JUnit, con H2 para integración. La aceptació
 
 ### Etiqueta y recuperación
 
-La etiqueta SVN `v1.0.0` se creó en **r11** a partir de la revisión **r10** de `trunk/AgroRetorno`. El contenido evaluado de `src/`, `pom.xml` y los Wrappers se cotejó por bytes con los archivos compilables de G02. [Commit Git de CR-01](https://github.com/MauricioZegarra/AgroRetorno/commit/eaa20e9d9c3b0404bd2b946a1a078a2f3e7e5acd). El dump conserva la instantánea de la práctica SVN. La recuperación histórica se hizo con un checkout de r3 en otra carpeta, preservando el trunk vigente. [Etiqueta, equivalencia y recuperación](evidencias/svn-etiqueta-recuperacion.txt).
+La etiqueta SVN `v1.0.0` se creó en **r11** a partir de la revisión **r10** de `trunk/AgroRetorno`. El contenido evaluado de `src/`, `pom.xml` y los Wrappers se cotejó por bytes con los archivos compilables de G02. [Commit Git de CR-01](https://github.com/MauricioZegarra/AgroRetorno/commit/383505a9b4e577a1575aaaa2cb495b5ff7a7767c). El dump conserva la instantánea de la práctica SVN. La recuperación histórica se hizo con un checkout de r3 en otra carpeta, preservando el trunk vigente. [Etiqueta, equivalencia y recuperación](evidencias/svn-etiqueta-recuperacion.txt).
 
 ### Respaldo portable
 
 [Descargar dump comprimido](respaldo/agroretorno-svn-r12.dump.gz) · [SHA-256](respaldo/SHA256SUMS) · [Verificación y restauración ejecutadas](evidencias/svn-restauracion.txt).
 
-Con Subversion 1.14 o posterior, ejecutar desde la carpeta `respaldo` en una terminal Bash con gzip y sha256sum. Elegir una ruta nueva sin espacios para este ejemplo.
+Con Subversion 1.14 o posterior, ejecutar el [restaurador](respaldo/restaurar.sh) desde la carpeta `respaldo` en Bash. El script verifica SHA-256, crea un repositorio en una ruta nueva, carga el dump, verifica r12 e inspecciona la etiqueta.
 
 ```bash
-set -o pipefail
-sha256sum -c SHA256SUMS
-svnadmin create agroretorno-restaurado
-gzip -dc agroretorno-svn-r12.dump.gz | svnadmin load agroretorno-restaurado
-svnadmin verify agroretorno-restaurado
-svnlook youngest agroretorno-restaurado
-svn log -v "file://$PWD/agroretorno-restaurado"
+bash restaurar.sh agroretorno-restaurado
 svn checkout "file://$PWD/agroretorno-restaurado/tags/v1.0.0" version-v1.0.0
 ```
 
-Se espera la revisión 12 y la etiqueta. En Windows, extraer el dump como archivo binario y usar redirección binaria con `svnadmin load` desde CMD o Git Bash. Después, usar TortoiseSVN para un checkout de la etiqueta y capturar su versión y salida.
+Se comprobó la restauración en Linux y el rechazo de destinos que ya existen y dumps con SHA-256 distinto. En Windows, usar Git Bash con SVN en el PATH o descomprimir como binario y pasar el dump a `svnadmin load` desde CMD. [Procedimiento y evidencia requerida de TortoiseSVN](TortoiseSVN.md).
 
 Para recorrer el cambio desde el requisito hasta esta evidencia, consultar [la matriz de G02](https://github.com/MauricioZegarra/AgroRetorno/blob/feature/ower-g02-proceso-de-requerimientos/entregables/G02_Proceso_Requerimientos/trazabilidad/Matriz_Trazabilidad.md#trazabilidad-de-cr-01).
 

@@ -1,0 +1,19 @@
+digraph G05 {
+  graph [bgcolor="#F1F6F3", rankdir=TB, pad=0.28, nodesep=0.32, ranksep=0.43, dpi=150];
+  node [shape=box, style="rounded,filled", fontname="DejaVu Sans", fontsize=11,
+        margin="0.20,0.14", color="#A8C3B3", fontcolor="#133127", fillcolor="#FFFFFF"];
+  edge [color="#568071", penwidth=1.2, arrowsize=0.68];
+  title [shape=plaintext, fontsize=17, label="SVN · una versión recuperable"];
+  base [label="TRUNK · r4\nLínea base para el cambio"];
+  rama [label="BRANCHES · r5–r7\nCR-01 y su prueba", fillcolor="#DCECE5"];
+  tronco [label="TRUNK · r8\nEdición documental concurrente"];
+  fusion [label="MERGE · r9\nConflicto resuelto y regresión"];
+  tag [label="TAGS · r11\nv1.0.0 se copia desde trunk@10", fillcolor="#DCECE5"];
+  dump [label="RESPALDO · r12\nSHA-256, carga y verificación aparte"];
+  historico [label="REVISIÓN HISTÓRICA\nCheckout de r3 en otra carpeta", fillcolor="#FAEDDC", color="#D8B289"];
+  title -> base [style=invis];
+  base -> rama; base -> tronco; base -> historico [style=dashed];
+  rama -> fusion; tronco -> fusion;
+  fusion -> tag -> dump;
+  { rank=same; rama; tronco; historico; }
+}
