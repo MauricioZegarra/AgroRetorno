@@ -1,0 +1,23 @@
+# Compilación
+target/
+ui-tests/target/
+!.mvn/wrapper/maven-wrapper.properties
+
+# Resultados generados (se versionan aparte como evidencias si se requiere)
+performance/jmeter/results/*
+!performance/jmeter/results/.gitkeep
+database/backups/*.sql
+
+# IDE / sistema
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+.DS_Store
+Thumbs.db
+*.log
+
+# Herramientas portátiles descargadas por run.bat / run.sh (Java 21, PostgreSQL)
+.runtime/
