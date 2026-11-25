@@ -42,4 +42,4 @@ La auditoria original del libro G04_07 registro 11 controles, 10 OK y 1 OBSERVAC
 
 ## Evidencias y bitacora
 
-Consultar `Bitacora.md`, los dictamenes G04_21, el informe de integracion G04_22, el informe de auditoria G04_23 y el informe de cierre G04_24. Las exportaciones automaticas de `05_Capturas/Exportaciones_Automaticas` no son capturas personales tomadas en el equipo.
+Consultar `Bitacora.md`, los dictamenes G04_21, el informe de integracion G04_22, el informe de auditoria G04_23 y el informe de cierre G04_24. Las vistas vigentes estan en `05_Capturas/Revisiones_Actualizadas_117/` (exportaciones locales del Excel vigente, Paso 1.25); las imagenes G04_08 se conservan solo como antecedente historico en su registro de procedencia.

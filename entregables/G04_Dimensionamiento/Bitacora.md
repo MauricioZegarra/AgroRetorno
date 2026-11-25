@@ -224,3 +224,11 @@ Estado:
 CIERRE TECNICO INTERNO AUDITADO.
 Sin conformidad formal de G01, certificacion COSMIC
 ni revision externa. No se realizo merge a main.
+## G04 - Paso 1.25: Actualizacion de vistas de revision
+
+Se regeneraron 14 imagenes desde el libro G04_22 de 117 CFP,
+131 UFP y 3.491 KLOC, usando Excel en modo de solo lectura.
+Imagenes vigentes: 05_Capturas/Revisiones_Actualizadas_117/.
+Origen: visualizacion automatizada de valores locales, no captura manual de pantalla.
+Las carpetas anteriores se respaldaron fuera del repositorio.
+El estado de horas reales y los limites de G01 no fueron modificados.

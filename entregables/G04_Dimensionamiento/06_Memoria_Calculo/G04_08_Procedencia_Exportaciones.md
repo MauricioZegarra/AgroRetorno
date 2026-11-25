@@ -1,3 +1,5 @@
+> **Nota de version (Paso 1.25):** las imagenes G04_08 corresponden al libro historico de 111 CFP y se retiraron del arbol de entrega. Las visualizaciones vigentes del libro de 117 CFP estan en `05_Capturas/Revisiones_Actualizadas_117/`. Este archivo conserva la procedencia de la version anterior.
+
 # G04 Paso 1.8 — Exportaciones automáticas de las hojas del libro
 
 **Proyecto:** AgroRetorno
