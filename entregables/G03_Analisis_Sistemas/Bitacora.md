@@ -219,3 +219,13 @@ Actividad: cierre documental de la revision local efectuada el 24/11/2026.
 - Resultado automatizado DOCX: Sin texto en encabezados ni pies (inspeccion automatica).
 - Rama y commit al registrar: feature/cielo-g03-analisis-de-sistemas / a327f874f81c.
 - Pendiente: ERS definitiva G01 y revision externa; no se hizo merge.
+
+## G03 - Paso 1.12: Conciliacion de trazabilidad interna (25/11/2026)
+
+- Matriz de los tres casos detallados alineada con la linea base RF01-RF15 de G03.
+- ED-02 incluye explicitamente RF09 (aprobar), RF10 (rechazar) y RF11 (entregar).
+- Encabezados/requisitos del DOCX de casos detallados normalizados a ED-01/ED-02/ED-03.
+- Mantiene la convencion de catalogo CU-01..CU-16; los ED son especificaciones detalladas.
+- Evidencia: 06_Revision/G03_12_Acta_Conciliacion_Interna.md.
+- Revision local de G03 ya documentada; ERS G01 definitiva y revision externa no acreditadas.
+- No se toco G04, el SDD ni su PDF; sin merge.
