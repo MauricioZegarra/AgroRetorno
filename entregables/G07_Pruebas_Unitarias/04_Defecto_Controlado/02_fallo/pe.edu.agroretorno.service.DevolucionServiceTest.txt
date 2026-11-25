@@ -1,0 +1,31 @@
+-------------------------------------------------------------------------------
+Test set: pe.edu.agroretorno.service.DevolucionServiceTest
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 1.605 s <<< FAILURE! -- in pe.edu.agroretorno.service.DevolucionServiceTest
+pe.edu.agroretorno.service.DevolucionServiceTest.cierreTrasVariasParciales -- Time elapsed: 0.019 s <<< ERROR!
+pe.edu.agroretorno.exception.ReglaNegocioException: La cantidad devuelta (5) supera las unidades pendientes (5)
+	at pe.edu.agroretorno.service.DevolucionService.registrar(DevolucionService.java:77)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.devolver(DevolucionServiceTest.java:82)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.cierreTrasVariasParciales(DevolucionServiceTest.java:150)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+pe.edu.agroretorno.service.DevolucionServiceTest.devolucionTotalBuenEstado -- Time elapsed: 0.004 s <<< ERROR!
+pe.edu.agroretorno.exception.ReglaNegocioException: La cantidad devuelta (20) supera las unidades pendientes (20)
+	at pe.edu.agroretorno.service.DevolucionService.registrar(DevolucionService.java:77)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.devolver(DevolucionServiceTest.java:82)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.devolucionTotalBuenEstado(DevolucionServiceTest.java:88)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+pe.edu.agroretorno.service.DevolucionServiceTest.prestamoCerrado -- Time elapsed: 0.004 s <<< ERROR!
+pe.edu.agroretorno.exception.ReglaNegocioException: La cantidad devuelta (20) supera las unidades pendientes (20)
+	at pe.edu.agroretorno.service.DevolucionService.registrar(DevolucionService.java:77)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.devolver(DevolucionServiceTest.java:82)
+	at pe.edu.agroretorno.service.DevolucionServiceTest.prestamoCerrado(DevolucionServiceTest.java:166)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
